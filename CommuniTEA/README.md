@@ -19,11 +19,6 @@ https://github.com/CommuniTEAM/CommuniTEA
 npm install
 ```
 
-3. Start the development server:
-```sh
-npm run dev
-```
-
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
