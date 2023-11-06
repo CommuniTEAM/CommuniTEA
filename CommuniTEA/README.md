@@ -3,9 +3,16 @@
 Bringing your local community together over a cuppa.
 
 ## Table of Contents
-- [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
 - [Installation](#installation)
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js: [Download](https://nodejs.org/)
+- Docker: [Download](https://www.docker.com/get-started)
 
 # Getting Started
 To get started with this project, follow these steps:
@@ -18,13 +25,6 @@ https://github.com/CommuniTEAM/CommuniTEA
 ```sh
 npm install
 ```
-
-## Prerequisites
-
-Before you begin, ensure you have met the following requirements:
-
-- Node.js: [Download](https://nodejs.org/)
-- Docker: [Download](https://www.docker.com/get-started)
 
 ## Installation
 
