@@ -4,11 +4,10 @@ Bringing your local community together over a cuppa.
 
 ## Table of Contents
 - [CommuniTEA Application](#communitea-application)
-  - [Table of Contents](#table-of-contents)
+- [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Usage](#usage)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 
 # Getting Started
 To get started with this project, follow these steps:
