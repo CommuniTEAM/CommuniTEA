@@ -1,27 +1,63 @@
-# React + TypeScript + Vite
+# CommuniTEA Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bringing your local community together over a cuppa.
 
-Currently, two official plugins are available:
+## Table of Contents
+- [CommuniTEA Application](#communitea-application)
+  - [Table of Contents](#table-of-contents)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+# Getting Started
+To get started with this project, follow these steps:
+1. clone the repository:
+```sh
+https://github.com/CommuniTEAM/CommuniTEA
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Install the project dependencies:
+```sh
+npm install
+```
+
+3. Start the development server:
+```sh
+npm run dev
+```
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js: [Download](https://nodejs.org/)
+- Docker: [Download](https://www.docker.com/get-started)
+
+## Installation
+
+1. Install Node.js packages:
+
+   ```sh
+   npm install
+   ```
+
+2. Build the Docker image:
+
+   ```sh
+   docker build -t communitea .
+   ```
+
+
+## Usage
+
+1. Start the Docker container:
+
+   ```sh
+   docker run -p 3000:3000 communitea npm run dev
+   ```
+
+2. Access the application in your web browser at `http://localhost:3000`.
+
+
+
