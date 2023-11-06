@@ -3,7 +3,6 @@
 Bringing your local community together over a cuppa.
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
