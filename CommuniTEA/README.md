@@ -3,7 +3,6 @@
 Bringing your local community together over a cuppa.
 
 ## Table of Contents
-- [CommuniTEA Application](#communitea-application)
 - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
