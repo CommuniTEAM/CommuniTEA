@@ -3,12 +3,16 @@
 Bringing your local community together over a cuppa.
 
 ## Table of Contents
-- [CommuniTEA Application](#communitea-application)
-  - [Table of Contents](#table-of-contents)
+- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Usage](#usage)
+- [Installation](#installation)
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js: [Download](https://nodejs.org/)
+- Docker: [Download](https://www.docker.com/get-started)
 
 # Getting Started
 To get started with this project, follow these steps:
@@ -21,18 +25,6 @@ https://github.com/CommuniTEAM/CommuniTEA
 ```sh
 npm install
 ```
-
-3. Start the development server:
-```sh
-npm run dev
-```
-
-## Prerequisites
-
-Before you begin, ensure you have met the following requirements:
-
-- Node.js: [Download](https://nodejs.org/)
-- Docker: [Download](https://www.docker.com/get-started)
 
 ## Installation
 
