@@ -1,0 +1,25 @@
+volumes:
+  communitea-db:
+    external: true
+
+
+services:
+  postgres:
+    image: postgres:14.5-bullseye
+    volumes:
+      - communitea-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: admin
+      POSTGRES_DB: communitea-db
+    ports:
+      - 15432:5432
+
+  webapp:
+    image: node:lts-bullseye
+    command: /bin/bash run.sh
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - 3000:3000
