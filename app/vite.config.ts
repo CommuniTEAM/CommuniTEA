@@ -7,5 +7,9 @@ export default defineConfig({
   server: {
     host: true,
     port: 3000,
+    // Look into whether watch option (hot reload) should be removed for production
+    watch: {
+      usePolling: true
+    }
   }
 })
