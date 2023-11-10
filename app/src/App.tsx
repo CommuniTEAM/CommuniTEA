@@ -5,6 +5,7 @@ function App (): ReactElement {
   return (
     <div>
       Hello CommuniTEAM Members! Welcome to TypeScript :)
+      HELLO HELLO HELLO
     </div>
   )
 }
