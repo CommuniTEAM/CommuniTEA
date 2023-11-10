@@ -10,17 +10,13 @@ module.exports = {
     'standard-with-typescript',
     'plugin:react/recommended'
   ],
-  ignorePatterns: [
-    'vite.config.ts'
-  ],
+  ignorePatterns: ['vite.config.ts'],
   overrides: [
     {
       env: {
         node: true
       },
-      files: [
-        '.eslintrc.{js,cjs}'
-      ],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script'
       }
@@ -30,10 +26,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: [
-    'react',
-    '@typescript-eslint'
-  ],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
     'react/react-in-jsx-scope': 0
   }
