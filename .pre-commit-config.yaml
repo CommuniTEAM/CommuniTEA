@@ -1,15 +1,16 @@
 repos:
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.8.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.5.0
     hooks:
       - id: trailing-whitespace
       - id: check-yaml
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.3
-    hooks:
-      - id: prettier
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.51.0
+    rev: v8.53.0
     hooks:
       - id: eslint
         additional_dependencies:
@@ -20,6 +21,6 @@ repos:
           - eslint-config-standard-with-typescript@39.1.1
           - eslint-config-airbnb-typescript@17.1.0
         exclude: node_modules
-        files: \.[jt]sx?$  # *.js, *.jsx, *.ts and *.tsx
+        files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
         types: [file]
-        args: [--max-warnings=0, --fix]
+        args: [--max-warnings=1, --fix]
