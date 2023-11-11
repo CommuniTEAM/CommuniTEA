@@ -1,8 +1,8 @@
-import type { ReactElement } from 'react'
-import './App.css'
+import type { ReactElement } from 'react';
+import './App.css';
 
-function App (): ReactElement {
-  return <div>Hello CommuniTEAM Members! Welcome to TypeScript :)</div>
+function App(): ReactElement {
+  return <div>Hello CommuniTEAM Members! Welcome to TypeScript :)</div>;
 }
 
-export default App
+export default App;

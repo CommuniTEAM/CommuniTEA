@@ -9,7 +9,7 @@ Bringing your local community together over a cuppa.
 - [CommuniTEA](#communitea)
   - [Table of Contents](#table-of-contents)
   - [Working with Git Hooks](#working-with-git-hooks)
-    - [Installation Pre-Commit](#installation-pre-commit)
+    - [Installing Pre-Commit](#installing-pre-commit)
     - [Pre-Commit Rulesets](#pre-commit-rulesets)
       - [Commit Message Format](#commit-message-format)
       - [ESLint TypeScript Format](#eslint-typescript-format)
@@ -25,7 +25,7 @@ Any commits to the repository must conform to the formatting rulesets for the fo
 
 To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook manager, is a required development dependency for the project. You will need to install it on your local machine.
 
-### Installation Pre-Commit
+### Installing Pre-Commit
 
 1. Install pre-commit.
 **Windows**:
@@ -43,7 +43,9 @@ For more detailed installation information and troubleshooting, see the [pre-com
 #### Commit Message Format
 
 All commit messages, regardless of the branch, must adhere to this header standard:
+
 ```<Emoji> [Related Jira Issue]: Description of work```
+
 Example: `✅ [TEA-123]: Added unit tests`
 
 These are the allowed emojis and their use-cases:
@@ -68,6 +70,6 @@ TBD.
 
 ### Using Git Hooks in VSCode
 
-When commiting changes through VSCode's source control tab, pre-commit will still run automatically without issues. If a hook fails, however, VSCode will throw you an error. In that case, click on "Show Command Output" as per the screenshot below.
+When commiting changes through VSCode's source control tab, pre-commit will still run automatically without issues. If a hook fails, however, VSCode will throw you an error. In that case, click on "Show Command Output" as per the screenshot below to see the errors returned from pre-commit.
 
 ![example error](https://gitlab.com/tea-masters/communiTEA/uploads/20cb944e753e1823f0702918050a4540/Screenshot_2023-10-17_124748.png)

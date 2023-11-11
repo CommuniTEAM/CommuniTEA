@@ -1,4 +1,5 @@
 default_install_hook_types: [pre-commit, commit-msg]
+
 repos:
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.8.0
@@ -25,4 +26,4 @@ repos:
         exclude: node_modules
         files: \.[t]sx?$ # *.js, *.jsx, *.ts and *.tsx
         types: [file]
-        args: [--max-warnings=1, --fix]
+        args: [--max-warnings=0, --fix]
