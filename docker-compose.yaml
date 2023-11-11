@@ -2,7 +2,6 @@ volumes:
   communitea-db:
     external: true
 
-
 services:
   postgres:
     image: postgres:14.5-bullseye
