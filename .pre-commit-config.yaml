@@ -30,4 +30,3 @@ repos:
         files: \.[t]sx?$ # *.js, *.jsx, *.ts and *.tsx
         types: [file]
         args: [--max-warnings=1, --fix]
-# test
