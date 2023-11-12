@@ -3,6 +3,7 @@
 Bringing your local community together over a cuppa.
 
 ## Table of Contents
+
 - [CommuniTEA React Application](#communitea-react-application)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
@@ -16,7 +17,9 @@ Before you begin, ensure you have met the following requirements:
 - Docker: [Download](https://www.docker.com/get-started)
 
 # Getting Started
+
 To get started with this project, first clone the repository:
+
 ```sh
 https://github.com/CommuniTEAM/CommuniTEA
 ```
