@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
+import '../../App.css'
 
 const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
@@ -38,14 +39,6 @@ function NavBar (): JSX.Element {
     setAnchorElUser(null)
   }
 
-  const commonStyles = {
-    fontFamily: 'monospace',
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    color: 'inherit',
-    textDecoration: 'none'
-  }
-
   return (
     <AppBar position="static" sx={{ backgroundColor: '#FFF5E1' }}>
       <Container maxWidth="xl">
@@ -61,7 +54,14 @@ function NavBar (): JSX.Element {
               noWrap
               component="a"
               href="#"
-              sx={{ ...commonStyles, display: { xs: 'none', md: 'flex', color: 'black' } }}
+              sx={{
+                fontFamily: 'Montserrat',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+                display: { xs: 'none', md: 'flex', color: 'black' }
+              }}
             >
               COMMUNITEA
             </Typography>
@@ -72,7 +72,7 @@ function NavBar (): JSX.Element {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ mx: 5, color: 'black', display: 'block' }}
+                sx={{ mx: 5, color: 'black', display: 'block', fontFamily: 'Montserrat' }}
               >
                 {page}
               </Button>
@@ -86,7 +86,6 @@ function NavBar (): JSX.Element {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
@@ -110,7 +109,9 @@ function NavBar (): JSX.Element {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  <Typography sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}>
+                    {page}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -133,7 +134,9 @@ function NavBar (): JSX.Element {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  <Typography sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}>
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

@@ -1,0 +1,78 @@
+import React from 'react'
+import '../../App.css'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import PouringTea from '../../assets/PouringTea.png'
+import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg'
+import FriendsDrinkingTea from '../../assets/FriendsDrinkingTea.jpg'
+
+export default function ValueProp (): JSX.Element {
+  const extraLargeScreen = useMediaQuery('(min-width:2300px)')
+  const largeScreen = useMediaQuery('(min-width:1500px)')
+  const smallScreen = useMediaQuery('(min-width:400px)')
+
+  const calculateHeight = (): string => {
+    if (extraLargeScreen) return '80vh'
+    if (largeScreen) return '50vh'
+    if (smallScreen) return '30vw'
+    return 'auto'
+  }
+
+  return (
+    <div
+      style={{
+        backgroundColor: '#FFFFF0',
+        display: 'flex',
+        height: calculateHeight()
+      }}
+    >
+      <div style={{ width: '50vw' }}>
+        <div style={{ transform: 'translate(5vw, -5vw)' }}>
+          <img
+            src={PouringTea}
+            alt="Pouring Tea"
+            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+          />
+        </div>
+        <div style={{ transform: 'translate(20vw, -12vw)' }}>
+          <img
+            src={PeopleDrinkingTea}
+            alt="People Drinking Tea"
+            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+          />
+        </div>
+        <div style={{ transform: 'translate(5vw, -20vw)' }}>
+          <img
+            src={FriendsDrinkingTea}
+            alt="Friends Drinking Tea"
+            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+          />
+        </div>
+      </div>
+      <div
+        style={{
+          width: '50vw',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <div style={{ width: '80%' }}>
+          <h1
+            style={{
+              fontFamily: 'Roboto Slab',
+              fontSize: '3vw',
+              fontWeight: 300,
+              color: '#416543'
+            }}
+          >
+            CommuniTEA is your gateway to a vibrant world of tea exploration.
+          </h1>
+          <p style={{ fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543' }}>
+            Whether you are a seasoned connoisseur or just starting your tea journey, our platform
+            brings together the finest tea varieties and the best local businesses, creating a tea
+            community like no other.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
