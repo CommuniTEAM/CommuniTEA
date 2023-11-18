@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-fmt.Println("HELLO WORLDS!!!!!!!!!!!!!")
+fmt.Println("HELLO WORLD!")
  // Create a new request multiplexer
  // Take incoming requests and dispatch them to the matching handlers
  mux := http.NewServeMux()
@@ -28,5 +28,5 @@ func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type testHandler struct{}
 
 func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- w.Write([]byte("This is a newer test message"))
+ w.Write([]byte("This is another test message"))
 }
