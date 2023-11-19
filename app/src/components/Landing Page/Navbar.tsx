@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import {
   AppBar,
   Box,
@@ -10,39 +10,63 @@ import {
   Button,
   Tooltip,
   MenuItem,
-  Container
+  Container,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
 import '../../App.css'
 
+// Placeholder navigation pages and settings
 const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function NavBar (): JSX.Element {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false)
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>): void => {
-    setAnchorElNav(event.currentTarget)
-  }
-
+  // Handlers
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = (): void => {
-    setAnchorElNav(null)
   }
 
   const handleCloseUserMenu = (): void => {
     setAnchorElUser(null)
   }
 
+  // Toggles the state of the drawer
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return
+    }
+    setDrawerOpen(open)
+  }
+
+  const toggleSettingsDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return
+      }
+      setSettingsDrawerOpen(open)
+    }
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#FFF5E1' }}>
       <Container maxWidth="xl">
         <Toolbar>
+          {/* Logo and title */}
           <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 'auto' }}>
             <img
               src={CommuniteaLogo}
@@ -67,11 +91,11 @@ function NavBar (): JSX.Element {
             </Typography>
           </Box>
 
+          {/* Navigation pages for large screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
                 sx={{ mx: 5, color: 'black', display: 'block', fontFamily: 'Montserrat' }}
               >
                 {page}
@@ -79,44 +103,36 @@ function NavBar (): JSX.Element {
             ))}
           </Box>
 
+          {/* Hamburger menu for small screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              edge="start"
+              aria-label="menu"
+              sx={{ mr: 2, display: { md: 'none' } }}
+              onClick={toggleDrawer(true)}
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' }
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}>
-                    {page}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+              <Box
+                sx={{ width: 250 }}
+                role="presentation"
+                onClick={toggleDrawer(false)}
+                onKeyDown={toggleDrawer(false)}
+              >
+                <List>
+                  {pages.map((text) => (
+                    <ListItem key={text}>
+                      <ListItemText primary={text} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Drawer>
           </Box>
 
+          {/* User settings menu */}
           <Box sx={{ flexGrow: 0, marginLeft: 16 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -140,6 +156,26 @@ function NavBar (): JSX.Element {
                 </MenuItem>
               ))}
             </Menu>
+          </Box>
+
+          {/* Settings drawer for small screens */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Drawer anchor="right" open={settingsDrawerOpen} onClose={toggleSettingsDrawer(false)}>
+              <Box
+                sx={{ width: 250 }}
+                role="presentation"
+                onClick={toggleSettingsDrawer(false)}
+                onKeyDown={toggleSettingsDrawer(false)}
+              >
+                <List>
+                  {settings.map((text) => (
+                    <ListItem key={text}>
+                      <ListItemText primary={text} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Drawer>
           </Box>
         </Toolbar>
       </Container>

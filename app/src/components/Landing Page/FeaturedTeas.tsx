@@ -1,24 +1,15 @@
 import '../../App.css'
-import useMediaQuery from '@mui/material/useMediaQuery'
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
 import OolongTeaCard from './Cards/OolongTeaCard'
 import GreenTeaCard from './Cards/GreenTeaCard'
 import ChamomileTeaCard from './Cards/ChamomileTeaCard'
 import DarjeelingTeaCard from './Cards/DarjeelingTeaCard'
 
 export default function FeaturedTeas (): JSX.Element {
-  const largeScreen = useMediaQuery('(min-width:1500px)')
-  const mediumScreen = useMediaQuery('(min-width:1000px)')
-  const smallScreen = useMediaQuery('(min-width:400px)')
-
-  const calculateHeight = (): string => {
-    if (largeScreen) return '60vh'
-    if (mediumScreen) return '50vh'
-    if (smallScreen) return '30vw'
-    return 'auto'
-  }
+  const responsiveHeight = useResponsiveHeight() // custom hook
 
   return (
-    <div style={{ backgroundColor: '#D2B48C', height: calculateHeight() }}>
+    <div style={{ backgroundColor: '#D2B48C', height: responsiveHeight }}>
       <div>
         <h1
           style={{

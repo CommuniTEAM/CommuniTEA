@@ -1,28 +1,19 @@
 import React from 'react'
 import '../../App.css'
-import useMediaQuery from '@mui/material/useMediaQuery'
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
 import PouringTea from '../../assets/PouringTea.png'
 import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg'
 import FriendsDrinkingTea from '../../assets/FriendsDrinkingTea.jpg'
 
 export default function ValueProp (): JSX.Element {
-  const extraLargeScreen = useMediaQuery('(min-width:2300px)')
-  const largeScreen = useMediaQuery('(min-width:1500px)')
-  const smallScreen = useMediaQuery('(min-width:400px)')
-
-  const calculateHeight = (): string => {
-    if (extraLargeScreen) return '60vh'
-    if (largeScreen) return '55vh'
-    if (smallScreen) return '30vw'
-    return 'auto'
-  }
+  const responsiveHeight = useResponsiveHeight() // custom hook
 
   return (
     <div
       style={{
         backgroundColor: '#FFFFF0',
         display: 'flex',
-        height: calculateHeight()
+        height: responsiveHeight
       }}
     >
       <div style={{ width: '50vw' }}>
