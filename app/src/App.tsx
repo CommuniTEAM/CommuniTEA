@@ -3,6 +3,7 @@ import NavBar from './components/Landing Page/Navbar'
 import './App.css'
 import HeroBanner from './components/Landing Page/HeroBanner'
 import ValueProp from './components/Landing Page/ValueProp'
+import FeaturedTeas from './components/Landing Page/FeaturedTeas'
 
 function App (): ReactElement {
   return (
@@ -10,6 +11,7 @@ function App (): ReactElement {
       <NavBar />
       <HeroBanner />
       <ValueProp />
+      <FeaturedTeas />
     </div>
   )
 }

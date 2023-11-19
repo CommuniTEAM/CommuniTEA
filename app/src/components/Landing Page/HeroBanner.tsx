@@ -4,7 +4,14 @@ import '../../App.css'
 
 function HeroBanner (): JSX.Element {
   return (
-    <div style={{ position: 'relative', width: '100vw', textAlign: 'center', color: 'white' }}>
+    <div
+      style={{
+        position: 'relative',
+        width: '100vw',
+        textAlign: 'center',
+        color: 'white'
+      }}
+    >
       <img
         src={HeroBannerImage}
         alt="Assorted teas and herbs"

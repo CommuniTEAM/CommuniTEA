@@ -11,8 +11,8 @@ export default function ValueProp (): JSX.Element {
   const smallScreen = useMediaQuery('(min-width:400px)')
 
   const calculateHeight = (): string => {
-    if (extraLargeScreen) return '80vh'
-    if (largeScreen) return '50vh'
+    if (extraLargeScreen) return '60vh'
+    if (largeScreen) return '55vh'
     if (smallScreen) return '30vw'
     return 'auto'
   }
@@ -26,25 +26,25 @@ export default function ValueProp (): JSX.Element {
       }}
     >
       <div style={{ width: '50vw' }}>
-        <div style={{ transform: 'translate(5vw, -5vw)' }}>
+        <div style={{ transform: 'translate(7vw, 2vw)' }}>
           <img
             src={PouringTea}
             alt="Pouring Tea"
-            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+            style={{ width: '20vw', height: 'auto', borderRadius: '50px' }}
           />
         </div>
-        <div style={{ transform: 'translate(20vw, -12vw)' }}>
+        <div style={{ transform: 'translate(26vw, -12vw)' }}>
           <img
             src={PeopleDrinkingTea}
             alt="People Drinking Tea"
-            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+            style={{ width: '20vw', height: 'auto', borderRadius: '50px' }}
           />
         </div>
-        <div style={{ transform: 'translate(5vw, -20vw)' }}>
+        <div style={{ transform: 'translate(15vw, -17vw)' }}>
           <img
             src={FriendsDrinkingTea}
             alt="Friends Drinking Tea"
-            style={{ width: '25vw', height: 'auto', borderRadius: '50px' }}
+            style={{ width: '21vw', height: 'auto', borderRadius: '50px' }}
           />
         </div>
       </div>
@@ -66,7 +66,15 @@ export default function ValueProp (): JSX.Element {
           >
             CommuniTEA is your gateway to a vibrant world of tea exploration.
           </h1>
-          <p style={{ fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543' }}>
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+              overflowX: 'hidden'
+            }}
+          >
             Whether you are a seasoned connoisseur or just starting your tea journey, our platform
             brings together the finest tea varieties and the best local businesses, creating a tea
             community like no other.
