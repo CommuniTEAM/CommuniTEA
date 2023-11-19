@@ -4,6 +4,7 @@ import ValueProp from './ValueProp'
 import FeaturedTeas from './FeaturedTeas'
 import '../../App.css'
 import HowItWorks from './HowItWorks'
+import BusinessShowcase from './BusinessShowcase'
 
 export default function LandingPage (): JSX.Element {
   return (
@@ -13,6 +14,7 @@ export default function LandingPage (): JSX.Element {
       <ValueProp />
       <FeaturedTeas />
       <HowItWorks />
+      <BusinessShowcase />
     </div>
   )
 }
