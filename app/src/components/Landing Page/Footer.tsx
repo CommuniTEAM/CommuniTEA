@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button, Typography, IconButton } from '@mui/material'
-import { GitHub } from '@mui/icons-material'
+import GitHubIcon from '../../assets/GitHubIcon.png'
 
-export default function Footer (): JSX.Element {
+export default function Footer(): JSX.Element {
   const footerMenuItems = ['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'FAQ']
 
   return (
@@ -72,7 +72,7 @@ export default function Footer (): JSX.Element {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <GitHub style={{ fontSize: '2rem', color: 'white' }} />
+          <img src={GitHubIcon} alt="GitHub" style={{ width: '1.5vw', color: 'white' }} />
         </IconButton>
       </div>
     </div>
