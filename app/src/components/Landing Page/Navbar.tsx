@@ -21,15 +21,15 @@ import { useNavigate } from 'react-router-dom'
 import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
 import '../../App.css'
 
-// Placeholder navigation pages and settings
-const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
-
 function NavBar (): JSX.Element {
   const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false)
+
+  // Placeholder navigation pages and settings
+  const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
   // Handlers
   const handleHomeNavigation = (): void => {
