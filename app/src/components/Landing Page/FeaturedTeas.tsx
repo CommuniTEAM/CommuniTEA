@@ -1,9 +1,6 @@
 import '../../App.css'
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
-import OolongTeaCard from './Cards/OolongTeaCard'
-import GreenTeaCard from './Cards/GreenTeaCard'
-import ChamomileTeaCard from './Cards/ChamomileTeaCard'
-import DarjeelingTeaCard from './Cards/DarjeelingTeaCard'
+import FeaturedTeaCards from './Cards/FeaturedTeaCards'
 
 export default function FeaturedTeas (): JSX.Element {
   const responsiveHeight = useResponsiveHeight() // custom hook
@@ -30,10 +27,7 @@ export default function FeaturedTeas (): JSX.Element {
           justifyContent: 'space-evenly'
         }}
       >
-        <OolongTeaCard />
-        <GreenTeaCard />
-        <ChamomileTeaCard />
-        <DarjeelingTeaCard />
+        <FeaturedTeaCards />
       </div>
     </div>
   )

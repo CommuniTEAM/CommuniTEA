@@ -27,7 +27,8 @@ export default function HowItWorks (): JSX.Element {
             flexDirection: 'column',
             alignItems: 'center',
             flexGrow: 1,
-            maxWidth: '30%'
+            maxWidth: '30%',
+            borderRight: '1px solid black'
           }}
         >
           <img src={One} alt="Step one" style={{ width: '25vh' }} />
@@ -59,7 +60,8 @@ export default function HowItWorks (): JSX.Element {
             flexDirection: 'column',
             alignItems: 'center',
             flexGrow: 1,
-            maxWidth: '30%'
+            maxWidth: '30%',
+            borderRight: '1px solid black'
           }}
         >
           <img src={Two} alt="Step two" style={{ width: '25vh' }} />
