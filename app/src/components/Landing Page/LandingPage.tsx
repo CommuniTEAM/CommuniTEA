@@ -3,6 +3,7 @@ import HeroBanner from './HeroBanner'
 import ValueProp from './ValueProp'
 import FeaturedTeas from './FeaturedTeas'
 import '../../App.css'
+import HowItWorks from './HowItWorks'
 
 export default function LandingPage (): JSX.Element {
   return (
@@ -11,6 +12,7 @@ export default function LandingPage (): JSX.Element {
       <HeroBanner />
       <ValueProp />
       <FeaturedTeas />
+      <HowItWorks />
     </div>
   )
 }

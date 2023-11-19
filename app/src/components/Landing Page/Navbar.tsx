@@ -17,6 +17,7 @@ import {
   ListItemText
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { useNavigate } from 'react-router-dom'
 import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
 import '../../App.css'
 
@@ -25,11 +26,16 @@ const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function NavBar (): JSX.Element {
+  const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false)
 
   // Handlers
+  const handleHomeNavigation = (): void => {
+    navigate('/')
+  }
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget)
   }
@@ -67,7 +73,14 @@ function NavBar (): JSX.Element {
       <Container maxWidth="xl">
         <Toolbar>
           {/* Logo and title */}
-          <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 'auto' }}>
+          <Box
+            onClick={handleHomeNavigation}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: 'auto'
+            }}
+          >
             <img
               src={CommuniteaLogo}
               alt="Communitea Logo"
