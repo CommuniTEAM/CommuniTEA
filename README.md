@@ -53,8 +53,9 @@ These are the allowed emojis and their use-cases:
 - 🐞: Bug fix
 - ✅: Added or updated tests
 - 🚧: Work in progress
-- ♻️: Refactored
+- 🔨: Refactored
 - 📝: Documentation updated
+- 🤝: Merged branches
 
 Special thanks to strdr4605 for their [walkthrough](https://strdr4605.com/commitlint-custom-commit-message-with-emojis) of this configuration!
 
