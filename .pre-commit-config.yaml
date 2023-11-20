@@ -1,4 +1,5 @@
 default_install_hook_types: [pre-commit, commit-msg]
+
 repos:
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.8.0
@@ -23,6 +24,6 @@ repos:
           - eslint-config-standard-with-typescript@39.1.1
           - eslint-config-airbnb-typescript@17.1.0
         exclude: node_modules
-        files: \.[t]sx?$ # *.js, *.jsx, *.ts and *.tsx
+        files: \.[t]sx?$ # *.ts and *.tsx
         types: [file]
-        args: [--max-warnings=1, --fix]
+        args: [--max-warnings=0, --fix]

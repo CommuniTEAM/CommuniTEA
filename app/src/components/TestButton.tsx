@@ -1,16 +1,18 @@
-import * as React from 'react'
-import { Button, Modal, Box, Typography } from '@mui/material'
+import * as React from 'react';
+import {
+  Button, Modal, Box, Typography,
+} from '@mui/material';
 
-function MyButton (): React.ReactElement {
-  const [open, setOpen] = React.useState(false)
+function MyButton(): React.ReactElement {
+  const [open, setOpen] = React.useState(false);
 
   const handleOpen = (): void => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = (): void => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <>
@@ -33,19 +35,27 @@ function MyButton (): React.ReactElement {
             bgcolor: 'background.paper',
             border: '2px solid #000',
             boxShadow: 24,
-            p: 4
+            p: 4,
           }}
         >
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: 'green' }}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ color: 'green' }}
+          >
             Notification
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, color: 'black' }}>
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2, color: 'black' }}
+          >
             Material UI has successfully been installed!
           </Typography>
         </Box>
       </Modal>
     </>
-  )
+  );
 }
 
-export default MyButton
+export default MyButton;
