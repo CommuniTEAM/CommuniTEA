@@ -1,4 +1,5 @@
 import NavBar from '../Landing Page/Navbar'
+import Filters from './Filters'
 import LocationSearch from './LocationSearch'
 
 export default function CommuniTeaPage (): JSX.Element {
@@ -6,6 +7,7 @@ export default function CommuniTeaPage (): JSX.Element {
     <div>
       <NavBar />
       <LocationSearch />
+      <Filters />
     </div>
   )
 }
