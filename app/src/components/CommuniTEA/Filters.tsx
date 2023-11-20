@@ -1,11 +1,17 @@
 import { FormControl, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
+import EventCards from './EventCard'
 
 export default function Filters (): JSX.Element {
   // TODO: Add functionality to the checkboxes
 
   return (
     <div style={{ display: 'flex', width: '50%' }}>
-      <div style={{ paddingLeft: '1vw', width: '30%', borderRight: '1px solid rgba(0, 0, 0, .5)' }}>
+      <div
+        style={{
+          paddingLeft: '1vw',
+          width: '30%'
+        }}
+      >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormLabel component="legend" sx={{ fontSize: '1vw' }}>
             Date
@@ -80,6 +86,17 @@ export default function Filters (): JSX.Element {
             />
           </FormGroup>
         </FormControl>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '70%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <EventCards />
       </div>
     </div>
   )
