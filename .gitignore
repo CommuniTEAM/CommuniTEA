@@ -24,4 +24,4 @@ go.work
 /tmp
 
 # Environments
-.env
+# .env
