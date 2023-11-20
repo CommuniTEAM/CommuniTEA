@@ -10,5 +10,5 @@ module.exports = {
   printWidth: 80,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',
-  useTabs: false
-}
+  useTabs: false,
+};
