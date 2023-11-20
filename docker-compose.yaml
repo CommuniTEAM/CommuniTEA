@@ -14,6 +14,18 @@ services:
     ports:
       - 15432:5432
 
+  goapi:
+    build:
+      context: backend
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app
+    command: air /cmd/main.go -b 0.0.0.0
+
   webapp:
     image: node:lts-bullseye
     # Change the run dev command to run build for production
