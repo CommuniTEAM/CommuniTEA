@@ -1,4 +1,3 @@
-import React from 'react'
 import { Grid } from '@mui/material'
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
 import One from '../../assets/One.svg'
