@@ -16,12 +16,12 @@ import {
   ListItem,
   ListItemText
 } from '@mui/material'
-import MenuIcon from '../../assets/MenuIcon.png'
 import { useNavigate } from 'react-router-dom'
+import MenuIcon from '../../assets/MenuIcon.png'
 import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
 import '../../App.css'
 
-function NavBar(): JSX.Element {
+function NavBar (): JSX.Element {
   const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -31,15 +31,20 @@ function NavBar(): JSX.Element {
   const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-  // Handlers
+  // Navigation Handlers
   const handleHomeNavigation = (): void => {
     navigate('/')
+  }
+
+  const handleCommuniTeaNavigation = (): void => {
+    navigate('/communitea')
   }
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget)
   }
 
+  // Other Handlers
   const handleCloseUserMenu = (): void => {
     setAnchorElUser(null)
   }
@@ -106,9 +111,14 @@ function NavBar(): JSX.Element {
 
           {/* Navigation pages for large screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-            {pages.map(page => (
+            {pages.map((page) => (
               <Button
                 key={page}
+                onClick={() => {
+                  if (page === 'CommuniTEA') {
+                    handleCommuniTeaNavigation()
+                  }
+                }}
                 sx={{ mx: 5, color: 'black', display: 'block', fontFamily: 'Montserrat' }}
               >
                 {page}
@@ -135,8 +145,15 @@ function NavBar(): JSX.Element {
                 onKeyDown={toggleDrawer(false)}
               >
                 <List>
-                  {pages.map(text => (
-                    <ListItem key={text}>
+                  {pages.map((text) => (
+                    <ListItem
+                      key={text}
+                      onClick={() => {
+                        if (text === 'CommuniTEA') {
+                          handleCommuniTeaNavigation()
+                        }
+                      }}
+                    >
                       <ListItemText primary={text} />
                     </ListItem>
                   ))}
@@ -161,7 +178,7 @@ function NavBar(): JSX.Element {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map(setting => (
+              {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}>
                     {setting}
@@ -181,7 +198,7 @@ function NavBar(): JSX.Element {
                 onKeyDown={toggleSettingsDrawer(false)}
               >
                 <List>
-                  {settings.map(text => (
+                  {settings.map((text) => (
                     <ListItem key={text}>
                       <ListItemText primary={text} />
                     </ListItem>
