@@ -1,8 +1,8 @@
-import type { ReactElement } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import LandingPage from './components/Landing Page/LandingPage'
+import type { ReactElement } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/Landing Page/LandingPage';
 
-function App (): ReactElement {
+function App(): ReactElement {
   return (
     <Router>
       <div>
@@ -11,7 +11,7 @@ function App (): ReactElement {
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
