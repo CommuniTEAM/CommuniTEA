@@ -6,12 +6,10 @@ import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage'
 function App (): ReactElement {
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/communitea" element={<CommuniTeaPage />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/communitea" element={<CommuniTeaPage />} />
+      </Routes>
     </Router>
   )
 }
