@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Typography, IconButton } from '@mui/material'
 import GitHubIcon from '../../assets/GitHubIcon.png'
 
-export default function Footer(): JSX.Element {
+export default function Footer (): JSX.Element {
   const footerMenuItems = ['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'FAQ']
 
   return (
