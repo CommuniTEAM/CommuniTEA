@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/Landing Page/LandingPage';
+import LandingPage from './components/Landing_Page/LandingPage';
 
 function App(): ReactElement {
   return (

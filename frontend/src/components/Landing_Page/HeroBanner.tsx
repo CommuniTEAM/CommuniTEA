@@ -1,15 +1,15 @@
-import React from 'react'
-import HeroBannerImage from '../../assets/HeroBannerImage.jpg'
-import '../../App.css'
+import React from 'react';
+import HeroBannerImage from '../../assets/HeroBannerImage.jpg';
+import '../../App.css';
 
-function HeroBanner (): JSX.Element {
+function HeroBanner(): JSX.Element {
   return (
     <div
       style={{
         position: 'relative',
         width: '100vw',
         textAlign: 'center',
-        color: 'white'
+        color: 'white',
       }}
     >
       <img
@@ -25,7 +25,7 @@ function HeroBanner (): JSX.Element {
           transform: 'translate(-50%, -50%)',
           width: '40vw',
           padding: '20px',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
         }}
       >
         <h1 style={{ fontFamily: 'Roboto Slab', fontSize: '4vw', fontWeight: 300 }}>
@@ -36,7 +36,7 @@ function HeroBanner (): JSX.Element {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default HeroBanner
+export default HeroBanner;

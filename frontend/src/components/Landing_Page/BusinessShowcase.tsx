@@ -1,9 +1,9 @@
-import { Button } from '@mui/material'
-import useResponsiveHeight from '../../hooks/useResponsiveHeight'
-import BusinessPartnerCards from './Cards/BusinessPartnerCards'
+import { Button } from '@mui/material';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
+import BusinessPartnerCards from './Cards/BusinessPartnerCards';
 
-export default function BusinessShowcase (): JSX.Element {
-  const responsiveHeight = useResponsiveHeight() // custom hook
+export default function BusinessShowcase(): JSX.Element {
+  const responsiveHeight = useResponsiveHeight(); // custom hook
   return (
     <>
       <div>
@@ -18,8 +18,8 @@ export default function BusinessShowcase (): JSX.Element {
             transform: 'translate(7vw, 2vw)',
             '&:hover': {
               backgroundColor: '#D2B48C',
-              color: 'black'
-            }
+              color: 'black',
+            },
           }}
         >
           Embark. Unite. Elevate your CommuniTEA.
@@ -29,7 +29,7 @@ export default function BusinessShowcase (): JSX.Element {
         style={{
           height: responsiveHeight,
           backgroundColor: 'rgba(85, 107, 47, 0.6)',
-          display: 'flex'
+          display: 'flex',
         }}
       >
         <div style={{ flexGrow: 1, maxWidth: '50%' }}>
@@ -38,7 +38,7 @@ export default function BusinessShowcase (): JSX.Element {
               style={{
                 fontFamily: 'Roboto Slab',
                 fontSize: '3vw',
-                fontWeight: 700
+                fontWeight: 700,
               }}
             >
               BUSINESSES
@@ -47,11 +47,12 @@ export default function BusinessShowcase (): JSX.Element {
               style={{
                 fontFamily: 'Roboto',
                 fontSize: '1.75vw',
-                fontWeight: 300
+                fontWeight: 300,
               }}
             >
-              Showcase your unique tea selections to a wider audience and boost community
-              engagement. Join CommuniTEA and let tea lovers discover and enjoy your offerings!
+              Showcase your unique tea selections to a wider audience and boost
+              community engagement. Join CommuniTEA and let tea lovers discover
+              and enjoy your offerings!
             </p>
           </div>
         </div>
@@ -61,7 +62,7 @@ export default function BusinessShowcase (): JSX.Element {
             maxWidth: '60%',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}
         >
           <div>
@@ -70,5 +71,5 @@ export default function BusinessShowcase (): JSX.Element {
         </div>
       </div>
     </>
-  )
+  );
 }

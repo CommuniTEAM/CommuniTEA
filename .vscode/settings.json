@@ -1,5 +1,5 @@
 {
-  "prettier.configPath": "app/.prettierrc.cjs",
+  "prettier.configPath": "frontend/.prettierrc.cjs",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "[typescript]": {

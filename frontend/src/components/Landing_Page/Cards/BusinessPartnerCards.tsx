@@ -1,32 +1,34 @@
-import { Card, CardContent, CardMedia, Typography, CardActionArea } from '@mui/material'
-import Slider from 'react-slick'
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import CoylesBakeshop from '../../../assets/CoylesBakeshop.jpg'
-import MiroTea from '../../../assets/MiroTea.png'
-import QueenMaryTea from '../../../assets/QueenMaryTea.png'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import {
+  Card, CardContent, CardMedia, Typography, CardActionArea,
+} from '@mui/material';
+import Slider from 'react-slick';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import CoylesBakeshop from '../../../assets/CoylesBakeshop.jpg';
+import MiroTea from '../../../assets/MiroTea.png';
+import QueenMaryTea from '../../../assets/QueenMaryTea.png';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-export default function BusinessPartnerCards (): JSX.Element {
-  const theme = useTheme()
-  const largeScreen = useMediaQuery(theme.breakpoints.up('lg'))
-  const mediumScreen = useMediaQuery(theme.breakpoints.between('md', 'lg'))
-  const smallScreen = useMediaQuery(theme.breakpoints.down('md'))
+export default function BusinessPartnerCards(): JSX.Element {
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const mediumScreen = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+  const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const getImageHeight = (): string => {
-    if (largeScreen) return '10vw'
-    if (mediumScreen) return '10vw'
-    if (smallScreen) return '10vw'
-    return '60vw'
-  }
+    if (largeScreen) return '10vw';
+    if (mediumScreen) return '10vw';
+    if (smallScreen) return '10vw';
+    return '60vw';
+  };
 
   const getCardHeight = (): string => {
-    if (largeScreen) return '18vw'
-    if (mediumScreen) return '20vw'
-    if (smallScreen) return '20vw'
-    return '60vw'
-  }
+    if (largeScreen) return '18vw';
+    if (mediumScreen) return '20vw';
+    if (smallScreen) return '20vw';
+    return '60vw';
+  };
 
   // This is test data. Replace when API is ready with rotation of featured businesses.
   const businessesData = [
@@ -36,7 +38,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: "Coyle's Bakeshop",
       address: ' 8300 GREENWOOD AVE N',
       contact: '206-257-4636',
-      website: 'https://www.coylesbakeshop.com/'
+      website: 'https://www.coylesbakeshop.com/',
     },
     {
       image: MiroTea,
@@ -44,7 +46,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Miro Tea',
       address: ' 5405 BALLARD AVE NW',
       contact: '206-782-6832',
-      website: 'https://mirotea.blogspot.com/'
+      website: 'https://mirotea.blogspot.com/',
     },
     {
       image: QueenMaryTea,
@@ -52,7 +54,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Queen Mary Tea',
       address: ' 2912 NE 55TH ST',
       contact: '206-257-4636',
-      website: 'https://queenmarytea.com/'
+      website: 'https://queenmarytea.com/',
     },
     {
       image: CoylesBakeshop,
@@ -60,7 +62,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: "Coyle's Bakeshop",
       address: ' 8300 GREENWOOD AVE N',
       contact: '206-257-4636',
-      website: 'https://www.coylesbakeshop.com/'
+      website: 'https://www.coylesbakeshop.com/',
     },
     {
       image: MiroTea,
@@ -68,7 +70,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Miro Tea',
       address: ' 5405 BALLARD AVE NW',
       contact: '206-782-6832',
-      website: 'https://mirotea.blogspot.com/'
+      website: 'https://mirotea.blogspot.com/',
     },
     {
       image: QueenMaryTea,
@@ -76,7 +78,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Queen Mary Tea',
       address: ' 2912 NE 55TH ST',
       contact: '206-257-4636',
-      website: 'https://queenmarytea.com/'
+      website: 'https://queenmarytea.com/',
     },
     {
       image: CoylesBakeshop,
@@ -84,7 +86,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: "Coyle's Bakeshop",
       address: ' 8300 GREENWOOD AVE N',
       contact: '206-257-4636',
-      website: 'https://www.coylesbakeshop.com/'
+      website: 'https://www.coylesbakeshop.com/',
     },
     {
       image: MiroTea,
@@ -92,7 +94,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Miro Tea',
       address: ' 5405 BALLARD AVE NW',
       contact: '206-782-6832',
-      website: 'https://mirotea.blogspot.com/'
+      website: 'https://mirotea.blogspot.com/',
     },
     {
       image: QueenMaryTea,
@@ -100,7 +102,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Queen Mary Tea',
       address: ' 2912 NE 55TH ST',
       contact: '206-257-4636',
-      website: 'https://queenmarytea.com/'
+      website: 'https://queenmarytea.com/',
     },
     {
       image: CoylesBakeshop,
@@ -108,7 +110,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: "Coyle's Bakeshop",
       address: ' 8300 GREENWOOD AVE N',
       contact: '206-257-4636',
-      website: 'https://www.coylesbakeshop.com/'
+      website: 'https://www.coylesbakeshop.com/',
     },
     {
       image: MiroTea,
@@ -116,7 +118,7 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Miro Tea',
       address: ' 5405 BALLARD AVE NW',
       contact: '206-782-6832',
-      website: 'https://mirotea.blogspot.com/'
+      website: 'https://mirotea.blogspot.com/',
     },
     {
       image: QueenMaryTea,
@@ -124,9 +126,9 @@ export default function BusinessPartnerCards (): JSX.Element {
       title: 'Queen Mary Tea',
       address: ' 2912 NE 55TH ST',
       contact: '206-257-4636',
-      website: 'https://queenmarytea.com/'
-    }
-  ]
+      website: 'https://queenmarytea.com/',
+    },
+  ];
 
   // Slider settings
   const settings = {
@@ -140,18 +142,18 @@ export default function BusinessPartnerCards (): JSX.Element {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2
-        }
+          slidesToScroll: 2,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  }
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
   return (
     <div style={{ padding: '0 40px' }}>
@@ -215,5 +217,5 @@ export default function BusinessPartnerCards (): JSX.Element {
         ))}
       </Slider>
     </div>
-  )
+  );
 }
