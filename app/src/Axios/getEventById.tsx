@@ -127,7 +127,7 @@ const eventData = [
     title: 'Paint & Sip: Night Owl',
     location: 'Friday Afternoon Tea',
     date: '11/18/2023',
-    startTime: '6:00 PM - 8:00 PM',
+    startTime: '6:00 PM',
     endTime: '8:00 PM',
     price: '$50',
     address: '4228 Stone Way N',

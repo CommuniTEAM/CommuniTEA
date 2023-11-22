@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.18",
+    "@react-google-maps/api": "^2.19.2",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "axios": "^1.6.2",
     "eslint-config-airbnb-typescript": "^17.1.0",

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Divider, Typography } from '@mui/material';
+import {
+  Button, Divider, Paper, Typography,
+} from '@mui/material';
 import NavBar from '../Landing Page/Navbar';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
 import shareIcon from '../../assets/shareIcon.png';
 import MapPinIncon from '../../assets/MapPinIcon.png';
+import OtherEvents from './OtherEvents';
 
 interface EventData {
   id: number
@@ -176,6 +179,62 @@ export default function EventDetailPage(): JSX.Element {
             </Typography>
           </div>
 
+          <Paper
+            elevation={0}
+            sx={{ backgroundColor: '#333', height: '8vh', marginTop: '2vh' }}
+          >
+            <div style={{ display: 'flex', height: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '70%',
+                  justifyContent: 'center',
+                  marginLeft: '2vw',
+                }}
+              >
+                <div>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontFamily: 'Montserrat', color: 'white' }}
+                  >
+                    Seattle Events
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: 'Montserrat', color: 'white' }}
+                  >
+                    10k+ Followers
+                  </Typography>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  width: '30%',
+                  marginRight: '2vw',
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: '10px',
+                    height: '3.5vh',
+                    backgroundColor: '#87CEEB',
+                    color: 'black',
+                    fontFamily: 'Montserrat',
+                  }}
+                >
+                  Follow
+                </Button>
+              </div>
+            </div>
+          </Paper>
+
           <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
           <div style={{ marginTop: '2vh' }}>
@@ -200,6 +259,13 @@ export default function EventDetailPage(): JSX.Element {
                 </Typography>
               </div>
             </div>
+          </div>
+          <div>
+            <iframe
+              src="https://storage.googleapis.com/maps-solutions-n6xadbe9gq/locator-plus/t8su/locator-plus.html"
+              style={{ width: '100%', height: '50vh', border: 0 }}
+              title="Google Maps"
+            />
           </div>
 
           <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
@@ -328,6 +394,7 @@ export default function EventDetailPage(): JSX.Element {
           <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
         </div>
       </div>
+      <OtherEvents />
     </div>
   );
 }
