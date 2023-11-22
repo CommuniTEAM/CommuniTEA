@@ -180,7 +180,7 @@ function NavBar(): JSX.Element {
           <Box sx={{ flexGrow: 0, marginLeft: 16 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                <Avatar />
               </IconButton>
             </Tooltip>
             <Menu
