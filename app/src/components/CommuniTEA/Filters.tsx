@@ -1,5 +1,8 @@
 import {
-  FormControl, FormControlLabel, FormGroup, FormLabel,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
 } from '@mui/material';
 import EventCards from './EventCard';
 
@@ -83,11 +86,6 @@ export default function Filters(): JSX.Element {
             />
             <FormControlLabel
               label="Pairing"
-              control={<input type="checkbox" />}
-              sx={{ paddingLeft: '1vw' }}
-            />
-            <FormControlLabel
-              label="Pre-Commit"
               control={<input type="checkbox" />}
               sx={{ paddingLeft: '1vw' }}
             />

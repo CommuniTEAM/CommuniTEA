@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
-import useResponsiveHeight from '../../hooks/useResponsiveHeight';
-import BusinessPartnerCards from './Cards/BusinessPartnerCards';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
+import BusinessPartnerCards from '../Landing Page/Cards/BusinessPartnerCards';
 
 export default function BusinessShowcase(): JSX.Element {
   const responsiveHeight = useResponsiveHeight(); // custom hook
@@ -37,22 +37,25 @@ export default function BusinessShowcase(): JSX.Element {
             <h1
               style={{
                 fontFamily: 'Roboto Slab',
-                fontSize: '3vw',
+                fontSize: '2vw',
                 fontWeight: 700,
               }}
             >
-              BUSINESSES
+              Explore Local Gems in your Cup of Tea
             </h1>
             <p
               style={{
                 fontFamily: 'Roboto',
-                fontSize: '1.75vw',
+                fontSize: '1vw',
                 fontWeight: 300,
               }}
             >
-              Showcase your unique tea selections to a wider audience and boost
-              community engagement. Join CommuniTEA and let tea lovers discover
-              and enjoy your offerings!
+              Embark on a journey to find local tea havens near you. CommuniTEA
+              opens the door to a diverse tapestry of nearby businesses, each
+              with its own unique blend of flavors and community charm. Whether
+              you&apos;re a seasoned tea aficionado or a curious newcomer, let
+              the essence of local tea culture unfold right in your
+              neighborhood.
             </p>
           </div>
         </div>

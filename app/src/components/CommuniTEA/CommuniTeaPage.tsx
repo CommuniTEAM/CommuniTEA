@@ -2,6 +2,7 @@ import Footer from '../Landing Page/Footer';
 import NavBar from '../Landing Page/Navbar';
 import Filters from './Filters';
 import LocationSearch from './LocationSearch';
+import LocalBusinesses from './LocalBusinesses';
 
 export default function CommuniTeaPage(): JSX.Element {
   return (
@@ -9,6 +10,7 @@ export default function CommuniTeaPage(): JSX.Element {
       <NavBar />
       <LocationSearch />
       <Filters />
+      <LocalBusinesses />
       <Footer />
     </div>
   );
