@@ -14,6 +14,8 @@ Bringing your local community together over a cuppa 🍵
       - [Commit Message Format](#commit-message-format)
       - [ESLint TypeScript Format](#eslint-typescript-format)
       - [Golang Format](#golang-format)
+        - [Installing golangci-lint on Mac or Linux Systems](#installing-golangci-lint-on-mac-or-linux-systems)
+        - [Installing golangci-lint on Windows Systems](#installing-golangci-lint-on-windows-systems)
     - [Using Git Hooks in VSCode](#using-git-hooks-in-vscode)
 
 ## Working with Git Hooks
@@ -42,8 +44,10 @@ For more detailed installation information and troubleshooting, see the [pre-com
 
 #### Commit Message Format
 
-All commit messages, regardless of the branch, must adhere to this header standard:<br>
-```<Emoji> [Related Jira Issue]: Description of work```<br>
+All commit messages, regardless of the branch, must adhere to this header standard:
+```
+<Emoji> [Related Jira Issue]: Description of work
+```
 Example: `✅ [TEA-123]: Added unit tests`
 
 These are the allowed emojis and their use-cases:
@@ -65,18 +69,38 @@ Please be sure to have the [Prettier VSCode extension](https://marketplace.visua
 
 #### Golang Format
 
-To successfully run the pre-commit hook set up for Go, you must have [golangci-lint](https://golangci-lint.run/) installed on your local machine. See the installation instructions below, or follow the [official documentation](https://golangci-lint.run/usage/install/).
+This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or see the installation instructions below.
 
-Installing golangci-lint for:
-- **Windows**: You must first install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash, as the golangci-lint installation commands cannot be run without a bash terminal. Once you have Git Bash at the ready, run `curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2`.
-- **Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`.
-- **Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
+##### Installing golangci-lint on Mac or Linux Systems
 
-This repository uses a robust golangci-lint configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). As a result, the linter is quite strict. It is highly recommended that you enable the [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) in VSCode in order to catch the linting errors as they occur.
+**Mac**: First, ensure you have [homebrew](https://brew.sh/) installed. Then, in your terminal, run:
+```
+brew install golangci-lint
+brew upgrade golangci-lint
+```
 
+**Linux**: If your distro has Snap, you can simply run:
+```
+sudo snap install golangci-lint
+```
+Alternatively, you can manually install the binary by running:
+```
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2
+```
+
+##### Installing golangci-lint on Windows Systems
+
+Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is recommended to install [Git for Windows](https://gitforwindows.org/) so that you have the Git Bash terminal available.
+
+In your bash terminal, install the golangci-lint binary by running:
+```
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2
+```
+
+**Note:** golangci-lint can *only* run inside a bash terminal. To run the pre-commit hook for Go, you must also run `git commit` inside of your bash terminal.
 
 ### Using Git Hooks in VSCode
 
 When commiting changes through VSCode's source control tab, pre-commit will still run automatically without issues. If a hook fails, however, VSCode will throw you an error. In that case, click on "Show Command Output" as per the screenshot below to see the errors returned from pre-commit.
 
-![example error](https://gitlab.com/tea-masters/communiTEA/uploads/20cb944e753e1823f0702918050a4540/Screenshot_2023-10-17_124748.png)
+<img src="https://gitlab.com/tea-masters/communiTEA/uploads/20cb944e753e1823f0702918050a4540/Screenshot_2023-10-17_124748.png" alt="example error" height=150 width=425>
