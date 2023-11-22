@@ -2,7 +2,7 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
-Bringing your local community together over a cuppa.
+Bringing your local community together over a cuppa 🍵
 
 ## Table of Contents
 
@@ -27,9 +27,9 @@ To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook 
 
 ### Installing Pre-Commit
 
-1. Install pre-commit.
+1. Install pre-commit.<br>
 **Windows**:
-Pre-commit runs off of Python, so you will need pip on your local machine. To install pre-commit, open your terminal and run `pip install pre-commit`.
+Pre-commit runs off of Python, so you will need pip on your local machine. To install pre-commit, open your terminal and run `pip install pre-commit`.<br>
 **Mac or Linux**:
 Ensure you have [homebrew](https://brew.sh/) installed on your local machine. To install pre-commit, open your terminal and run `brew install pre-commit`.
 
@@ -67,7 +67,13 @@ Please be sure to have the [Prettier VSCode extension](https://marketplace.visua
 
 #### Golang Format
 
-TBD.
+To successfully run the pre-commit hook set up for Go, you must have [golangci-lint](https://golangci-lint.run/) installed on your local machine. See the installation instructions below, or follow the [official documentation](https://golangci-lint.run/usage/install/). <br>
+**Windows**: You must first install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash, as the golangci-lint installation commands cannot be run without a bash terminal. Once you have Git Bash at the ready, run `curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2`. <br>
+**Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`. <br>
+**Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
+
+This repository uses a robust golangci-lint configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). As a result, the linter is quite strict. It is highly recommended that you enable the [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) in VSCode in order to catch the linting errors as they occur.
+
 
 ### Using Git Hooks in VSCode
 

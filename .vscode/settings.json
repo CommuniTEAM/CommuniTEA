@@ -23,5 +23,6 @@
   },
   "go.formatTool": "goimports",
   "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--fast"],
   "files.eol": "\n"
 }
