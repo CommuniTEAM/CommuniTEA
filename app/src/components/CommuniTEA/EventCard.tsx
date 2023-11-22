@@ -1,5 +1,10 @@
 import {
-  Card, CardContent, CardMedia, Divider, Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Divider,
+  Typography,
 } from '@mui/material';
 import TeaExpo from '../../assets/TeaExpo.jpg';
 import LikeIcon from '../../assets/LikeIcon.png';
@@ -73,49 +78,69 @@ export default function EventCards(): JSX.Element {
   return (
     <div style={{ width: '100%', marginTop: '2vh' }}>
       {eventsData.map((event) => (
-        <Card key={event.name} sx={{ display: 'flex', width: '100%', marginBottom: 2 }}>
-          <CardMedia sx={{ height: 250, width: '50%' }} image={event.image} title={event.name} />
-
-          <div style={{ display: 'flex', flexDirection: 'column', width: '40%' }}>
-            <CardContent sx={{ marginBottom: '2vh' }}>
-              <Typography gutterBottom variant="h5" component="div">
-                {event.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Location:
-                {event.Location}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Date:
-                {event.Date}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Time:
-                {event.Time}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Price:
-                {event.Price}
-              </Typography>
-            </CardContent>
-
-            <Divider sx={{ width: '90%', alignSelf: 'center' }} />
-
-            <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-              <div style={{ flexGrow: 1, marginLeft: '1vw' }}>
-                <Typography variant="body2" color="text.secondary">
-                  {event.Address}
+        <Card
+          key={event.name}
+          sx={{ display: 'flex', width: '100%', marginBottom: 2 }}
+        >
+          <CardActionArea sx={{ width: 'inherit', display: 'flex' }}>
+            <CardMedia
+              sx={{ height: 250, width: '60%' }}
+              image={event.image}
+              title={event.name}
+            />
+            <div
+              style={{ display: 'flex', flexDirection: 'column', width: '40%' }}
+            >
+              <CardContent sx={{ marginBottom: '2vh' }}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {event.name}
                 </Typography>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={LikeIcon} alt="Like Icon" style={{ width: '.75vw' }} />
                 <Typography variant="body2" color="text.secondary">
-                  {' '}
-                  {event.Attending}
+                  Location:
+                  {event.Location}
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Date:
+                  {event.Date}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Time:
+                  {event.Time}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price:
+                  {event.Price}
+                </Typography>
+              </CardContent>
+
+              <Divider sx={{ width: '90%', alignSelf: 'center' }} />
+
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+              >
+                <div style={{ flexGrow: 1, marginLeft: '1vw' }}>
+                  <Typography variant="body2" color="text.secondary">
+                    {event.Address}
+                  </Typography>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <img
+                    src={LikeIcon}
+                    alt="Like Icon"
+                    style={{ width: '.75vw' }}
+                  />
+                  <Typography variant="body2" color="text.secondary">
+                    {' '}
+                    {event.Attending}
+                  </Typography>
+                </div>
               </div>
             </div>
-          </div>
+          </CardActionArea>
         </Card>
       ))}
     </div>
