@@ -42,10 +42,8 @@ For more detailed installation information and troubleshooting, see the [pre-com
 
 #### Commit Message Format
 
-All commit messages, regardless of the branch, must adhere to this header standard:
-
-```<Emoji> [Related Jira Issue]: Description of work```
-
+All commit messages, regardless of the branch, must adhere to this header standard:<br>
+```<Emoji> [Related Jira Issue]: Description of work```<br>
 Example: `✅ [TEA-123]: Added unit tests`
 
 These are the allowed emojis and their use-cases:
@@ -67,10 +65,12 @@ Please be sure to have the [Prettier VSCode extension](https://marketplace.visua
 
 #### Golang Format
 
-To successfully run the pre-commit hook set up for Go, you must have [golangci-lint](https://golangci-lint.run/) installed on your local machine. See the installation instructions below, or follow the [official documentation](https://golangci-lint.run/usage/install/). <br>
-**Windows**: You must first install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash, as the golangci-lint installation commands cannot be run without a bash terminal. Once you have Git Bash at the ready, run `curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2`. <br>
-**Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`. <br>
-**Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
+To successfully run the pre-commit hook set up for Go, you must have [golangci-lint](https://golangci-lint.run/) installed on your local machine. See the installation instructions below, or follow the [official documentation](https://golangci-lint.run/usage/install/).
+
+Installing golangci-lint for:
+- **Windows**: You must first install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash, as the golangci-lint installation commands cannot be run without a bash terminal. Once you have Git Bash at the ready, run `curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2`.
+-**Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`.
+-**Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
 
 This repository uses a robust golangci-lint configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). As a result, the linter is quite strict. It is highly recommended that you enable the [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) in VSCode in order to catch the linting errors as they occur.
 
