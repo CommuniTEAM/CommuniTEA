@@ -22,4 +22,6 @@
     "editor.defaultFormatter": "golang.go"
   },
   "go.formatTool": "goimports",
+  "go.lintTool": "golangci-lint",
+  "files.eol": "\n"
 }
