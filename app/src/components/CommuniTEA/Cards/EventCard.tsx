@@ -6,12 +6,12 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import TeaExpo from '../../assets/TeaExpo.jpg';
-import LikeIcon from '../../assets/LikeIcon.png';
-import TeaTasting from '../../assets/TeaTasting.png';
-import FourSeasonsTea from '../../assets/FourSeasonsTea.png';
-import DataCoffee from '../../assets/DataCoffee.png';
-import TeaAndPainting from '../../assets/TeaAndPainting.jpg';
+import TeaExpo from '../../../assets/TeaExpo.jpg';
+import LikeIcon from '../../../assets/LikeIcon.png';
+import TeaTasting from '../../../assets/TeaTasting.png';
+import FourSeasonsTea from '../../../assets/FourSeasonsTea.png';
+import DataCoffee from '../../../assets/DataCoffee.png';
+import TeaAndPainting from '../../../assets/TeaAndPainting.jpg';
 
 export default function EventCards(): JSX.Element {
   // TODO: Add functionality to the card

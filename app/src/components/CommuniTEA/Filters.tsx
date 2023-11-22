@@ -4,7 +4,7 @@ import {
   FormGroup,
   FormLabel,
 } from '@mui/material';
-import EventCards from './EventCard';
+import EventCards from './Cards/EventCard';
 
 export default function Filters(): JSX.Element {
   // TODO: Add functionality to the checkboxes
