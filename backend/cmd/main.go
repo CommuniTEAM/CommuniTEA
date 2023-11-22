@@ -1,32 +1,42 @@
 package main
 
 import (
-	    "net/http"
-        "fmt"
+	"net/http"
+	"time"
 )
 
 func main() {
-fmt.Println("HELLO WORLD!")
- // Create a new request multiplexer
- // Take incoming requests and dispatch them to the matching handlers
- mux := http.NewServeMux()
+	// // Create a new request multiplexer
+	// // Take incoming requests and dispatch them to the matching handlers
+	// mux := http.NewServeMux()
 
- // Register the routes and handlers
- mux.Handle("/", &homeHandler{})
- mux.Handle("/test", &testHandler{})
+	// // Register the routes and handlers
+	// mux.Handle("/", &homeHandler{})
+	// mux.Handle("/test", &testHandler{})
 
- // Run the server
- http.ListenAndServe(":8000", mux)
+	// Appeasing the linter??
+	const three = 3
+
+	// Run the server
+	server := &http.Server{
+		Addr:              ":8000",
+		ReadHeaderTimeout: three * time.Second,
+	}
+
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }
 
-type homeHandler struct{}
+// type homeHandler struct{}
 
-func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- w.Write([]byte("This is my home page"))
-}
+// func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+//  w.Write([]byte("This is my home page"))
+// }
 
-type testHandler struct{}
+// type testHandler struct{}
 
-func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- w.Write([]byte("This is another test message"))
-}
+// func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+//  w.Write([]byte("This is another test message"))
+// }
