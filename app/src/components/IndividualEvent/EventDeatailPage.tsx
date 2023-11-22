@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import NavBar from '../Landing Page/Navbar';
 import getEventById from '../../Axios/getEventById';
+import LikeIcon from '../../assets/LikeIcon.png';
+import shareIcon from '../../assets/shareIcon.png';
+import MapPinIncon from '../../assets/MapPinIcon.png';
 
 interface EventData {
   id: number
@@ -72,81 +75,259 @@ export default function EventDetailPage(): JSX.Element {
   return (
     <div>
       <NavBar />
-      <img src={eventData.image} alt={eventData.name} />
-      <Typography variant="h1">{eventData.name}</Typography>
-      <Typography variant="h5">{eventData.date}</Typography>
-      <Typography variant="h5">{eventData.startTime}</Typography>
-      <Typography variant="h5">{eventData.endTime}</Typography>
-      <Typography variant="body2">{eventData.headline}</Typography>
-      <Typography variant="body2">{eventData.headline2}</Typography>
-      <Typography variant="h3">Location</Typography>
-      <Typography variant="body2">{eventData.location}</Typography>
-      <Typography variant="body2">{eventData.address}</Typography>
-      <Typography variant="h3">About this Event</Typography>
-      <Typography variant="body2">{eventData.description}</Typography>
-      <Typography variant="h4">Event Highlights:</Typography>
-      <ul>
-        <li>
-          <Typography variant="h5">{eventData.eventHighlight1}</Typography>
-          <ul>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight1Bullet1}
+      <div
+        style={{
+          marginLeft: '5vw',
+          marginRight: '5vw',
+        }}
+      >
+        <div style={{ textAlign: 'center', marginTop: '2vh' }}>
+          <img
+            src={eventData.image}
+            alt={eventData.name}
+            style={{ borderRadius: '50px', width: '100%', height: '80vh' }}
+          />
+        </div>
+        <div style={{ display: 'flex', marginTop: '2vh' }}>
+          <div style={{ width: '90%' }}>
+            <Typography
+              sx={{
+                fontFamily: 'Montserrat',
+                color: '#29C6CF',
+                fontSize: '.80vw',
+              }}
+            >
+              {eventData.tag}
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              width: '10%',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                fontFamily: 'Montserrat',
+                fontSize: '.80vw',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <img
+                src={LikeIcon}
+                alt="Like Icon"
+                style={{ width: '1vw', marginRight: '.5vw' }}
+              />
+              Like
+            </div>
+            <div
+              style={{
+                fontFamily: 'Montserrat',
+                fontSize: '.80vw',
+              }}
+            >
+              <img
+                src={shareIcon}
+                alt="Share Icon"
+                style={{ width: '1vw', marginRight: '.5vw' }}
+              />
+              Share
+            </div>
+          </div>
+        </div>
+
+        <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+
+        <div style={{ width: '70%' }}>
+          <Typography variant="h2" sx={{ fontFamily: 'Montserrat' }}>
+            {eventData.name}
+          </Typography>
+          <div style={{ display: 'flex', marginTop: '1vh' }}>
+            <div style={{ width: '80%' }}>
+              <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                {eventData.date}
               </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight1Bullet2}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                {eventData.startTime}
+                -
+                {eventData.endTime}
+                PST
               </Typography>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <Typography variant="h5">{eventData.eventHighlight2}</Typography>
-          <ul>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight2Bullet1}
+            </div>
+          </div>
+          <div style={{ paddingTop: '2vh' }}>
+            <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+              {eventData.headline}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                fontFamily: 'Montserrat',
+                fontStyle: 'italic',
+                marginTop: '1vh',
+              }}
+            >
+              {eventData.headline2}
+            </Typography>
+          </div>
+
+          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+
+          <div style={{ marginTop: '2vh' }}>
+            <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
+              Location
+            </Typography>
+            <div style={{ display: 'flex', marginTop: '1vh' }}>
+              <img
+                src={MapPinIncon}
+                alt="Map Pin Icon"
+                style={{ width: '1vw', height: '1vw' }}
+              />
+              <div style={{ marginLeft: '3vh' }}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontFamily: 'Montserrat', fontWeight: 'bold' }}
+                >
+                  {eventData.location}
+                </Typography>
+                <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.address}
+                </Typography>
+              </div>
+            </div>
+          </div>
+
+          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+
+          <div>
+            <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
+              About this Event
+            </Typography>
+            <div style={{ marginTop: '1vh' }}>
+              <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                {eventData.description}
               </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight2Bullet2}
+            </div>
+            <div style={{ marginTop: '1vh' }}>
+              <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
+                Event Highlights:
               </Typography>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <Typography variant="h5">{eventData.eventHighlight3}</Typography>
-          <ul>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight3Bullet1}
+            </div>
+            <ul>
+              <li>
+                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.eventHighlight1}
+                </Typography>
+                <ul>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight1Bullet1}
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight1Bullet2}
+                    </Typography>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.eventHighlight2}
+                </Typography>
+                <ul>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight2Bullet1}
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight2Bullet2}
+                    </Typography>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.eventHighlight3}
+                </Typography>
+                <ul>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight3Bullet1}
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight3Bullet2}
+                    </Typography>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.eventHighlight4}
+                </Typography>
+                <ul>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight4Bullet1}
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'Montserrat' }}
+                    >
+                      {eventData.eventHighlight4Bullet2}
+                    </Typography>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
+              Why Attend?
+            </Typography>
+            <div style={{ marginTop: '1vh' }}>
+              <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                {eventData.whyAttend}
               </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight3Bullet2}
-              </Typography>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <Typography variant="h5">{eventData.eventHighlight4}</Typography>
-          <ul>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight4Bullet1}
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                {eventData.eventHighlight4Bullet2}
-              </Typography>
-            </li>
-          </ul>
-        </li>
-      </ul>
+            </div>
+          </div>
+
+          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+        </div>
+      </div>
     </div>
   );
 }

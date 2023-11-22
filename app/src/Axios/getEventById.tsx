@@ -7,6 +7,7 @@ import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 interface Event {
   id: number
   image: string
+  tag: string
   name: string
   title: string
   location: string
@@ -42,6 +43,7 @@ const eventData = [
   {
     id: 1,
     image: TeaExpo,
+    tag: 'Seminar',
     name: 'World Tea Conference and Expo',
     title: 'World Tea Conference and Expo',
     location: 'Seattle Center',
@@ -49,7 +51,7 @@ const eventData = [
     startTime: '4:00 PM',
     endTime: '8:00 PM',
     price: 'from $50',
-    address: '305 Harrison St',
+    address: '305 Harrison St Seattle, WA 98109',
     attending: '2000',
     headline:
       'Join us on this extraordinary journey through the world of tea. Elevate your tea experience, broaden our horizons, and become a part of the vibrant tapestry that is the World Tea Conference and Expo! ',
@@ -138,7 +140,7 @@ const getEventById = async (eventId: number): Promise<Event> => new Promise((res
     const foundEvent = eventData.find(
       (eventItem) => eventItem.id === eventId,
     );
-    if (foundEvent !== undefined) {
+    if (foundEvent !== undefined || foundEvent !== null) {
       resolve(foundEvent);
     } else {
       reject(new Error('Event not found'));
