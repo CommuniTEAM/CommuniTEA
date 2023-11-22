@@ -1,9 +1,9 @@
-import React from 'react'
-import { Button, Typography, IconButton } from '@mui/material'
-import GitHubIcon from '../../assets/GitHubIcon.png'
+import React from 'react';
+import { Button, Typography, IconButton } from '@mui/material';
+import GitHubIcon from '../../assets/GitHubIcon.png';
 
-export default function Footer (): JSX.Element {
-  const footerMenuItems = ['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'FAQ']
+export default function Footer(): JSX.Element {
+  const footerMenuItems = ['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'FAQ'];
 
   return (
     <div
@@ -11,7 +11,7 @@ export default function Footer (): JSX.Element {
         display: 'flex',
         backgroundColor: '#333',
         height: 64,
-        paddingLeft: '1vw'
+        paddingLeft: '1vw',
       }}
     >
       <div
@@ -20,7 +20,7 @@ export default function Footer (): JSX.Element {
           flexDirection: 'column',
           justifyContent: 'center',
           flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '33%',
         }}
       >
         <Typography style={{ color: '#fff', fontFamily: 'Montserrat' }}>
@@ -33,7 +33,7 @@ export default function Footer (): JSX.Element {
           justifyContent: 'center',
           alignItems: 'center',
           flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '33%',
         }}
       >
         {footerMenuItems.map((item, index) => (
@@ -43,7 +43,7 @@ export default function Footer (): JSX.Element {
                 color: '#fff',
                 fontFamily: 'Montserrat',
                 textTransform: 'none',
-                fontSize: '1rem'
+                fontSize: '1rem',
               }}
             >
               {item}
@@ -63,7 +63,7 @@ export default function Footer (): JSX.Element {
           justifyContent: 'center',
           alignItems: 'flex-end',
           flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '33%',
         }}
       >
         <IconButton
@@ -76,5 +76,5 @@ export default function Footer (): JSX.Element {
         </IconButton>
       </div>
     </div>
-  )
+  );
 }

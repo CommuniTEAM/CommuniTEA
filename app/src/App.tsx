@@ -1,9 +1,9 @@
-import type { ReactElement } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import LandingPage from './components/Landing Page/LandingPage'
-import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage'
+import type { ReactElement } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/Landing Page/LandingPage';
+import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage';
 
-function App (): ReactElement {
+function App(): ReactElement {
   return (
     <Router>
       <Routes>
@@ -11,7 +11,7 @@ function App (): ReactElement {
         <Route path="/communitea" element={<CommuniTeaPage />} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,12 +1,12 @@
-import { Grid } from '@mui/material'
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
-import One from '../../assets/One.svg'
-import Two from '../../assets/Two.svg'
-import Three from '../../assets/Three.svg'
-import '../../App.css'
+import { Grid } from '@mui/material';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
+import One from '../../assets/One.svg';
+import Two from '../../assets/Two.svg';
+import Three from '../../assets/Three.svg';
+import '../../App.css';
 
-export default function HowItWorks (): JSX.Element {
-  const responsiveHeight = useResponsiveHeight() // custom hook
+export default function HowItWorks(): JSX.Element {
+  const responsiveHeight = useResponsiveHeight(); // custom hook
 
   return (
     <div style={{ height: responsiveHeight }}>
@@ -16,7 +16,7 @@ export default function HowItWorks (): JSX.Element {
           fontSize: '2vw',
           fontWeight: 300,
           color: '#416543',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         How does it work?
@@ -33,12 +33,19 @@ export default function HowItWorks (): JSX.Element {
               fontFamily: 'Roboto Slab',
               fontSize: '1.5vw',
               fontWeight: 300,
-              color: '#416543'
+              color: '#416543',
             }}
           >
             Discover
           </h1>
-          <p style={{ fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543' }}>
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
+          >
             Find your favorite teas from curated local businesses
           </p>
         </Grid>
@@ -53,12 +60,19 @@ export default function HowItWorks (): JSX.Element {
               fontFamily: 'Roboto Slab',
               fontSize: '1.5vw',
               fontWeight: 300,
-              color: '#416543'
+              color: '#416543',
             }}
           >
             Connect
           </h1>
-          <p style={{ fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543' }}>
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
+          >
             Explore tea-related events and connect enthusiasts.
           </p>
         </Grid>
@@ -73,16 +87,24 @@ export default function HowItWorks (): JSX.Element {
               fontFamily: 'Roboto Slab',
               fontSize: '1.5vw',
               fontWeight: 300,
-              color: '#416543'
+              color: '#416543',
             }}
           >
             Experience
           </h1>
-          <p style={{ fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543' }}>
-            Transform your tea-ppreciation into a collective experience with CommuniTEA
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
+          >
+            Transform your tea-ppreciation into a collective experience with
+            CommuniTEA
           </p>
         </Grid>
       </Grid>
     </div>
-  )
+  );
 }

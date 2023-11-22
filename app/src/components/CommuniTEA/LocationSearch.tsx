@@ -1,12 +1,15 @@
-import { TextField } from '@mui/material'
-import MapPinIcon from '../../assets/MapPinIcon.png'
+import { TextField } from '@mui/material';
+import MapPinIcon from '../../assets/MapPinIcon.png';
 
-export default function LocationSearch (): JSX.Element {
+export default function LocationSearch(): JSX.Element {
   // TODO: Add functionality to the searchbox
   return (
     <div style={{ maxWidth: '50%', backgroundColor: '#FFFFF0', marginTop: '1vw' }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', flexGrow: 2, marginLeft: '1vw' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', flexGrow: 2, marginLeft: '1vw',
+        }}
+        >
           <img
             src={MapPinIcon}
             alt="Map Pin Icon"
@@ -29,5 +32,5 @@ export default function LocationSearch (): JSX.Element {
         </div> */}
       </div>
     </div>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import React from 'react'
-import '../../App.css'
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
-import PouringTea from '../../assets/PouringTea.png'
-import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg'
-import FriendsDrinkingTea from '../../assets/FriendsDrinkingTea.jpg'
+import React from 'react';
+import '../../App.css';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
+import PouringTea from '../../assets/PouringTea.png';
+import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg';
+import FriendsDrinkingTea from '../../assets/FriendsDrinkingTea.jpg';
 
-export default function ValueProp (): JSX.Element {
-  const responsiveHeight = useResponsiveHeight() // custom hook
+export default function ValueProp(): JSX.Element {
+  const responsiveHeight = useResponsiveHeight(); // custom hook
 
   return (
     <div
       style={{
         backgroundColor: '#FFFFF0',
         display: 'flex',
-        height: responsiveHeight
+        height: responsiveHeight,
       }}
     >
       <div style={{ width: '50vw' }}>
@@ -43,7 +43,7 @@ export default function ValueProp (): JSX.Element {
         style={{
           width: '50vw',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <div style={{ width: '80%' }}>
@@ -52,7 +52,7 @@ export default function ValueProp (): JSX.Element {
               fontFamily: 'Roboto Slab',
               fontSize: '3vw',
               fontWeight: 300,
-              color: '#416543'
+              color: '#416543',
             }}
           >
             CommuniTEA is your gateway to a vibrant world of tea exploration.
@@ -63,15 +63,15 @@ export default function ValueProp (): JSX.Element {
               fontSize: '1vw',
               fontWeight: 300,
               color: '#416543',
-              overflowX: 'hidden'
+              overflowX: 'hidden',
             }}
           >
-            Whether you are a seasoned connoisseur or just starting your tea journey, our platform
-            brings together the finest tea varieties and the best local businesses, creating a tea
-            community like no other.
+            Whether you are a seasoned connoisseur or just starting your tea
+            journey, our platform brings together the finest tea varieties and
+            the best local businesses, creating a tea community like no other.
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

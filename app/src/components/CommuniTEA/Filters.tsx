@@ -1,7 +1,9 @@
-import { FormControl, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
-import EventCards from './EventCard'
+import {
+  FormControl, FormControlLabel, FormGroup, FormLabel,
+} from '@mui/material';
+import EventCards from './EventCard';
 
-export default function Filters (): JSX.Element {
+export default function Filters(): JSX.Element {
   // TODO: Add functionality to the checkboxes
 
   return (
@@ -9,7 +11,7 @@ export default function Filters (): JSX.Element {
       <div
         style={{
           paddingLeft: '1vw',
-          width: '30%'
+          width: '30%',
         }}
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
@@ -84,6 +86,11 @@ export default function Filters (): JSX.Element {
               control={<input type="checkbox" />}
               sx={{ paddingLeft: '1vw' }}
             />
+            <FormControlLabel
+              label="Pre-Commit"
+              control={<input type="checkbox" />}
+              sx={{ paddingLeft: '1vw' }}
+            />
           </FormGroup>
         </FormControl>
       </div>
@@ -93,11 +100,11 @@ export default function Filters (): JSX.Element {
           flexDirection: 'column',
           width: '70%',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <EventCards />
       </div>
     </div>
-  )
+  );
 }

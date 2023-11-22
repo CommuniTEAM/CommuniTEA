@@ -1,12 +1,14 @@
-import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material'
-import TeaExpo from '../../assets/TeaExpo.jpg'
-import LikeIcon from '../../assets/LikeIcon.png'
-import TeaTasting from '../../assets/TeaTasting.png'
-import FourSeasonsTea from '../../assets/FourSeasonsTea.png'
-import DataCoffee from '../../assets/DataCoffee.png'
-import TeaAndPainting from '../../assets/TeaAndPainting.jpg'
+import {
+  Card, CardContent, CardMedia, Divider, Typography,
+} from '@mui/material';
+import TeaExpo from '../../assets/TeaExpo.jpg';
+import LikeIcon from '../../assets/LikeIcon.png';
+import TeaTasting from '../../assets/TeaTasting.png';
+import FourSeasonsTea from '../../assets/FourSeasonsTea.png';
+import DataCoffee from '../../assets/DataCoffee.png';
+import TeaAndPainting from '../../assets/TeaAndPainting.jpg';
 
-export default function EventCards (): JSX.Element {
+export default function EventCards(): JSX.Element {
   // TODO: Add functionality to the cards
 
   // Test data, replace with API call
@@ -20,7 +22,7 @@ export default function EventCards (): JSX.Element {
       Time: '5:00 PM',
       Price: 'from $50',
       Address: '305 Harrison St',
-      Attending: '2000'
+      Attending: '2000',
     },
     {
       image: TeaTasting,
@@ -31,7 +33,7 @@ export default function EventCards (): JSX.Element {
       Time: '7:00 PM',
       Price: 'Free',
       Address: '8300 Greenwood Ave N',
-      Attending: '20'
+      Attending: '20',
     },
     {
       image: FourSeasonsTea,
@@ -42,7 +44,7 @@ export default function EventCards (): JSX.Element {
       Time: '2:00 PM',
       Price: 'Free',
       Address: '1414 S Weller St. East Bldg. fl 2',
-      Attending: '10'
+      Attending: '10',
     },
     {
       image: DataCoffee,
@@ -53,7 +55,7 @@ export default function EventCards (): JSX.Element {
       Time: '10:00 AM',
       Price: 'Free',
       Address: '1252 Thomas St.',
-      Attending: '22'
+      Attending: '22',
     },
     {
       image: TeaAndPainting,
@@ -64,9 +66,9 @@ export default function EventCards (): JSX.Element {
       Time: '6:00 PM - 8:00 PM',
       Price: '$50',
       Address: '4228 Stone Way N',
-      Attending: '30'
-    }
-  ]
+      Attending: '30',
+    },
+  ];
 
   return (
     <div style={{ width: '100%', marginTop: '2vh' }}>
@@ -117,5 +119,5 @@ export default function EventCards (): JSX.Element {
         </Card>
       ))}
     </div>
-  )
+  );
 }

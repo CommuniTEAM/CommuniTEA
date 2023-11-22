@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   AppBar,
   Box,
@@ -14,64 +14,63 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText
-} from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import MenuIcon from '../../assets/MenuIcon.png'
-import CommuniteaLogo from '../../assets/CommuniteaLogo.svg'
-import '../../App.css'
+  ListItemText,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import MenuIcon from '../../assets/MenuIcon.png';
+import CommuniteaLogo from '../../assets/CommuniteaLogo.svg';
+import '../../App.css';
 
-function NavBar (): JSX.Element {
-  const navigate = useNavigate()
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false)
+function NavBar(): JSX.Element {
+  const navigate = useNavigate();
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false);
 
   // Placeholder navigation pages and settings
-  const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA']
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+  const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA'];
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
   // Navigation Handlers
   const handleHomeNavigation = (): void => {
-    navigate('/')
-  }
+    navigate('/');
+  };
 
   const handleCommuniTeaNavigation = (): void => {
-    navigate('/communitea')
-  }
+    navigate('/communitea');
+  };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
-    setAnchorElUser(event.currentTarget)
-  }
+    setAnchorElUser(event.currentTarget);
+  };
 
   // Other Handlers
   const handleCloseUserMenu = (): void => {
-    setAnchorElUser(null)
-  }
+    setAnchorElUser(null);
+  };
 
   // Toggles the state of the drawer
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
+      event.type === 'keydown'
+        && ((event as React.KeyboardEvent).key === 'Tab'
+          || (event as React.KeyboardEvent).key === 'Shift')
     ) {
-      return
+      return;
     }
-    setDrawerOpen(open)
-  }
+    setDrawerOpen(open);
+  };
 
-  const toggleSettingsDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return
-      }
-      setSettingsDrawerOpen(open)
+  const toggleMenuDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown'
+        && ((event as React.KeyboardEvent).key === 'Tab'
+          || (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
     }
+    setSettingsDrawerOpen(open);
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#FFF5E1' }}>
@@ -83,7 +82,7 @@ function NavBar (): JSX.Element {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              marginRight: 'auto'
+              marginRight: 'auto',
             }}
           >
             <img
@@ -102,7 +101,7 @@ function NavBar (): JSX.Element {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
-                display: { xs: 'none', md: 'flex', color: 'black' }
+                display: { xs: 'none', md: 'flex', color: 'black' },
               }}
             >
               COMMUNITEA
@@ -110,16 +109,27 @@ function NavBar (): JSX.Element {
           </Box>
 
           {/* Navigation pages for large screens */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'center',
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => {
                   if (page === 'CommuniTEA') {
-                    handleCommuniTeaNavigation()
+                    handleCommuniTeaNavigation();
                   }
                 }}
-                sx={{ mx: 5, color: 'black', display: 'block', fontFamily: 'Montserrat' }}
+                sx={{
+                  mx: 5,
+                  color: 'black',
+                  display: 'block',
+                  fontFamily: 'Montserrat',
+                }}
               >
                 {page}
               </Button>
@@ -137,7 +147,11 @@ function NavBar (): JSX.Element {
             >
               <img src={MenuIcon} alt="Menu Icon" style={{ width: '25px' }} />
             </IconButton>
-            <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <Drawer
+              anchor="left"
+              open={drawerOpen}
+              onClose={toggleDrawer(false)}
+            >
               <Box
                 sx={{ width: 250 }}
                 role="presentation"
@@ -150,7 +164,7 @@ function NavBar (): JSX.Element {
                       key={text}
                       onClick={() => {
                         if (text === 'CommuniTEA') {
-                          handleCommuniTeaNavigation()
+                          handleCommuniTeaNavigation();
                         }
                       }}
                     >
@@ -180,7 +194,9 @@ function NavBar (): JSX.Element {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}>
+                  <Typography
+                    sx={{ textAlign: 'center', fontFamily: 'Montserrat' }}
+                  >
                     {setting}
                   </Typography>
                 </MenuItem>
@@ -190,12 +206,16 @@ function NavBar (): JSX.Element {
 
           {/* Settings drawer for small screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <Drawer anchor="right" open={settingsDrawerOpen} onClose={toggleSettingsDrawer(false)}>
+            <Drawer
+              anchor="right"
+              open={settingsDrawerOpen}
+              onClose={toggleMenuDrawer(false)}
+            >
               <Box
                 sx={{ width: 250 }}
                 role="presentation"
-                onClick={toggleSettingsDrawer(false)}
-                onKeyDown={toggleSettingsDrawer(false)}
+                onClick={toggleMenuDrawer(false)}
+                onKeyDown={toggleMenuDrawer(false)}
               >
                 <List>
                   {settings.map((text) => (
@@ -210,7 +230,7 @@ function NavBar (): JSX.Element {
         </Toolbar>
       </Container>
     </AppBar>
-  )
+  );
 }
 
-export default NavBar
+export default NavBar;
