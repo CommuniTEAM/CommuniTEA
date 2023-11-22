@@ -69,8 +69,8 @@ To successfully run the pre-commit hook set up for Go, you must have [golangci-l
 
 Installing golangci-lint for:
 - **Windows**: You must first install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash, as the golangci-lint installation commands cannot be run without a bash terminal. Once you have Git Bash at the ready, run `curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2`.
--**Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`.
--**Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
+- **Mac**: In your terminal, run `brew install golangci-lint` followed by `brew upgrade golangci-lint`.
+- **Linux**: In your terminal, run `sudo snap install golangci-lint`. Alternatively, you can run the same command supplied for Windows users above.
 
 This repository uses a robust golangci-lint configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). As a result, the linter is quite strict. It is highly recommended that you enable the [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) in VSCode in order to catch the linting errors as they occur.
 
