@@ -21,7 +21,7 @@
 go.work
 
 # Air compilation folder
-backend/tmp
+tmp
 
 # Environments
 .env
