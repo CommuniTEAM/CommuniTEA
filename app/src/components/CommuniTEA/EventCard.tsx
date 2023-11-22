@@ -14,7 +14,8 @@ import DataCoffee from '../../assets/DataCoffee.png';
 import TeaAndPainting from '../../assets/TeaAndPainting.jpg';
 
 export default function EventCards(): JSX.Element {
-  // TODO: Add functionality to the cards
+  // TODO: Add functionality to the card
+  // TODO: Add Map functionality
 
   // Test data, replace with API call
   const eventsData = [

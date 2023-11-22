@@ -5,6 +5,7 @@ import LocationSearch from './LocationSearch';
 import LocalBusinesses from './LocalBusinesses';
 
 export default function CommuniTeaPage(): JSX.Element {
+  // TODO: Add Map functionality
   return (
     <div>
       <NavBar />
