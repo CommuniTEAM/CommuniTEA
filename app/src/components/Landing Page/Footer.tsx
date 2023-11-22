@@ -1,9 +1,15 @@
-import React from 'react'
-import { Button, Typography, IconButton } from '@mui/material'
-import GitHubIcon from '../../assets/GitHubIcon.png'
+import React from 'react';
+import { Button, Typography, IconButton } from '@mui/material';
+import GitHubIcon from '../../assets/GitHubIcon.png';
 
-export default function Footer (): JSX.Element {
-  const footerMenuItems = ['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'FAQ']
+export default function Footer(): JSX.Element {
+  const footerMenuItems = [
+    'About Us',
+    'Contact Us',
+    'Privacy Policy',
+    'Terms of Service',
+    'FAQ',
+  ];
 
   return (
     <div
@@ -11,7 +17,7 @@ export default function Footer (): JSX.Element {
         display: 'flex',
         backgroundColor: '#333',
         height: 64,
-        paddingLeft: '1vw'
+        paddingLeft: '1vw',
       }}
     >
       <div
@@ -20,20 +26,22 @@ export default function Footer (): JSX.Element {
           flexDirection: 'column',
           justifyContent: 'center',
           flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '25%',
         }}
       >
-        <Typography style={{ color: '#fff', fontFamily: 'Montserrat' }}>
+        <Typography
+          style={{ color: '#fff', fontFamily: 'Montserrat', fontSize: '.75vw' }}
+        >
           © 2023 CommuniTeam. All Rights Reserved.
         </Typography>
       </div>
       <div
         style={{
           display: 'flex',
+          flexGrow: 2,
           justifyContent: 'center',
           alignItems: 'center',
-          flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '50%',
         }}
       >
         {footerMenuItems.map((item, index) => (
@@ -43,13 +51,19 @@ export default function Footer (): JSX.Element {
                 color: '#fff',
                 fontFamily: 'Montserrat',
                 textTransform: 'none',
-                fontSize: '1rem'
+                fontSize: '.75vw',
               }}
             >
               {item}
             </Button>
             {index < footerMenuItems.length - 1 && (
-              <Typography style={{ color: '#fff', fontFamily: 'Montserrat', margin: '0 10px' }}>
+              <Typography
+                style={{
+                  color: '#fff',
+                  fontFamily: 'Montserrat',
+                  margin: '0 10px',
+                }}
+              >
                 |
               </Typography>
             )}
@@ -63,7 +77,7 @@ export default function Footer (): JSX.Element {
           justifyContent: 'center',
           alignItems: 'flex-end',
           flexGrow: 1,
-          maxWidth: '33%'
+          maxWidth: '25%',
         }}
       >
         <IconButton
@@ -72,9 +86,13 @@ export default function Footer (): JSX.Element {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img src={GitHubIcon} alt="GitHub" style={{ width: '1.5vw', color: 'white' }} />
+          <img
+            src={GitHubIcon}
+            alt="GitHub"
+            style={{ width: '1.5vw', color: 'white' }}
+          />
         </IconButton>
       </div>
     </div>
-  )
+  );
 }
