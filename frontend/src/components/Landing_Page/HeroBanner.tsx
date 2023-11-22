@@ -28,11 +28,18 @@ function HeroBanner(): JSX.Element {
           boxSizing: 'border-box',
         }}
       >
-        <h1 style={{ fontFamily: 'Roboto Slab', fontSize: '4vw', fontWeight: 300 }}>
+        <h1
+          style={{
+            fontFamily: 'Roboto Slab',
+            fontSize: '4vw',
+            fontWeight: 300,
+          }}
+        >
           Discover the World of Tea with CommuniTEA!
         </h1>
         <p style={{ fontFamily: 'Roboto', fontSize: '2vw', fontWeight: 300 }}>
-          Connecting Tea Enthusiasts with Local Businesses for a Shared Tea Experience
+          Connecting Tea Enthusiasts with Local Businesses for a Shared Tea
+          Experience
         </p>
       </div>
     </div>

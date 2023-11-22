@@ -1,5 +1,9 @@
 import {
-  Card, CardContent, CardMedia, Typography, CardActionArea,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  CardActionArea,
 } from '@mui/material';
 import Slider from 'react-slick';
 import { useTheme } from '@mui/material/styles';
@@ -175,7 +179,11 @@ export default function BusinessPartnerCards(): JSX.Element {
                   gutterBottom
                   variant="body1"
                   component="div"
-                  sx={{ fontFamily: 'Montserrat', fontWeight: 300, color: '#29C6CF' }}
+                  sx={{
+                    fontFamily: 'Montserrat',
+                    fontWeight: 300,
+                    color: '#29C6CF',
+                  }}
                 >
                   Partner
                 </Typography>

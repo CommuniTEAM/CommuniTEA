@@ -31,15 +31,20 @@ function NavBar(): JSX.Element {
   const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA'];
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-  // Handlers
+  // Navigation Handlers
   const handleHomeNavigation = (): void => {
     navigate('/');
+  };
+
+  const handleCommuniTeaNavigation = (): void => {
+    navigate('/communitea');
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
   };
 
+  // Other Handlers
   const handleCloseUserMenu = (): void => {
     setAnchorElUser(null);
   };
@@ -56,7 +61,7 @@ function NavBar(): JSX.Element {
     setDrawerOpen(open);
   };
 
-  const toggleSettingsDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  const toggleMenuDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === 'keydown'
         && ((event as React.KeyboardEvent).key === 'Tab'
@@ -114,6 +119,11 @@ function NavBar(): JSX.Element {
             {pages.map((page) => (
               <Button
                 key={page}
+                onClick={() => {
+                  if (page === 'CommuniTEA') {
+                    handleCommuniTeaNavigation();
+                  }
+                }}
                 sx={{
                   mx: 5,
                   color: 'black',
@@ -150,7 +160,14 @@ function NavBar(): JSX.Element {
               >
                 <List>
                   {pages.map((text) => (
-                    <ListItem key={text}>
+                    <ListItem
+                      key={text}
+                      onClick={() => {
+                        if (text === 'CommuniTEA') {
+                          handleCommuniTeaNavigation();
+                        }
+                      }}
+                    >
                       <ListItemText primary={text} />
                     </ListItem>
                   ))}
@@ -192,13 +209,13 @@ function NavBar(): JSX.Element {
             <Drawer
               anchor="right"
               open={settingsDrawerOpen}
-              onClose={toggleSettingsDrawer(false)}
+              onClose={toggleMenuDrawer(false)}
             >
               <Box
                 sx={{ width: 250 }}
                 role="presentation"
-                onClick={toggleSettingsDrawer(false)}
-                onKeyDown={toggleSettingsDrawer(false)}
+                onClick={toggleMenuDrawer(false)}
+                onKeyDown={toggleMenuDrawer(false)}
               >
                 <List>
                   {settings.map((text) => (

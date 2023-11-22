@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid } from '@mui/material';
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import One from '../../assets/One.svg';
@@ -39,9 +38,13 @@ export default function HowItWorks(): JSX.Element {
           >
             Discover
           </h1>
-          <p style={{
-            fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543',
-          }}
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
           >
             Find your favorite teas from curated local businesses
           </p>
@@ -62,9 +65,13 @@ export default function HowItWorks(): JSX.Element {
           >
             Connect
           </h1>
-          <p style={{
-            fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543',
-          }}
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
           >
             Explore tea-related events and connect enthusiasts.
           </p>
@@ -85,11 +92,16 @@ export default function HowItWorks(): JSX.Element {
           >
             Experience
           </h1>
-          <p style={{
-            fontFamily: 'Roboto', fontSize: '1vw', fontWeight: 300, color: '#416543',
-          }}
+          <p
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '1vw',
+              fontWeight: 300,
+              color: '#416543',
+            }}
           >
-            Transform your tea-ppreciation into a collective experience with CommuniTEA
+            Transform your tea-ppreciation into a collective experience with
+            CommuniTEA
           </p>
         </Grid>
       </Grid>
