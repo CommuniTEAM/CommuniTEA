@@ -83,7 +83,7 @@ function GoogleMapsMultiplePins({
         height: '90em',
         width: '50%',
         marginTop: 30,
-        marginLeft: 2,
+        marginLeft: 10,
         marginRight: '2vw',
       }}
     />
