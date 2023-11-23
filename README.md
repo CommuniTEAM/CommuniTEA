@@ -112,20 +112,19 @@ This repository uses a robust [golangci-lint](https://golangci-lint.run/) config
 
   While you can absolutely run pre-commit and git commands in your installed bash terminal, it's not the only way. If you don't want to be forced into using your bash terminal for everything, it is possible to set up your system path such that bash scripts can be run successfully from any terminal, including Powershell.
 
-  For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the MSYS bash terminal must be at the top of your system path and given priority over system32 as shown below:
-  ```
-  C:\msys64\usr\bin
-  %SystemRoot%\system32
-  <The rest of your system path>
-  ```
+  For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the MSYS bash terminal (`C:\msys64\usr\bin`) must be at the top of your system path and given priority over system32 as shown below:
+  <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/cd954473-7e58-44e6-8fb6-4ac19ebf40e5" alt="example of MSYS path at the root of system path" height=250 width=525>
+
 
   Instructions on how to change your system path can be found [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
 
   For more information on why this is the necessary fix for bash commands, see [this thread](https://github.com/syntaqx/git-hooks/pull/3). TL;DR: It's because we have WSL installed (required for Docker) and WSL intercepts the bash commands.
 
-</details>
-<br>
-To save yourself unnecessary headaches, it is strongly recommended to install the official Go extension for VSCode so that the linting errors show in real time as you make changes to the codebase. The extension requires Go to be installed locally, as well as some additional dependencies, before it will display linting hints.
+</details><br>
+
+To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode so that the linting errors show in real time as you make changes to the codebase. The extension requires Go to be installed locally, as well as some additional dependencies, before it will display linting hints. After installing, check the footer in VSCode to install any missing dependencies, as showcased in the screenshot below.
+
+<img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
 
 ### Using Git Hooks in VSCode
 
