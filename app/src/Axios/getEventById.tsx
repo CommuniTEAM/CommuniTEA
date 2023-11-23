@@ -14,7 +14,7 @@ interface Event {
   date: string
   startTime: string
   endTime: string
-  price: string
+  price?: string
   address: string
   attending: string
   headline?: string
@@ -104,7 +104,7 @@ const eventData = [
     startTime: '2:00 PM',
     endTime: '8:00 PM',
     price: 'Free',
-    address: '1414 S Weller St. East Bldg. fl 2',
+    address: '1414 S Weller St.',
     attending: '10',
   },
   {
@@ -117,7 +117,7 @@ const eventData = [
     startTime: '10:00 AM',
     endTime: '9:00 PM',
     price: 'Free',
-    address: '1252 Thomas St.',
+    address: '1252 Thomas St. Seattle, WA 98109',
     attending: '22',
   },
   {

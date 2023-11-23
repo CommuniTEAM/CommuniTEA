@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import BusinessPartnerCards from '../Landing Page/Cards/BusinessPartnerCards';
 
@@ -11,9 +11,8 @@ export default function OtherEvents(): JSX.Element {
           variant="contained"
           sx={{
             backgroundColor: '#8B4513',
-            fontFamily: 'Montserrat',
             borderRadius: 10,
-            fontSize: '1vw',
+            width: '30vw',
             padding: 2.5,
             transform: 'translate(7vw, 2vw)',
             '&:hover': {
@@ -22,7 +21,12 @@ export default function OtherEvents(): JSX.Element {
             },
           }}
         >
-          Embark. Unite. Elevate your CommuniTEA.
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
+          >
+            Embark. Unite. Elevate your CommuniTEA.
+          </Typography>
         </Button>
       </div>
       <div
@@ -37,7 +41,7 @@ export default function OtherEvents(): JSX.Element {
             <h1
               style={{
                 fontFamily: 'Roboto Slab',
-                fontSize: '2vw',
+                fontSize: '2em',
                 fontWeight: 700,
               }}
             >

@@ -9,6 +9,7 @@ import LikeIcon from '../../assets/LikeIcon.png';
 import shareIcon from '../../assets/shareIcon.png';
 import MapPinIncon from '../../assets/MapPinIcon.png';
 import OtherEvents from './OtherEvents';
+import Footer from '../Landing Page/Footer';
 
 interface EventData {
   id: number
@@ -48,6 +49,11 @@ export default function EventDetailPage(): JSX.Element {
   const { eventId } = useParams<string>();
   const [eventData, setEventData] = useState<EventData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  // Concat Street Address, City, State, and Zip Code
+  // Create a variable to store the address
+  // Call the variable in the Google Maps query
 
   useEffect(() => {
     const fetchEventData = async (): Promise<void> => {
@@ -145,17 +151,26 @@ export default function EventDetailPage(): JSX.Element {
         <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
         <div style={{ width: '70%' }}>
-          <Typography variant="h2" sx={{ fontFamily: 'Montserrat' }}>
+          <Typography
+            variant="h2"
+            sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
+          >
             {eventData.name}
           </Typography>
           <div style={{ display: 'flex', marginTop: '1vh' }}>
             <div style={{ width: '80%' }}>
-              <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+              <Typography
+                variant="h5"
+                sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
+              >
                 {eventData.date}
               </Typography>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+              <Typography
+                variant="h5"
+                sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
+              >
                 {eventData.startTime}
                 -
                 {eventData.endTime}
@@ -164,7 +179,10 @@ export default function EventDetailPage(): JSX.Element {
             </div>
           </div>
           <div style={{ paddingTop: '2vh' }}>
-            <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+            <Typography
+              variant="body2"
+              sx={{ fontFamily: 'Montserrat', fontSize: '1em' }}
+            >
               {eventData.headline}
             </Typography>
             <Typography
@@ -173,6 +191,7 @@ export default function EventDetailPage(): JSX.Element {
                 fontFamily: 'Montserrat',
                 fontStyle: 'italic',
                 marginTop: '1vh',
+                fontSize: '1em',
               }}
             >
               {eventData.headline2}
@@ -181,7 +200,11 @@ export default function EventDetailPage(): JSX.Element {
 
           <Paper
             elevation={0}
-            sx={{ backgroundColor: '#333', height: '8vh', marginTop: '2vh' }}
+            sx={{
+              backgroundColor: '#333',
+              height: '5em',
+              marginTop: '2vh',
+            }}
           >
             <div style={{ display: 'flex', height: '100%' }}>
               <div
@@ -196,7 +219,11 @@ export default function EventDetailPage(): JSX.Element {
                 <div>
                   <Typography
                     variant="h4"
-                    sx={{ fontFamily: 'Montserrat', color: 'white' }}
+                    sx={{
+                      fontFamily: 'Montserrat',
+                      color: 'white',
+                      fontSize: '1.5em',
+                    }}
                   >
                     Seattle Events
                   </Typography>
@@ -204,7 +231,11 @@ export default function EventDetailPage(): JSX.Element {
                 <div>
                   <Typography
                     variant="body2"
-                    sx={{ fontFamily: 'Montserrat', color: 'white' }}
+                    sx={{
+                      fontFamily: 'Montserrat',
+                      color: 'white',
+                      fontSize: '1em',
+                    }}
                   >
                     10k+ Followers
                   </Typography>
@@ -223,7 +254,7 @@ export default function EventDetailPage(): JSX.Element {
                   variant="contained"
                   sx={{
                     borderRadius: '10px',
-                    height: '3.5vh',
+                    width: '20vw',
                     backgroundColor: '#87CEEB',
                     color: 'black',
                     fontFamily: 'Montserrat',
@@ -238,14 +269,17 @@ export default function EventDetailPage(): JSX.Element {
           <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
           <div style={{ marginTop: '2vh' }}>
-            <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
+            <Typography
+              variant="h3"
+              sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
+            >
               Location
             </Typography>
             <div style={{ display: 'flex', marginTop: '1vh' }}>
               <img
                 src={MapPinIncon}
-                alt="Map Pin Icon"
-                style={{ width: '1vw', height: '1vw' }}
+                alt="Location"
+                style={{ width: '1.5em', height: '1.5em' }}
               />
               <div style={{ marginLeft: '3vh' }}>
                 <Typography
@@ -262,7 +296,7 @@ export default function EventDetailPage(): JSX.Element {
           </div>
           <div>
             <iframe
-              src="https://storage.googleapis.com/maps-solutions-n6xadbe9gq/locator-plus/t8su/locator-plus.html"
+              src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${eventData.location}`}
               style={{ width: '100%', height: '50vh', border: 0 }}
               title="Google Maps"
             />
@@ -395,6 +429,7 @@ export default function EventDetailPage(): JSX.Element {
         </div>
       </div>
       <OtherEvents />
+      <Footer />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function Filters(): JSX.Element {
   // TODO: Add functionality to the checkboxes
 
   return (
-    <div style={{ display: 'flex', width: '50%' }}>
+    <div style={{ display: 'flex', width: '50%', marginLeft: '2vw' }}>
       <div
         style={{
           paddingLeft: '1vw',
