@@ -72,7 +72,11 @@ Please be sure to have the [Prettier VSCode extension](https://marketplace.visua
 
 #### Golang Format
 
-This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or see the installation instructions below.
+This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or continue reading for installation instructions.
+
+To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode in order to be fully set up for linting Go locally. The repository is configured to support real-time linting feedback from the extension so that linting flags appear as errors. As the extension requires a local installation of Go, as well as some additional dependencies, it will prompt you to install any missing requirements for local linting, as demonstrated in the screenshot below. Simply click the warning to begin the setup.
+
+<img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
 
 <details>
   <summary><b>Installing golangci-lint on Mac or Linux Systems</b></summary>
@@ -113,18 +117,15 @@ This repository uses a robust [golangci-lint](https://golangci-lint.run/) config
   While you can absolutely run pre-commit and git commands in your installed bash terminal, it's not the only way. If you don't want to be forced into using your bash terminal for everything, it is possible to set up your system path such that bash scripts can be run successfully from any terminal, including Powershell.
 
   For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the MSYS bash terminal (`C:\msys64\usr\bin`) must be at the top of your system path and given priority over system32 as shown below:
-  <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/cd954473-7e58-44e6-8fb6-4ac19ebf40e5" alt="example of MSYS path at the root of system path" height=250 width=525>
+  
+  <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/cd954473-7e58-44e6-8fb6-4ac19ebf40e5" alt="example of MSYS path at the root of system path">
 
 
   Instructions on how to change your system path can be found [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
 
   For more information on why this is the necessary fix for bash commands, see [this thread](https://github.com/syntaqx/git-hooks/pull/3). TL;DR: It's because we have WSL installed (required for Docker) and WSL intercepts the bash commands.
 
-</details><br>
-
-To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode so that the linting errors show in real time as you make changes to the codebase. The extension requires Go to be installed locally, as well as some additional dependencies, before it will display linting hints. After installing, check the footer in VSCode to install any missing dependencies, as showcased in the screenshot below.
-
-<img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
+</details>
 
 ### Using Git Hooks in VSCode
 
