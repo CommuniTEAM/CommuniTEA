@@ -1,6 +1,6 @@
 # CommuniTEA
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 Bringing your local community together over a cuppa 🍵
 
@@ -12,7 +12,7 @@ Bringing your local community together over a cuppa 🍵
 - [CommuniTEA](#communitea)
   - [Table of Contents](#table-of-contents)
   - [Working with Git Hooks](#working-with-git-hooks)
-    - [Installing Pre-Commit](#installing-pre-commit)
+    - [Setting Up Pre-Commit](#setting-up-pre-commit)
     - [Pre-Commit Rulesets](#pre-commit-rulesets)
       - [Commit Message Format](#commit-message-format)
       - [ESLint TypeScript Format](#eslint-typescript-format)
@@ -23,16 +23,16 @@ Bringing your local community together over a cuppa 🍵
 
 ## Working with Git Hooks
 
-Any commits to the repository must conform to the formatting rulesets for the following:
+Any commits to the repository must conform to the configured rulesets for:
 - Commit Messages
 - ESLint TypeScript
-- Golang (TBD)
+- Golang
 
 To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook manager, is a required development dependency for the project. You will need to install it on your local machine.
 
-### Installing Pre-Commit
+### Setting Up Pre-Commit
 
-1. Install pre-commit.<br>
+1. Install pre-commit:<br>
 **Windows**:
 Pre-commit runs off of Python, so you will need pip on your local machine. To install pre-commit, open your terminal and run `pip install pre-commit`.<br>
 **Mac or Linux**:
@@ -105,7 +105,8 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 <details>
   <summary><b>Installing golangci-lint on Windows Systems</b></summary>
   <br>
-  Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is strongly recommended to install <a src="https://www.msys2.org/">MSYS2</a> and use its UCRT64 environment.
+  
+  Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is strongly recommended to install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash available.
 
   In your bash terminal, install the golangci-lint binary by running:
   ```
@@ -116,14 +117,14 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 
   While you can absolutely run pre-commit and git commands in your installed bash terminal, it's not the only way. If you don't want to be forced into using your bash terminal for everything, it is possible to set up your system path such that bash scripts can be run successfully from any terminal, including Powershell.
 
-  For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the MSYS bash terminal (`C:\msys64\usr\bin`) must be at the top of your system path and given priority over system32 as shown below:
+  For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the Git Bash terminal (`C:\Program Files\Git\cmd`) must be at the top of your system path and given priority over system32 as shown below:
   
-  <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/cd954473-7e58-44e6-8fb6-4ac19ebf40e5" alt="example of MSYS path at the root of system path">
+  <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/3fbd7d15-b76c-456a-b92d-a04413df0c8f" alt="example of Git Bash path at the root of system path">
 
 
-  Instructions on how to change your system path can be found [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
+  Instructions on how to change your system path can be found [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/). Note: Changes to the path will go into effect after a PC reboot. You can check your current path in PowerShell with `$env:PATH`.
 
-  For more information on why this is the necessary fix for bash commands, see [this thread](https://github.com/syntaqx/git-hooks/pull/3). TL;DR: It's because we have WSL installed (required for Docker) and WSL intercepts the bash commands.
+  For more information on why this is the necessary fix for bash commands, see [this thread](https://github.com/syntaqx/git-hooks/pull/3). TL;DR: It's because we have WSL installed (required for Docker) as part of system32 and WSL erroneously intercepts the bash commands.
 
 </details>
 
