@@ -1,8 +1,34 @@
-# CommuniTEA
+<div align="center">
+  
+  <img src="frontend/public/CommuniteaLogo.svg" alt="CommuniTEA Logo" width="200"/>
+  
+  # CommuniTEA
 
-[![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+  [![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+  
+  **Bringing your local community together over a cuppa 🍵**
+  
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/eslint/eslint-original-wordmark.svg" width="50" height="50" alt="ESLint Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/figma/figma-original.svg" width="50" height="50" alt="Figma Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/go/go-original-wordmark.svg" width="50" height="50" alt="Go Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/react/react-original-wordmark.svg" width="50" height="50" alt="React Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/redux/redux-original.svg" width="50" height="50" alt="Redux Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/typescript/typescript-original.svg" width="50" height="50" alt="TypeScript Logo">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/vitejs/vitejs-original.svg" width="50" height="50" alt="Vite Logo">
 
-Bringing your local community together over a cuppa 🍵
+</div>
 
 ## Table of Contents
 
