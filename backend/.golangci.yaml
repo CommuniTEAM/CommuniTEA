@@ -216,7 +216,7 @@ linters:
     - goconst # finds repeated strings that could be replaced by a constant
     - gocritic # provides diagnostics that check for bugs, performance and style issues
     - gocyclo # computes and checks the cyclomatic complexity of functions
-    - godot # checks if comments end in a period
+    # - godot # checks if comments end in a period
     - goimports # in addition to fixing imports, goimports also formats your code in the same style as gofmt
     - gomnd # detects magic numbers
     - gomoddirectives # manages the use of 'replace', 'retract', and 'excludes' directives in go.mod
@@ -315,8 +315,8 @@ issues:
   max-same-issues: 50
 
   exclude-rules:
-    - source: "(noinspection|TODO)"
-      linters: [ godot ]
+    # - source: "(noinspection|TODO)"
+    #   linters: [ godot ]
     - source: "//noinspection"
       linters: [ gocritic ]
     - path: "_test\\.go"

@@ -1,13 +1,13 @@
 <div align="center">
-  
+
   <img src="frontend/public/CommuniteaLogo.svg" alt="CommuniTEA Logo" width="200"/>
-  
+
   # CommuniTEA
 
   [![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-  
+
   **Bringing your local community together over a cuppa 🍵**
-  
+
   <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo">
   &nbsp;
   <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/eslint/eslint-original-wordmark.svg" width="50" height="50" alt="ESLint Logo">
@@ -131,7 +131,7 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 <details>
   <summary><b>Installing golangci-lint on Windows Systems</b></summary>
   <br>
-  
+
   Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is strongly recommended to install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash available.
 
   In your bash terminal, install the golangci-lint binary by running:
@@ -144,7 +144,7 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
   While you can absolutely run pre-commit and git commands in your installed bash terminal, it's not the only way. If you don't want to be forced into using your bash terminal for everything, it is possible to set up your system path such that bash scripts can be run successfully from any terminal, including Powershell.
 
   For bash scripts to work anywhere, you must reconfigure your system path in Windows. The path to the Git Bash terminal (`C:\Program Files\Git\cmd`) must be at the top of your system path and given priority over system32 as shown below:
-  
+
   <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/3fbd7d15-b76c-456a-b92d-a04413df0c8f" alt="example of Git Bash path at the root of system path">
 
 
