@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
-import BusinessPartnerCards from '../Landing Page/Cards/BusinessPartnerCards';
+import BusinessPartnerCards from '../LandingPage/Cards/BusinessPartnerCards';
 
 export default function BusinessShowcase(): JSX.Element {
   const responsiveHeight = useResponsiveHeight(); // custom hook

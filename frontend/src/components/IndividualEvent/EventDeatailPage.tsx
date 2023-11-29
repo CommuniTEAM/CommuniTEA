@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import {
   Button, Divider, Paper, Typography,
 } from '@mui/material';
-import NavBar from '../Landing Page/Navbar';
+import NavBar from '../LandingPage/Navbar';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
 import shareIcon from '../../assets/shareIcon.png';
 import MapPinIncon from '../../assets/MapPinIcon.png';
 import OtherEvents from './OtherEvents';
-import Footer from '../Landing Page/Footer';
+import Footer from '../LandingPage/Footer';
 
 interface EventData {
   id: number
