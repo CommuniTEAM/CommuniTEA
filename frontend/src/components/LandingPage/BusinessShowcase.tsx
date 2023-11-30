@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import useResponsiveHeight from '../../hooks/useResponsiveHeight';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import BusinessPartnerCards from './Cards/BusinessPartnerCards';
 
 export default function BusinessShowcase(): JSX.Element {
