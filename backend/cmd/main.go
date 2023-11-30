@@ -1,32 +1,57 @@
 package main
 
 import (
-	    "net/http"
-        "fmt"
+	fmtdev "fmt"
+	"net/http"
+	"time"
 )
 
+// appeasing the "magic number detector" linter (maybe we'll have to turn this off down the line? lol)
+const three = 3
+
 func main() {
-fmt.Println("HELLO WORLD!")
- // Create a new request multiplexer
- // Take incoming requests and dispatch them to the matching handlers
- mux := http.NewServeMux()
+	// ! debug statement for project init's demonstrative purposes -- remove for production
+	fmtdev.Println("\nSuccessfully recompiled! Hello World :)")
 
- // Register the routes and handlers
- mux.Handle("/", &homeHandler{})
- mux.Handle("/test", &testHandler{})
+	// // Create a new request multiplexer
 
- // Run the server
- http.ListenAndServe(":8000", mux)
+	// // Take incoming requests and dispatch them to the matching handlers
+
+	// mux := http.NewServeMux()
+
+	// // Register the routes and handlers
+
+	// mux.Handle("/", &homeHandler{})
+
+	// mux.Handle("/test", &testHandler{})
+
+	// Run the server
+	server := &http.Server{
+
+		Addr: ":8000",
+
+		ReadHeaderTimeout: three * time.Second,
+	}
+
+	err := server.ListenAndServe()
+
+	if err != nil {
+		panic(err)
+	}
 }
 
-type homeHandler struct{}
+// type homeHandler struct{}
 
-func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- w.Write([]byte("This is my home page"))
-}
+// func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-type testHandler struct{}
+//  w.Write([]byte("This is my home page"))
 
-func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- w.Write([]byte("This is another test message"))
-}
+// }
+
+// type testHandler struct{}
+
+// func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+//  w.Write([]byte("This is another test message"))
+
+// }

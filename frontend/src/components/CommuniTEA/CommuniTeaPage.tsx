@@ -1,5 +1,5 @@
-import Footer from '../Landing Page/Footer';
-import NavBar from '../Landing Page/Navbar';
+import Footer from '../Landing_Page/Footer';
+import NavBar from '../Landing_Page/Navbar';
 import Filters from './Filters';
 import LocationSearch from './LocationSearch';
 import LocalBusinesses from './LocalBusinesses';
