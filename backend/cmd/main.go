@@ -60,12 +60,18 @@ func main() {
 	const three = 3
 
 	// Run the server
+
 	server := &http.Server{
-		Addr:              ":8000",
+
+		Addr: ":8000",
+
+		Handler: s,
+
 		ReadHeaderTimeout: three * time.Second,
 	}
 
 	err := server.ListenAndServe()
+
 	if err != nil {
 		panic(err)
 	}

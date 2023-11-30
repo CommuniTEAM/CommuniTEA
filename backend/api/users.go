@@ -32,9 +32,11 @@ type userInput struct {
 // Declare output port type.
 
 // type userOutput struct {
+
 // 	Now time.Time `header:"X-Now" json:"-"`
 
 // 	Name string `json:"name"`
+
 // }
 
 // Displays New User Response
