@@ -30,8 +30,8 @@ services:
     image: node:lts-bullseye
     # Change the run dev command to run build for production
     command: bash -c "npm install && npm run dev"
-    working_dir: /frontend
+    working_dir: /app
     volumes:
-      - ./frontend:/frontend
+      - ./frontend:/app
     ports:
       - 3000:3000

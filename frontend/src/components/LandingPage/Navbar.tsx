@@ -129,6 +129,7 @@ function NavBar(): JSX.Element {
                   color: 'black',
                   display: 'block',
                   fontFamily: 'Montserrat',
+                  minWidth: '100px',
                 }}
               >
                 {page}

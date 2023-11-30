@@ -44,6 +44,7 @@ const eventData = [
     id: 1,
     image: TeaExpo,
     tag: 'Seminar',
+    host: 'Seattle Events',
     name: 'World Tea Conference and Expo',
     title: 'World Tea Conference and Expo',
     location: 'Seattle Center',

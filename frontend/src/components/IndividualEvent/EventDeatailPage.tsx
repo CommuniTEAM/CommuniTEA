@@ -7,9 +7,10 @@ import NavBar from '../LandingPage/Navbar';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
 import shareIcon from '../../assets/shareIcon.png';
-import MapPinIncon from '../../assets/MapPinIcon.png';
+import MapPinIcon from '../../assets/MapPinIcon.png';
 import OtherEvents from './OtherEvents';
 import Footer from '../LandingPage/Footer';
+import RsvpForm from './Forms/RsvpForm';
 
 interface EventData {
   id: number
@@ -150,282 +151,311 @@ export default function EventDetailPage(): JSX.Element {
 
         <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
-        <div style={{ width: '70%' }}>
-          <Typography
-            variant="h2"
-            sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
-          >
-            {eventData.name}
-          </Typography>
-          <div style={{ display: 'flex', marginTop: '1vh' }}>
-            <div style={{ width: '80%' }}>
-              <Typography
-                variant="h5"
-                sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
-              >
-                {eventData.date}
-              </Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography
-                variant="h5"
-                sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
-              >
-                {eventData.startTime}
-                -
-                {eventData.endTime}
-                PST
-              </Typography>
-            </div>
-          </div>
-          <div style={{ paddingTop: '2vh' }}>
+        <div style={{ display: 'flex' }}>
+          <div style={{ width: '70%' }}>
             <Typography
-              variant="body2"
-              sx={{ fontFamily: 'Montserrat', fontSize: '1em' }}
-            >
-              {eventData.headline}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                fontFamily: 'Montserrat',
-                fontStyle: 'italic',
-                marginTop: '1vh',
-                fontSize: '1em',
-              }}
-            >
-              {eventData.headline2}
-            </Typography>
-          </div>
-
-          <Paper
-            elevation={0}
-            sx={{
-              backgroundColor: '#333',
-              height: '5em',
-              marginTop: '2vh',
-            }}
-          >
-            <div style={{ display: 'flex', height: '100%' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '70%',
-                  justifyContent: 'center',
-                  marginLeft: '2vw',
-                }}
-              >
-                <div>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontFamily: 'Montserrat',
-                      color: 'white',
-                      fontSize: '1.5em',
-                    }}
-                  >
-                    Seattle Events
-                  </Typography>
-                </div>
-                <div>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontFamily: 'Montserrat',
-                      color: 'white',
-                      fontSize: '1em',
-                    }}
-                  >
-                    10k+ Followers
-                  </Typography>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  width: '30%',
-                  marginRight: '2vw',
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    borderRadius: '10px',
-                    width: '20vw',
-                    backgroundColor: '#87CEEB',
-                    color: 'black',
-                    fontFamily: 'Montserrat',
-                  }}
-                >
-                  Follow
-                </Button>
-              </div>
-            </div>
-          </Paper>
-
-          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
-
-          <div style={{ marginTop: '2vh' }}>
-            <Typography
-              variant="h3"
+              variant="h2"
               sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
             >
-              Location
+              {eventData.name}
             </Typography>
             <div style={{ display: 'flex', marginTop: '1vh' }}>
-              <img
-                src={MapPinIncon}
-                alt="Location"
-                style={{ width: '1.5em', height: '1.5em' }}
-              />
-              <div style={{ marginLeft: '3vh' }}>
+              <div style={{ width: '80%' }}>
                 <Typography
-                  variant="body2"
-                  sx={{ fontFamily: 'Montserrat', fontWeight: 'bold' }}
+                  variant="h5"
+                  sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
                 >
-                  {eventData.location}
+                  {eventData.date}
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
-                  {eventData.address}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
+                >
+                  {eventData.startTime}
+                  -
+                  {eventData.endTime}
+                  PST
                 </Typography>
               </div>
             </div>
-          </div>
-          <div>
-            <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${eventData.location}`}
-              style={{ width: '100%', height: '50vh', border: 0 }}
-              title="Google Maps"
-            />
-          </div>
-
-          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
-
-          <div>
-            <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
-              About this Event
-            </Typography>
-            <div style={{ marginTop: '1vh' }}>
-              <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
-                {eventData.description}
+            <div style={{ paddingTop: '2vh' }}>
+              <Typography
+                variant="body2"
+                sx={{ fontFamily: 'Montserrat', fontSize: '1em' }}
+              >
+                {eventData.headline}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontFamily: 'Montserrat',
+                  fontStyle: 'italic',
+                  marginTop: '1vh',
+                  fontSize: '1em',
+                }}
+              >
+                {eventData.headline2}
               </Typography>
             </div>
-            <div style={{ marginTop: '1vh' }}>
+
+            <Paper
+              elevation={0}
+              sx={{
+                backgroundColor: '#333',
+                height: '5em',
+                marginTop: '2vh',
+              }}
+            >
+              <div style={{ display: 'flex', height: '100%' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '70%',
+                    justifyContent: 'center',
+                    marginLeft: '2vw',
+                  }}
+                >
+                  <div>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontFamily: 'Montserrat',
+                        color: 'white',
+                        fontSize: '1.5em',
+                      }}
+                    >
+                      Seattle Events
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontFamily: 'Montserrat',
+                        color: 'white',
+                        fontSize: '1em',
+                      }}
+                    >
+                      10k+ Followers
+                    </Typography>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    width: '30%',
+                    marginRight: '2vw',
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      borderRadius: '10px',
+                      backgroundColor: '#87CEEB',
+                      color: 'black',
+                      fontFamily: 'Montserrat',
+                    }}
+                  >
+                    Follow
+                  </Button>
+                </div>
+              </div>
+            </Paper>
+
+            <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+
+            <div style={{ marginTop: '2vh' }}>
+              <Typography
+                variant="h3"
+                sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
+              >
+                Location
+              </Typography>
+              <div style={{ display: 'flex', marginTop: '1vh' }}>
+                <img
+                  src={MapPinIcon}
+                  alt="Location"
+                  style={{ width: '1.5em', height: '1.5em' }}
+                />
+                <div style={{ marginLeft: '3vh' }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: 'Montserrat', fontWeight: 'bold' }}
+                  >
+                    {eventData.location}
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                    {eventData.address}
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            <div>
+              <iframe
+                src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${eventData.location}`}
+                style={{ width: '100%', height: '50vh', border: 0 }}
+                title="Google Maps"
+              />
+            </div>
+
+            <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+
+            <div>
+              <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
+                About this Event
+              </Typography>
+              <div style={{ marginTop: '1vh' }}>
+                <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.description}
+                </Typography>
+              </div>
+              <div style={{ marginTop: '1vh' }}>
+                <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
+                  Event Highlights:
+                </Typography>
+              </div>
+              <ul>
+                <li>
+                  <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                    {eventData.eventHighlight1}
+                  </Typography>
+                  <ul>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight1Bullet1}
+                      </Typography>
+                    </li>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight1Bullet2}
+                      </Typography>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                    {eventData.eventHighlight2}
+                  </Typography>
+                  <ul>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight2Bullet1}
+                      </Typography>
+                    </li>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight2Bullet2}
+                      </Typography>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                    {eventData.eventHighlight3}
+                  </Typography>
+                  <ul>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight3Bullet1}
+                      </Typography>
+                    </li>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight3Bullet2}
+                      </Typography>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
+                    {eventData.eventHighlight4}
+                  </Typography>
+                  <ul>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight4Bullet1}
+                      </Typography>
+                    </li>
+                    <li>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: 'Montserrat' }}
+                      >
+                        {eventData.eventHighlight4Bullet2}
+                      </Typography>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div>
               <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
-                Event Highlights:
+                Why Attend?
               </Typography>
+              <div style={{ marginTop: '1vh' }}>
+                <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
+                  {eventData.whyAttend}
+                </Typography>
+              </div>
             </div>
-            <ul>
-              <li>
-                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
-                  {eventData.eventHighlight1}
-                </Typography>
-                <ul>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight1Bullet1}
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight1Bullet2}
-                    </Typography>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
-                  {eventData.eventHighlight2}
-                </Typography>
-                <ul>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight2Bullet1}
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight2Bullet2}
-                    </Typography>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
-                  {eventData.eventHighlight3}
-                </Typography>
-                <ul>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight3Bullet1}
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight3Bullet2}
-                    </Typography>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Typography variant="h5" sx={{ fontFamily: 'Montserrat' }}>
-                  {eventData.eventHighlight4}
-                </Typography>
-                <ul>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight4Bullet1}
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: 'Montserrat' }}
-                    >
-                      {eventData.eventHighlight4Bullet2}
-                    </Typography>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+
+            <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
           </div>
 
-          <div>
-            <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
-              Why Attend?
-            </Typography>
-            <div style={{ marginTop: '1vh' }}>
-              <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
-                {eventData.whyAttend}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '30%',
+              marginLeft: '2vw',
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: '#333',
+              }}
+            >
+              <RsvpForm />
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+              <Typography
+                variant="h4"
+                sx={{ fontFamily: 'Montserrat', textAlign: 'center' }}
+              >
+                Upcoming events hosted by
+                {' '}
+                {eventData.host}
               </Typography>
             </div>
           </div>
-
-          <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
         </div>
       </div>
       <OtherEvents />
