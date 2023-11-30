@@ -37,41 +37,43 @@
 
 - [CommuniTEA](#communitea)
   - [Table of Contents](#table-of-contents)
-  - [Working with Git Hooks](#working-with-git-hooks)
-    - [Setting Up Pre-Commit](#setting-up-pre-commit)
-    - [Pre-Commit Rulesets](#pre-commit-rulesets)
-      - [Commit Message Format](#commit-message-format)
-      - [ESLint TypeScript Format](#eslint-typescript-format)
-      - [Golang Format](#golang-format)
-    - [Using Git Hooks in VSCode](#using-git-hooks-in-vscode)
+- [Working with Git Hooks](#working-with-git-hooks)
+  - [Setting Up Pre-Commit](#setting-up-pre-commit)
+  - [Pre-Commit Rulesets](#pre-commit-rulesets)
+    - [Commit Message Format](#commit-message-format)
+    - [ESLint TypeScript Format](#eslint-typescript-format)
+    - [Go Format](#go-format)
+      - [Installing golangci-lint on Mac or Linux Systems](#installing-golangci-lint-on-mac-or-linux-systems)
+      - [Installing golangci-lint on Windows Systems](#installing-golangci-lint-on-windows-systems)
+  - [Using Git Hooks in VSCode](#using-git-hooks-in-vscode)
 
 </details>
 
-## Working with Git Hooks
+# Working with Git Hooks
 
 Any commits to the repository must conform to the configured rulesets for:
 - Commit Messages
 - ESLint TypeScript
-- Golang
+- Golangci-lint
 
 To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook manager, is a required development dependency for the project. You will need to install it on your local machine.
 
-### Setting Up Pre-Commit
+## Setting Up Pre-Commit
 
 1. Install pre-commit:<br>
 **Windows**:
 Pre-commit runs off of Python, so you will need pip on your local machine. To install pre-commit, open your terminal and run `pip install pre-commit`.<br>
 **Mac or Linux**:
-Ensure you have [homebrew](https://brew.sh/) installed on your local machine. To install pre-commit, open your terminal and run `brew install pre-commit`.
+Ensure you have [homebrew](https://brew.sh/) installed on your local machine. To install pre-commit, open your terminal and run `brew install pre-commit`.<br>
 
 2. Install the repository's Git hooks by navigating to the repo's directory in your terminal and running `pre-commit install`.
 
 And that's all! You're now ready to commit to the repository.
 For more detailed installation information and troubleshooting, see the [pre-commit documentation](https://pre-commit.com/#install).
 
-### Pre-Commit Rulesets
+## Pre-Commit Rulesets
 
-#### Commit Message Format
+### Commit Message Format
 
 All commit messages, regardless of the branch, must adhere to this header standard:
 ```
@@ -90,13 +92,13 @@ These are the allowed emojis and their use-cases:
 
 Special thanks to strdr4605 for their [walkthrough](https://strdr4605.com/commitlint-custom-commit-message-with-emojis) of this configuration!
 
-#### ESLint TypeScript Format
+### ESLint TypeScript Format
 
 The ESLint configuration for this repository uses the [guide by Airbnb](https://github.com/airbnb/javascript). The installed pre-commit hook will attempt to fix any linting errors found in the staged changes. If it does, the check will fail and you will need to re-stage and commit.
 
 Please be sure to have the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) installed and format your code often. The included workspace settings for VSCode set Prettier as the default formatter for TypeScript and JavaScript. To format the current file quickly, do a manual save (Windows/Linux: `Ctrl+S`  Mac: `⌘S`).
 
-#### Golang Format
+### Go Format
 
 This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or continue reading for installation instructions.
 
@@ -105,7 +107,11 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
 
 <details>
-  <summary><b>Installing golangci-lint on Mac or Linux Systems</b></summary>
+  <summary>
+
+  #### Installing golangci-lint on Mac or Linux Systems
+
+  </summary>
 
   **Mac**
 
@@ -129,7 +135,11 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 </details>
 <br>
 <details>
-  <summary><b>Installing golangci-lint on Windows Systems</b></summary>
+  <summary>
+
+  #### Installing golangci-lint on Windows Systems
+
+  </summary>
   <br>
 
   Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is strongly recommended to install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash available.
@@ -154,7 +164,7 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
 
 </details>
 
-### Using Git Hooks in VSCode
+## Using Git Hooks in VSCode
 
 When commiting changes through VSCode's source control tab, pre-commit will still run automatically in your default terminal as if you committed from the command line. If a hook fails, however, VSCode will notify you via an error. To display the details of the pre-commit failure, click on "Show Command Output" as per the screenshot below to display the results in the command line.
 

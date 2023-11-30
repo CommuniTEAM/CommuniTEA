@@ -1,34 +1,71 @@
+// Documentation you'll need to get acquainted with the APIs:
+
+// https://pkg.go.dev/github.com/swaggest/rest#section-readme
+
+// https://docs.sqlc.dev/en/latest/tutorials/getting-started-postgresql.html
+
+// https://github.com/jackc/pgx/wiki/Getting-started-with-pgx
+
+// https://dev.to/vearutop/tutorial-developing-a-restful-api-with-go-json-schema-validation-and-openapi-docs-2490
+
 package main
 
 import (
-	fmtdev "fmt"
+	"log"
 	"net/http"
 	"time"
+
+	"github.com/CommuniTEAM/CommuniTEA/api"
+	"github.com/swaggest/openapi-go/openapi31"
+	"github.com/swaggest/rest/response/gzip"
+	"github.com/swaggest/rest/web"
+	swgui "github.com/swaggest/swgui/v5emb"
 )
 
-// appeasing the "magic number detector" linter (maybe we'll have to turn this off down the line? lol)
-const three = 3
-
 func main() {
-	// ! debug statement for project init's demonstrative purposes -- remove for production
-	fmtdev.Println("\nSuccessfully recompiled! Hello World :)")
+	s := web.NewService(openapi31.NewReflector())
 
-	// // Create a new request multiplexer
+	// Init API documentation schema.
 
-	// // Take incoming requests and dispatch them to the matching handlers
+	s.OpenAPISchema().SetTitle("CommuniTEA API")
 
-	// mux := http.NewServeMux()
+	s.OpenAPISchema().SetDescription("Let's gooooooooooooooo!")
 
-	// // Register the routes and handlers
+	s.OpenAPISchema().SetVersion("v1.0.0")
 
-	// mux.Handle("/", &homeHandler{})
+	// Setup middlewares.
 
-	// mux.Handle("/test", &testHandler{})
+	s.Wrap(
+
+		gzip.Middleware, // Response compression with support for direct gzip pass through.
+
+	)
+
+	// Add use case handler to router.
+
+	s.Get("/hello/{name}", api.Greet())
+
+	s.Get("/users", api.GetAllUsers())
+
+	s.Post("/users", api.CreateUser())
+
+	// Swagger UI endpoint at /docs.
+
+	s.Docs("/docs", swgui.New)
+
+	// Start server.
+
+	log.Println("http://localhost:8000/docs")
+
+	const three = 3
 
 	// Run the server
+
 	server := &http.Server{
 
 		Addr: ":8000",
+
+		Handler: s,
 
 		ReadHeaderTimeout: three * time.Second,
 	}
@@ -39,19 +76,3 @@ func main() {
 		panic(err)
 	}
 }
-
-// type homeHandler struct{}
-
-// func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-//  w.Write([]byte("This is my home page"))
-
-// }
-
-// type testHandler struct{}
-
-// func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-//  w.Write([]byte("This is another test message"))
-
-// }

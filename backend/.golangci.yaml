@@ -8,12 +8,10 @@
 # Feel free to adapt and change it for your needs.
 # Source: https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322
 
-
 run:
   # Timeout for analysis, e.g. 30s, 5m.
   # Default: 1m
   timeout: 3m
-
 
 # This file contains only configs which differ from defaults.
 # All possible options can be found here https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
@@ -45,28 +43,28 @@ linters-settings:
     # Default: []
     exclude:
       # std libs
-      - "^net/http.Client$"
-      - "^net/http.Cookie$"
-      - "^net/http.Request$"
-      - "^net/http.Response$"
-      - "^net/http.Server$"
-      - "^net/http.Transport$"
-      - "^net/url.URL$"
-      - "^os/exec.Cmd$"
-      - "^reflect.StructField$"
+      - '^net/http.Client$'
+      - '^net/http.Cookie$'
+      - '^net/http.Request$'
+      - '^net/http.Response$'
+      - '^net/http.Server$'
+      - '^net/http.Transport$'
+      - '^net/url.URL$'
+      - '^os/exec.Cmd$'
+      - '^reflect.StructField$'
       # public libs
-      - "^github.com/Shopify/sarama.Config$"
-      - "^github.com/Shopify/sarama.ProducerMessage$"
-      - "^github.com/mitchellh/mapstructure.DecoderConfig$"
-      - "^github.com/prometheus/client_golang/.+Opts$"
-      - "^github.com/spf13/cobra.Command$"
-      - "^github.com/spf13/cobra.CompletionOptions$"
-      - "^github.com/stretchr/testify/mock.Mock$"
-      - "^github.com/testcontainers/testcontainers-go.+Request$"
-      - "^github.com/testcontainers/testcontainers-go.FromDockerfile$"
-      - "^golang.org/x/tools/go/analysis.Analyzer$"
-      - "^google.golang.org/protobuf/.+Options$"
-      - "^gopkg.in/yaml.v3.Node$"
+      - '^github.com/Shopify/sarama.Config$'
+      - '^github.com/Shopify/sarama.ProducerMessage$'
+      - '^github.com/mitchellh/mapstructure.DecoderConfig$'
+      - '^github.com/prometheus/client_golang/.+Opts$'
+      - '^github.com/spf13/cobra.Command$'
+      - '^github.com/spf13/cobra.CompletionOptions$'
+      - '^github.com/stretchr/testify/mock.Mock$'
+      - '^github.com/testcontainers/testcontainers-go.+Request$'
+      - '^github.com/testcontainers/testcontainers-go.FromDockerfile$'
+      - '^golang.org/x/tools/go/analysis.Analyzer$'
+      - '^google.golang.org/protobuf/.+Options$'
+      - '^gopkg.in/yaml.v3.Node$'
 
   funlen:
     # Checks the number of lines in a function.
@@ -127,7 +125,7 @@ linters-settings:
         - github.com/golang/protobuf:
             recommendations:
               - google.golang.org/protobuf
-            reason: "see https://developers.google.com/protocol-buffers/docs/reference/go/faq#modules"
+            reason: 'see https://developers.google.com/protocol-buffers/docs/reference/go/faq#modules'
         - github.com/satori/go.uuid:
             recommendations:
               - github.com/google/uuid
@@ -161,7 +159,7 @@ linters-settings:
   nolintlint:
     # Exclude following linters from requiring an explanation.
     # Default: []
-    allow-no-explanation: [ funlen, gocognit, lll ]
+    allow-no-explanation: [funlen, gocognit, lll]
     # Enable to require an explanation of nonzero length after each nolint directive.
     # Default: false
     require-explanation: true
@@ -180,7 +178,6 @@ linters-settings:
     # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
     # Default: false
     all: true
-
 
 linters:
   disable-all: true
@@ -266,7 +263,7 @@ linters:
     - goheader # checks if file header matches to pattern
     #- inamedparam # [great idea, but too strict, need to ignore a lot of cases by default] reports interfaces with unnamed method parameters
     - interfacebloat # checks the number of methods inside an interface
-    - ireturn # accept interfaces, return concrete types
+    # - ireturn # accept interfaces, return concrete types
     #- prealloc # [premature optimization, but can be used in some cases] finds slice declarations that could potentially be preallocated
     - tagalign # checks that struct tags are well aligned
     #- varnamelen # [great idea, but too many false positives] checks that the length of a variable's name matches its scope
@@ -307,7 +304,6 @@ linters:
     #- structcheck # [deprecated, replaced by unused] finds unused struct fields
     #- varcheck # [deprecated, replaced by unused] finds unused global variables and constants
 
-
 issues:
   # Maximum count of issues with the same text.
   # Set to 0 to disable.
@@ -317,8 +313,8 @@ issues:
   exclude-rules:
     # - source: "(noinspection|TODO)"
     #   linters: [ godot ]
-    - source: "//noinspection"
-      linters: [ gocritic ]
+    - source: '//noinspection'
+      linters: [gocritic]
     - path: "_test\\.go"
       linters:
         - bodyclose

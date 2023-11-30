@@ -6,7 +6,7 @@ import {
 import NavBar from '../LandingPage/Navbar';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
-import shareIcon from '../../assets/shareIcon.png';
+import shareIcon from '../../assets/ShareIcon.png';
 import MapPinIcon from '../../assets/MapPinIcon.png';
 import OtherEvents from './OtherEvents';
 import Footer from '../LandingPage/Footer';
