@@ -54,7 +54,7 @@
 Any commits to the repository must conform to the configured rulesets for:
 - Commit Messages
 - ESLint TypeScript
-- Go
+- Golangci-lint
 
 To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook manager, is a required development dependency for the project. You will need to install it on your local machine.
 
