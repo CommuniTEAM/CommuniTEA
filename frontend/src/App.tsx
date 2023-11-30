@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/Landing_Page/LandingPage';
+import LandingPage from './components/LandingPage/LandingPage';
 import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage';
+import EventDetailPage from './components/IndividualEvent/EventDeatailPage';
 
 function App(): ReactElement {
   return (
@@ -9,6 +10,7 @@ function App(): ReactElement {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/communitea" element={<CommuniTeaPage />} />
+        <Route path="/event/:eventId" element={<EventDetailPage />} />
       </Routes>
     </Router>
   );
