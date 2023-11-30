@@ -4,15 +4,15 @@ import (
 	"context"
 	"time"
 
+	// "github.com/swaggest/usecase/status"
+	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/jackc/pgx/v5"
 	"github.com/swaggest/usecase"
-	// "github.com/swaggest/usecase/status"
-	"github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 )
 
 // Declare input port type.
 type userInput struct {
-	Name string `path:"name" minLength:"3"` // Field tags define parameter location and JSON schema constraints.
+	Name string `minLength:"3" path:"name"` // Field tags define parameter location and JSON schema constraints.
 
 	// Field tags of unnamed fields are applied to parent schema.
 	// they are optional and can be used to disallow unknown parameters.
@@ -49,7 +49,6 @@ type userOutput struct {
 
 func GetAllUsers() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, _ struct{}, output *[]db.User) error {
-
 		dbCtx := context.Background()
 
 		conn, err := pgx.Connect(dbCtx, "postgresql://admin:secret@postgres/communitea-db")
@@ -59,13 +58,13 @@ func GetAllUsers() usecase.Interactor {
 		defer conn.Close(dbCtx)
 		queries := db.New(conn)
 
-        *output, err = queries.GetUsers(ctx)
+		*output, err = queries.GetUsers(ctx)
 		if err != nil {
 			return err
 		}
-        return nil
-    })
-    response.SetTags("Users")
+		return nil
+	})
+	response.SetTags("Users")
 
-    return response
+	return response
 }

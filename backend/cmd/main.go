@@ -9,23 +9,17 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 
+	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/jackc/pgx/v5"
-	"net/http"
-	"log"
-
 	"github.com/swaggest/openapi-go/openapi31"
 	"github.com/swaggest/rest/response/gzip"
 	"github.com/swaggest/rest/web"
 	swgui "github.com/swaggest/swgui/v5emb"
-
-	"github.com/CommuniTEAM/CommuniTEA/api"
 )
-
-func YourHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
-}
 
 func main() {
 	conn, err := pgx.Connect(context.Background(), "postgresql://admin:secret@postgres/communitea-db")
@@ -43,7 +37,6 @@ func main() {
 	}
 
 	fmt.Println(greeting)
-
 
 	s := web.NewService(openapi31.NewReflector())
 

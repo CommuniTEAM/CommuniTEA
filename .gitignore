@@ -16,12 +16,13 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+bin
 
 # Go workspace file
 go.work
 
 # Air compilation folder
-/tmp
+tmp
 
 # Environments
 .env

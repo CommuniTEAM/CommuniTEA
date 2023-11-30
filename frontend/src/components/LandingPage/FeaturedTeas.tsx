@@ -1,9 +1,9 @@
-import '../../App.css'
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight'
-import FeaturedTeaCards from './Cards/FeaturedTeaCards'
+import '../../App.css';
+import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
+import FeaturedTeaCards from './Cards/FeaturedTeaCards';
 
-export default function FeaturedTeas (): JSX.Element {
-  const responsiveHeight = useResponsiveHeight() // custom hook
+export default function FeaturedTeas(): JSX.Element {
+  const responsiveHeight = useResponsiveHeight(); // custom hook
 
   return (
     <div style={{ backgroundColor: '#D2B48C', height: responsiveHeight }}>
@@ -14,7 +14,7 @@ export default function FeaturedTeas (): JSX.Element {
             fontSize: '2vw',
             fontWeight: 300,
             textAlign: 'center',
-            paddingTop: '5vh'
+            paddingTop: '5vh',
           }}
         >
           Explore Our Featured Teas
@@ -24,11 +24,11 @@ export default function FeaturedTeas (): JSX.Element {
         style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-evenly'
+          justifyContent: 'space-evenly',
         }}
       >
         <FeaturedTeaCards />
       </div>
     </div>
-  )
+  );
 }
