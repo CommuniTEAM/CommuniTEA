@@ -3,8 +3,8 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
+SELECT pg_catalog.set_config('search_path', '', FALSE);
+SET check_function_bodies = FALSE;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -25,7 +25,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.schema_migrations (
-    version character varying(128) NOT NULL
+    version CHARACTER VARYING(128) NOT NULL
 );
 
 
@@ -34,8 +34,8 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.users (
-    id integer NOT NULL,
-    name character varying(50) NOT NULL
+    id INTEGER NOT NULL,
+    name CHARACTER VARYING(50) NOT NULL
 );
 
 
@@ -44,12 +44,12 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+AS INTEGER
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -63,7 +63,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT NEXTVAL('public.users_id_seq'::REGCLASS);
 
 
 --
@@ -71,7 +71,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 ALTER TABLE ONLY public.schema_migrations
-    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 --
@@ -79,7 +79,7 @@ ALTER TABLE ONLY public.schema_migrations
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
@@ -92,4 +92,4 @@ ALTER TABLE ONLY public.users
 --
 
 INSERT INTO public.schema_migrations (version) VALUES
-    ('20231129225316');
+('20231129225316');
