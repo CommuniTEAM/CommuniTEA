@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"os"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/jackc/pgx/v5"
@@ -59,7 +60,7 @@ func CreateUser() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input userInput, output *db.User) error {
 		dbCtx := context.Background()
 
-		conn, err := pgx.Connect(dbCtx, "postgresql://admin:secret@postgres/communitea-db")
+		conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
 
 		if err != nil {
 			return fmt.Errorf("failed to connect to DB: %w", err)
@@ -99,7 +100,7 @@ func GetAllUsers() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, _ struct{}, output *[]db.User) error {
 		dbCtx := context.Background()
 
-		conn, err := pgx.Connect(dbCtx, "postgresql://admin:secret@postgres/communitea-db")
+		conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
 
 		if err != nil {
 			return fmt.Errorf("failed to connect to DB: %w", err)
