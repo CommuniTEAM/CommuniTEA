@@ -4,9 +4,22 @@
 
 package db
 
-import ()
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
+type LocationsCity struct {
+	ID    pgtype.UUID
+	Name  string
+	State string
+}
+
+type LocationsState struct {
+	Name         string
+	Abbreviation string
+}
 
 type User struct {
-	ID   int32
+	ID   pgtype.UUID
 	Name string
 }

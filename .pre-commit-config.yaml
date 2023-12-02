@@ -16,6 +16,7 @@ repos:
     rev: 3.0.0a3
     hooks:
       - id: sqlfluff-fix
+        exclude: schema.sql
   - repo: https://github.com/TekWizely/pre-commit-golang
     rev: v1.0.0-rc.1
     hooks:
