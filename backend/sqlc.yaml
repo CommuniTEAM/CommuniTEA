@@ -1,8 +1,3 @@
-# To (re)generate sqlc Go code, run "sqlc generate" in the goapi docker container
-
-# To run migrations on the database, navigate to /CommuniTEA/backend in your terminal and run:
-# docker run --rm -it --network=host -v "$(pwd)/db:/db" ghcr.io/amacneil/dbmate -u "postgres://admin:secret@localhost:15432/communitea-db?sslmode=disable" up
-
 version: "2"
 sql:
 - schema: "db/migrations/"

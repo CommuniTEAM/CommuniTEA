@@ -29,7 +29,7 @@ This will start the entire application, including the API service container and 
 
 After creating the docker volume for the project or after pulling changes in the `db/migrations` directory, migrations must be ran against the database in order for the changes to be applied locally. [Dbmate](https://github.com/amacneil/dbmate) is used to manage migrations.
 
-To run existing migrations against the database, navigate to `CommuniTEA/backend` in your terminal and run:
+Migrations are automatically ran every time time `goapi` container starts up. However, migrations can also be run manually at any time, given the postgres container is running. To manually run migrations, navigate to `CommuniTEA/backend` in your terminal and run:
 
 ```
 docker run --rm -it --network=host -v "$(pwd)/db:/db" ghcr.io/amacneil/dbmate -u "postgres://admin:secret@localhost:15432/communitea-db?sslmode=disable" up
@@ -41,7 +41,7 @@ To create a new migration file, run:
 docker run --rm -it --network=host -v "$(pwd)/db:/db" ghcr.io/amacneil/dbmate new <NAME OF YOUR MIGRATION (ex. create_users_tables)>
 ```
 
-For Dbmate to run migrations successfully, the SQL file must have both `-- migrate:up` (above any creation statements) and `-- migrate:down` (above any deletion statements) present, even if one is left blank.
+For Dbmate to run migrations successfully, the SQL file must have both `-- migrate:up` and `-- migrate:down` present, even if one is left blank. There should be only one instance of each statement.
 
 ### Go and the Database
 

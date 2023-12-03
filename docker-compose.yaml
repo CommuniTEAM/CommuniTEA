@@ -15,6 +15,9 @@ services:
       - 15432:5432
 
   goapi:
+    environment:
+      WAIT_HOSTS: postgres:5432
+      WAIT_TIMEOUT: 60
     build:
       context: backend
       dockerfile: Dockerfile.dev
@@ -24,7 +27,7 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/app
-    command: bash -c "sqlc generate && air /cmd/main.go -b 0.0.0.0"
+    command: bash -c "/wait && dbmate -e DBMATE up && sqlc generate && air /cmd/main.go -b 0.0.0.0"
 
   webapp:
     image: node:lts-bullseye
