@@ -33,19 +33,22 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT (name)
+SELECT id, name
 FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int32) (string, error) {
+func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, id)
-	var name string
-	err := row.Scan(&name)
-	return name, err
+	var i User
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
+/* These are example queries and do not reflect
+the columns in the production users table */
+
 SELECT id, name FROM users
 `
 
@@ -69,7 +72,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	return items, nil
 }
 
-const updateUser = `-- name: UpdateUser :one
+const updateUser = `-- name: UpdateUser :exec
 UPDATE users
 SET name = $2
 WHERE id = $1
@@ -81,9 +84,7 @@ type UpdateUserParams struct {
 	Name string
 }
 
-func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, updateUser, arg.ID, arg.Name)
-	var i User
-	err := row.Scan(&i.ID, &i.Name)
-	return i, err
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
+	_, err := q.db.Exec(ctx, updateUser, arg.ID, arg.Name)
+	return err
 }

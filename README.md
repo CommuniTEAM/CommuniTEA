@@ -8,25 +8,29 @@
 
   **Bringing your local community together over a cuppa 🍵**
 
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo">
+  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/axios/axios-plain-wordmark.svg" width="50" height="50" alt="Axios Logo" title="Axios">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/eslint/eslint-original-wordmark.svg" width="50" height="50" alt="ESLint Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo" title="Docker">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/figma/figma-original.svg" width="50" height="50" alt="Figma Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/eslint/eslint-original-wordmark.svg" width="50" height="50" alt="ESLint Logo" title="ESLint">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/go/go-original-wordmark.svg" width="50" height="50" alt="Go Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/figma/figma-original.svg" width="50" height="50" alt="Figma Logo" title="Figma">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/go/go-original-wordmark.svg" width="50" height="50" alt="Go Logo" title="Go">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo" title="MaterialUI">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/react/react-original-wordmark.svg" width="50" height="50" alt="React Logo">
+  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/oauth/oauth-original.svg" width="50" height="50" alt="OAuth Logo" title="OAuth">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/redux/redux-original.svg" width="50" height="50" alt="Redux Logo">
+  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/openapi/openapi-original-wordmark.svg" width="50" height="50" alt="OpenAPI Logo" title="OpenAPI">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/typescript/typescript-original.svg" width="50" height="50" alt="TypeScript Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo" title="PostgreSQL">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/vitejs/vitejs-original.svg" width="50" height="50" alt="Vite Logo">
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/react/react-original-wordmark.svg" width="50" height="50" alt="React Logo" title="React">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/typescript/typescript-original.svg" width="50" height="50" alt="TypeScript Logo" title="TypeScript">
+  &nbsp;
+  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/vitejs/vitejs-original.svg" width="50" height="50" alt="Vite Logo" title="Vite">
 
 </div>
 
@@ -90,7 +94,7 @@ These are the allowed emojis and their use-cases:
 - 📝: Documentation updated
 - 🤝: Merged branches
 
-Special thanks to strdr4605 for their [walkthrough](https://strdr4605.com/commitlint-custom-commit-message-with-emojis) of this configuration!
+Special thanks to strdr4605 for [their walkthrough](https://strdr4605.com/commitlint-custom-commit-message-with-emojis) of this configuration!
 
 ### ESLint TypeScript Format
 
@@ -102,7 +106,7 @@ Please be sure to have the [Prettier VSCode extension](https://marketplace.visua
 
 This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or continue reading for installation instructions.
 
-To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode in order to be fully set up for linting Go locally. The repository is configured to support real-time linting feedback from the extension so that linting flags appear as errors. As the extension requires a local installation of Go, as well as some additional dependencies, it will prompt you to install any missing requirements for local linting, as demonstrated in the screenshot below. Simply click the warning to begin the setup.
+To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode in order to be fully set up for linting Go locally. The repository is configured to support real-time linting feedback from the extension so that linting flags appear as errors. The extension requires a local installation of Go, as well as some additional dependencies, and will prompt you to install any missing requirements for local linting. Simply click the warning as seen in the screenshot below to begin the setup.
 
 <img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
 
@@ -133,14 +137,12 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
   ```
 
 </details>
-<br>
 <details>
   <summary>
 
   #### Installing golangci-lint on Windows Systems
 
   </summary>
-  <br>
 
   Unfortunately installation on Windows is not as straightforward, as golangci-lint runs off of bash. If you do not already have a bash terminal, it is strongly recommended to install [Git for Windows](https://gitforwindows.org/) so that you have Git Bash available.
 

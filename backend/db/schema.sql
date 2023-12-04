@@ -21,6 +21,27 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: locations_cities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.locations_cities (
+    id uuid NOT NULL,
+    name character varying(50) NOT NULL,
+    state character varying(2) NOT NULL
+);
+
+
+--
+-- Name: locations_states; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.locations_states (
+    name character varying(50) NOT NULL,
+    abbreviation character varying(2) NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -67,6 +88,30 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Name: locations_cities locations_cities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.locations_cities
+    ADD CONSTRAINT locations_cities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locations_states locations_states_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.locations_states
+    ADD CONSTRAINT locations_states_name_key UNIQUE (name);
+
+
+--
+-- Name: locations_states locations_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.locations_states
+    ADD CONSTRAINT locations_states_pkey PRIMARY KEY (abbreviation);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -83,6 +128,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: locations_cities locations_cities_state_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.locations_cities
+    ADD CONSTRAINT locations_cities_state_fkey FOREIGN KEY (state) REFERENCES public.locations_states(abbreviation);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -92,4 +145,6 @@ ALTER TABLE ONLY public.users
 --
 
 INSERT INTO public.schema_migrations (version) VALUES
-    ('20231129225316');
+    ('20231129225316'),
+    ('20231201051016'),
+    ('20231201090112');

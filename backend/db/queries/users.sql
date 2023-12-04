@@ -1,22 +1,25 @@
+/* These are example queries and do not reflect
+the columns in the production users table */
+
 -- name: GetUsers :many
-SELECT * FROM users;
+select * from users;
 
 -- name: GetUser :one
-SELECT (name)
-FROM users
-WHERE id = $1 LIMIT 1;
+select *
+from users
+where id = $1 limit 1;
 
 -- name: DeleteUser :exec
-DELETE FROM users
-WHERE id = $1;
+delete from users
+where id = $1;
 
 -- name: CreateUser :one
-INSERT INTO users (name)
-VALUES ($1)
-RETURNING *;
+insert into users (name)
+values ($1)
+returning *;
 
--- name: UpdateUser :one
-UPDATE users
-SET name = $2
-WHERE id = $1
-RETURNING *;
+-- name: UpdateUser :exec
+update users
+set name = $2
+where id = $1
+returning *;
