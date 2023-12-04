@@ -1,207 +1,207 @@
 -- migrate:up
-INSERT INTO "locations_states"
-VALUES ('Alabama', 'AL')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Alabama', 'AL')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Alaska', 'AK')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Alaska', 'AK')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Arizona', 'AZ')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Arizona', 'AZ')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Arkansas', 'AR')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Arkansas', 'AR')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('California', 'CA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('California', 'CA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Colorado', 'CO')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Colorado', 'CO')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Connecticut', 'CT')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Connecticut', 'CT')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Delaware', 'DE')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Delaware', 'DE')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Florida', 'FL')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Florida', 'FL')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Georgia', 'GA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Georgia', 'GA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Hawaii', 'HI')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Hawaii', 'HI')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Idaho', 'ID')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Idaho', 'ID')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Illinois', 'IL')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Illinois', 'IL')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Indiana', 'IN')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Indiana', 'IN')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Iowa', 'IA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Iowa', 'IA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Kansas', 'KS')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Kansas', 'KS')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Kentucky', 'KY')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Kentucky', 'KY')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Louisiana', 'LA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Louisiana', 'LA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Maine', 'ME')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Maine', 'ME')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Maryland', 'MD')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Maryland', 'MD')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Massachusetts', 'MA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Massachusetts', 'MA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Michigan', 'MI')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Michigan', 'MI')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Minnesota', 'MN')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Minnesota', 'MN')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Mississippi', 'MS')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Mississippi', 'MS')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Missouri', 'MO')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Missouri', 'MO')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Montana', 'MT')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Montana', 'MT')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Nebraska', 'NE')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Nebraska', 'NE')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Nevada', 'NV')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Nevada', 'NV')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('New Hampshire', 'NH')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('New Hampshire', 'NH')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('New Jersey', 'NJ')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('New Jersey', 'NJ')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('New Mexico', 'NM')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('New Mexico', 'NM')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('New York', 'NY')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('New York', 'NY')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('North Carolina', 'NC')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('North Carolina', 'NC')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('North Dakota', 'ND')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('North Dakota', 'ND')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Ohio', 'OH')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Ohio', 'OH')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Oklahoma', 'OK')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Oklahoma', 'OK')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Oregon', 'OR')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Oregon', 'OR')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Pennsylvania', 'PA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Pennsylvania', 'PA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Rhode Island', 'RI')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Rhode Island', 'RI')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('South Carolina', 'SC')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('South Carolina', 'SC')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('South Dakota', 'SD')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('South Dakota', 'SD')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Tennessee', 'TN')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Tennessee', 'TN')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Texas', 'TX')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Texas', 'TX')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Utah', 'UT')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Utah', 'UT')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Vermont', 'VT')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Vermont', 'VT')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Virginia', 'VA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Virginia', 'VA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Washington', 'WA')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Washington', 'WA')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('West Virginia', 'WV')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('West Virginia', 'WV')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Wisconsin', 'WI')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Wisconsin', 'WI')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('Wyoming', 'WY')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('Wyoming', 'WY')
+on conflict (abbreviation) do nothing;
 
-INSERT INTO "locations_states"
-VALUES ('District of Colombia', 'DC')
-ON CONFLICT (abbreviation) DO NOTHING;
+insert into "locations_states"
+values ('District of Colombia', 'DC')
+on conflict (abbreviation) do nothing;
 
 
 -- migrate:down

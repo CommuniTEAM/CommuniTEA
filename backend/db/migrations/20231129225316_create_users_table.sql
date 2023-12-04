@@ -1,12 +1,12 @@
 -- migrate:up
-CREATE TABLE "users" (
-    "id" SERIAL PRIMARY KEY,
-    "name" VARCHAR(50) NOT NULL
+create table "users" (
+    "id" serial primary key,
+    "name" varchar(50) not null
 );
 
 
 -- migrate:down
-DROP TABLE "users";
+drop table "users";
 
 /*
 This file should be deleted and a new migration file should be

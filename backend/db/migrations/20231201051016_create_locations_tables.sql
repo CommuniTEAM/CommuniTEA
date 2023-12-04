@@ -1,15 +1,15 @@
 -- migrate:up
-CREATE TABLE IF NOT EXISTS "locations_states" (
-    "name" VARCHAR(50) UNIQUE NOT NULL,
-    "abbreviation" VARCHAR(2) PRIMARY KEY
+create table if not exists "locations_states" (
+    "name" varchar(50) unique not null,
+    "abbreviation" varchar(2) primary key
 );
 
-CREATE TABLE IF NOT EXISTS "locations_cities" (
-    "id" UUID PRIMARY KEY,
-    "name" VARCHAR(50) NOT NULL,
-    "state" VARCHAR(2) NOT NULL REFERENCES locations_states (abbreviation)
+create table if not exists "locations_cities" (
+    "id" uuid primary key,
+    "name" varchar(50) not null,
+    "state" varchar(2) not null references locations_states (abbreviation)
 );
 
 -- migrate:down
-DROP TABLE "locations_states";
-DROP TABLE "locations_cities";
+drop table "locations_states";
+drop table "locations_cities";
