@@ -20,6 +20,6 @@ type LocationsState struct {
 }
 
 type User struct {
-	ID   pgtype.UUID
+	ID   int32
 	Name string
 }

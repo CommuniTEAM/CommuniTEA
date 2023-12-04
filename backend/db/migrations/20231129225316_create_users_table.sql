@@ -1,6 +1,6 @@
 -- migrate:up
 CREATE TABLE "users" (
-    "id" UUID PRIMARY KEY,
+    "id" SERIAL PRIMARY KEY,
     "name" VARCHAR(50) NOT NULL
 );
 

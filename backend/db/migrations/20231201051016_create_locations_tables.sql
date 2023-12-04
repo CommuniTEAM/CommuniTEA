@@ -1,7 +1,7 @@
 -- migrate:up
 CREATE TABLE IF NOT EXISTS "locations_states" (
     "name" VARCHAR(50) UNIQUE NOT NULL,
-    "abbreviation" VARCHAR(2) PRIMARY KEY UNIQUE
+    "abbreviation" VARCHAR(2) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS "locations_cities" (
