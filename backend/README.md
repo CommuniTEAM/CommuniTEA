@@ -29,7 +29,7 @@ This will start the entire application, including the API service container and 
 
 After creating the docker volume for the project or after pulling changes in the `db/migrations` directory, migrations must be ran against the database in order for the changes to be applied locally. [Dbmate](https://github.com/amacneil/dbmate) is used to manage migrations.
 
-Migrations are automatically ran every time time `goapi` container starts up. However, migrations can also be run manually at any time, given the postgres container is running. To manually run migrations, navigate to `CommuniTEA/backend` in your terminal and run:
+Migrations are automatically ran every time time `goapi` container starts up; however, updates to `/db/schema.sql` upon changes will only be made when migrations are run manually. To manually run migrations, ensure the postgres container is running and navigate to `CommuniTEA/backend` in your terminal to run:
 
 ```
 docker run --rm -it --network=host -v "$(pwd)/db:/db" ghcr.io/amacneil/dbmate -u "postgres://admin:secret@localhost:15432/communitea-db?sslmode=disable" up
