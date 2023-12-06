@@ -19,6 +19,46 @@ type LocationsState struct {
 	Abbreviation string
 }
 
+type Tea struct {
+	ID          pgtype.UUID
+	Name        string
+	ImgUrl      pgtype.Text
+	Description string
+	BrewTime    pgtype.Text
+	BrewTemp    pgtype.Float8
+	Published   bool
+}
+
+type TeaAromatic struct {
+	Name string
+}
+
+type TeaAromaticTag struct {
+	ID    pgtype.UUID
+	Name  string
+	TeaID pgtype.UUID
+}
+
+type TeaFlavorProfile struct {
+	Name string
+}
+
+type TeaFlavorProfileTag struct {
+	ID    pgtype.UUID
+	Name  string
+	TeaID pgtype.UUID
+}
+
+type TeaOrigin struct {
+	Name string
+}
+
+type TeaOriginTag struct {
+	ID    pgtype.UUID
+	Name  pgtype.Text
+	TeaID pgtype.UUID
+}
+
 type User struct {
 	ID   int32
 	Name string

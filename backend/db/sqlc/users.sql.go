@@ -10,9 +10,9 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (name)
-VALUES ($1)
-RETURNING id, name
+insert into users (name)
+values ($1)
+returning id, name
 `
 
 func (q *Queries) CreateUser(ctx context.Context, name string) (User, error) {
@@ -23,8 +23,8 @@ func (q *Queries) CreateUser(ctx context.Context, name string) (User, error) {
 }
 
 const deleteUser = `-- name: DeleteUser :exec
-DELETE FROM users
-WHERE id = $1
+delete from users
+where id = $1
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
@@ -33,9 +33,9 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name
-FROM users
-WHERE id = $1 LIMIT 1
+select id, name
+from users
+where id = $1 limit 1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
@@ -49,7 +49,7 @@ const getUsers = `-- name: GetUsers :many
 /* These are example queries and do not reflect
 the columns in the production users table */
 
-SELECT id, name FROM users
+select id, name from users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -73,10 +73,10 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 }
 
 const updateUser = `-- name: UpdateUser :exec
-UPDATE users
-SET name = $2
-WHERE id = $1
-RETURNING id, name
+update users
+set name = $2
+where id = $1
+returning id, name
 `
 
 type UpdateUserParams struct {
