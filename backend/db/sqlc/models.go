@@ -9,17 +9,17 @@ import (
 )
 
 type LocationsCity struct {
-	ID    pgtype.UUID
-	Name  string
-	State string
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	State string      `json:"state"`
 }
 
 type LocationsState struct {
-	Name         string
-	Abbreviation string
+	Name         string `json:"name"`
+	Abbreviation string `json:"abbreviation"`
 }
 
 type User struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }

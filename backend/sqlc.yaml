@@ -8,7 +8,10 @@ sql:
       package: "db"
       sql_package: "pgx/v5"
       out: "db/sqlc"
+      emit_json_tags: true
+      emit_empty_slices: true
+      emit_pointers_for_null_types: true
   database:
-    uri: postgresql://admin:secret@postgres/communitea-db
+    uri: ${DB_URI}
   rules:
-    - sqlc/db-prepare  # TODO: Check what this does & remove if necessary
+    - sqlc/db-prepare
