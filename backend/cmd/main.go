@@ -42,6 +42,7 @@ func main() {
 	s.Get("/hello/{name}", api.Greet())
 	s.Get("/users", api.GetAllUsers(dbPool))
 	s.Post("/users", api.CreateUser(dbPool))
+	s.Post("/locations/cities", api.CreateCity(dbPool))
 
 	// Swagger UI endpoint at /docs.
 	s.Docs("/docs", swgui.New)
