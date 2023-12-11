@@ -6,6 +6,7 @@ import (
 	"os"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/swaggest/usecase"
@@ -17,13 +18,13 @@ type getTeasInput struct {
 }
 
 type teaInput struct {
-	ID          pgtype.UUID   `json:"id"`
-	Name        string        `json:"name"`
-	ImgURL      pgtype.Text   `json:"img_url"`
-	Description string        `json:"description"`
-	BrewTime    pgtype.Text   `json:"brew_time"`
-	BrewTemp    pgtype.Float8 `json:"brew_temp"`
-	Published   bool          `json:"published"`
+	ID          pgtype.UUID
+	Name        string      `json:"name"                 minLength:"1"`
+	ImgURL      pgtype.Text `json:"img_url ,omitempty"`
+	Description string      `json:"description"          minLength:"1"`
+	BrewTime    pgtype.Text `json:"brew_time ,omitempty"`
+	BrewTemp    float64     `json:"brew_temp ,omitempty"`
+	Published   bool
 }
 
 func CreateTea() usecase.Interactor {
@@ -40,26 +41,27 @@ func CreateTea() usecase.Interactor {
 
 		queries := db.New(conn)
 
+		newUUID, err := uuid.NewRandom()
+
+		if err != nil {
+			return fmt.Errorf("failed to create UUID: %w", err)
+		}
+
+		isValid := true
+
+		if input.BrewTemp == 0 {
+			isValid = false
+		}
+
 		teaParams := db.CreateTeaParams{
-			ID:          input.ID,
+			ID:          pgtype.UUID{Bytes: newUUID, Valid: true},
 			Name:        input.Name,
 			ImgUrl:      input.ImgURL,
 			Description: input.Description,
 			BrewTime:    input.BrewTime,
-			BrewTemp:    input.BrewTemp,
-			Published:   input.Published,
+			BrewTemp:    pgtype.Float8{Float64: input.BrewTemp, Valid: isValid},
+			Published:   false,
 		}
-		// db.CreateTeaParams.Name = fmt.Sprintf("%s", input.Name)
-
-		// db.CreateTeaParams.ImgUrl = input.ImgUrl
-
-		// db.CreateTeaParams.Description = fmt.Sprintf("%s", input.Description)
-
-		// db.CreateTeaParams.BrewTime = input.BrewTime
-
-		// db.CreateTeaParams.BrewTemp = input.BrewTemp
-
-		// db.CreateTeaParams.Published = false
 
 		*output, err = queries.CreateTea(ctx, teaParams)
 
