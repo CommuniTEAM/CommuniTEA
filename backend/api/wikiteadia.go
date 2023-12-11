@@ -19,11 +19,11 @@ type getTeasInput struct {
 
 type teaInput struct {
 	ID          pgtype.UUID
-	Name        string      `json:"name"                 minLength:"1"`
-	ImgURL      pgtype.Text `json:"img_url ,omitempty"`
-	Description string      `json:"description"          minLength:"1"`
-	BrewTime    pgtype.Text `json:"brew_time ,omitempty"`
-	BrewTemp    float64     `json:"brew_temp ,omitempty"`
+	Name        string  `json:"name"                 minLength:"1"`
+	ImgURL      string  `default:""                  json:"img_url ,omitempty"`
+	Description string  `json:"description"          minLength:"1"`
+	BrewTime    string  `default:""                  json:"brew_time ,omitempty"`
+	BrewTemp    float64 `json:"brew_temp ,omitempty"`
 	Published   bool
 }
 
@@ -47,19 +47,31 @@ func CreateTea() usecase.Interactor {
 			return fmt.Errorf("failed to create UUID: %w", err)
 		}
 
-		isValid := true
+		isImgURLValid := true
+
+		if input.ImgURL == "" {
+			isImgURLValid = false
+		}
+
+		isBrewTimeValid := true
+
+		if input.BrewTime == "" {
+			isBrewTimeValid = false
+		}
+
+		isBrewTempValid := true
 
 		if input.BrewTemp == 0 {
-			isValid = false
+			isBrewTempValid = false
 		}
 
 		teaParams := db.CreateTeaParams{
 			ID:          pgtype.UUID{Bytes: newUUID, Valid: true},
 			Name:        input.Name,
-			ImgUrl:      input.ImgURL,
+			ImgUrl:      pgtype.Text{String: input.ImgURL, Valid: isImgURLValid},
 			Description: input.Description,
-			BrewTime:    input.BrewTime,
-			BrewTemp:    pgtype.Float8{Float64: input.BrewTemp, Valid: isValid},
+			BrewTime:    pgtype.Text{String: input.BrewTime, Valid: isBrewTimeValid},
+			BrewTemp:    pgtype.Float8{Float64: input.BrewTemp, Valid: isBrewTempValid},
 			Published:   false,
 		}
 
