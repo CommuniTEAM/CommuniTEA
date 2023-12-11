@@ -49,6 +49,10 @@ func main() {
 
 	s.Post("/users", api.CreateUser())
 
+	s.Get("/teas/{published}", api.GetAllTeas())
+
+	s.Post("/teas", api.CreateTea())
+
 	// Swagger UI endpoint at /docs.
 
 	s.Docs("/docs", swgui.New)
