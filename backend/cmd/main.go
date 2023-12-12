@@ -13,9 +13,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
+	"github.com/CommuniTEAM/CommuniTEA/db"
 	"github.com/swaggest/openapi-go/openapi31"
 	"github.com/swaggest/rest/response/gzip"
 	"github.com/swaggest/rest/web"
@@ -23,15 +25,21 @@ import (
 )
 
 func main() {
+	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
+
+	if err != nil {
+		panic(err)
+	}
+
 	s := web.NewService(openapi31.NewReflector())
 
 	// Init API documentation schema.
 
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
 
-	s.OpenAPISchema().SetDescription("Let's gooooooooooooooo!")
+	s.OpenAPISchema().SetDescription("Bringing your community together over a cuppa")
 
-	s.OpenAPISchema().SetVersion("v1.0.0")
+	s.OpenAPISchema().SetVersion("v0.0.1")
 
 	// Setup middlewares.
 
@@ -45,13 +53,15 @@ func main() {
 
 	s.Get("/hello/{name}", api.Greet())
 
-	s.Get("/users", api.GetAllUsers())
+	s.Get("/users", api.GetAllUsers(dbPool))
 
-	s.Post("/users", api.CreateUser())
+	s.Post("/users", api.CreateUser(dbPool))
 
-	s.Get("/teas/{published}", api.GetAllTeas())
+	s.Post("/locations/cities", api.CreateCity(dbPool))
 
-	s.Post("/teas", api.CreateTea())
+	s.Get("/teas/{published}", api.GetAllTeas(dbPool))
+
+	s.Post("/teas", api.CreateTea(dbPool))
 
 	// Swagger UI endpoint at /docs.
 
@@ -59,11 +69,17 @@ func main() {
 
 	// Start server.
 
-	log.Println("http://localhost:8000/docs")
+	pubURL := os.Getenv("PUBLIC_URL")
 
-	const three = 3
+	if pubURL == "" {
+		log.Println("WARN: Could not find PUBLIC_URL var. Update .env file and rebuild docker containers.")
+	} else {
+		log.Printf("Starting server at %v/docs", pubURL)
+	}
 
 	// Run the server
+
+	const serverTimeout = 5
 
 	server := &http.Server{
 
@@ -71,10 +87,10 @@ func main() {
 
 		Handler: s,
 
-		ReadHeaderTimeout: three * time.Second,
+		ReadHeaderTimeout: serverTimeout * time.Second,
 	}
 
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 
 	if err != nil {
 		panic(err)

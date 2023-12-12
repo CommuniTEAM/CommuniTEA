@@ -9,57 +9,57 @@ import (
 )
 
 type LocationsCity struct {
-	ID    pgtype.UUID
-	Name  string
-	State string
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	State string      `json:"state"`
 }
 
 type LocationsState struct {
-	Name         string
-	Abbreviation string
+	Name         string `json:"name"`
+	Abbreviation string `json:"abbreviation"`
 }
 
 type Tea struct {
-	ID          pgtype.UUID
-	Name        string
-	ImgUrl      pgtype.Text
-	Description string
-	BrewTime    pgtype.Text
-	BrewTemp    pgtype.Float8
-	Published   bool
+	ID          pgtype.UUID   `json:"id"`
+	Name        string        `json:"name"`
+	ImgUrl      pgtype.Text   `json:"img_url"`
+	Description string        `json:"description"`
+	BrewTime    pgtype.Text   `json:"brew_time"`
+	BrewTemp    pgtype.Float8 `json:"brew_temp"`
+	Published   bool          `json:"published"`
 }
 
 type TeaAromatic struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type TeaAromaticTag struct {
-	ID    pgtype.UUID
-	Name  string
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 type TeaFlavorProfile struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type TeaFlavorProfileTag struct {
-	ID    pgtype.UUID
-	Name  string
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 type TeaOrigin struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type TeaOriginTag struct {
-	ID    pgtype.UUID
-	Name  pgtype.Text
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  pgtype.Text `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 type User struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }

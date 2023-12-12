@@ -11,23 +11,31 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
+        stages: [pre-commit]
       - id: check-yaml
+        stages: [pre-commit]
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.0.0a3
     hooks:
-      - id: sqlfluff-lint
       - id: sqlfluff-fix
+        args: [-q]
+        stages: [pre-commit]
+        exclude: schema.sql
+      - id: sqlfluff-lint
         args: [-v]
+        stages: [pre-commit]
         exclude: schema.sql
   - repo: https://github.com/TekWizely/pre-commit-golang
     rev: v1.0.0-rc.1
     hooks:
       - id: golangci-lint-repo-mod
+        stages: [pre-commit]
         args: [--fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.54.0
     hooks:
       - id: eslint
+        stages: [pre-commit]
         additional_dependencies:
           - eslint@8.53.0
           - eslint-plugin-react-hooks@4.6.0

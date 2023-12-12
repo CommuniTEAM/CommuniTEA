@@ -26,13 +26,13 @@ returning id, name, img_url, description, brew_time, brew_temp, published
 `
 
 type CreateTeaParams struct {
-	ID          pgtype.UUID
-	Name        string
-	ImgUrl      pgtype.Text
-	Description string
-	BrewTime    pgtype.Text
-	BrewTemp    pgtype.Float8
-	Published   bool
+	ID          pgtype.UUID   `json:"id"`
+	Name        string        `json:"name"`
+	ImgUrl      pgtype.Text   `json:"img_url"`
+	Description string        `json:"description"`
+	BrewTime    pgtype.Text   `json:"brew_time"`
+	BrewTemp    pgtype.Float8 `json:"brew_temp"`
+	Published   bool          `json:"published"`
 }
 
 func (q *Queries) CreateTea(ctx context.Context, arg CreateTeaParams) (Tea, error) {
@@ -65,9 +65,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaAromaticTagsParams struct {
-	ID    pgtype.UUID
-	Name  string
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaAromaticTags(ctx context.Context, arg CreateTeaAromaticTagsParams) (TeaAromaticTag, error) {
@@ -96,9 +96,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaFlavorProfileTagsParams struct {
-	ID    pgtype.UUID
-	Name  string
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaFlavorProfileTags(ctx context.Context, arg CreateTeaFlavorProfileTagsParams) (TeaFlavorProfileTag, error) {
@@ -127,9 +127,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaOriginTagsParams struct {
-	ID    pgtype.UUID
-	Name  pgtype.Text
-	TeaID pgtype.UUID
+	ID    pgtype.UUID `json:"id"`
+	Name  pgtype.Text `json:"name"`
+	TeaID pgtype.UUID `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaOriginTags(ctx context.Context, arg CreateTeaOriginTagsParams) (TeaOriginTag, error) {
@@ -231,7 +231,7 @@ func (q *Queries) GetAllTeaAromatics(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	items := []string{}
 	for rows.Next() {
 		var name string
 		if err := rows.Scan(&name); err != nil {
@@ -255,7 +255,7 @@ func (q *Queries) GetAllTeaFlavorProfiles(ctx context.Context) ([]string, error)
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	items := []string{}
 	for rows.Next() {
 		var name string
 		if err := rows.Scan(&name); err != nil {
@@ -279,7 +279,7 @@ func (q *Queries) GetAllTeaOrigins(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	items := []string{}
 	for rows.Next() {
 		var name string
 		if err := rows.Scan(&name); err != nil {
@@ -352,7 +352,7 @@ func (q *Queries) GetTeaAromaticTags(ctx context.Context, teaID pgtype.UUID) ([]
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	items := []string{}
 	for rows.Next() {
 		var name string
 		if err := rows.Scan(&name); err != nil {
@@ -404,7 +404,7 @@ func (q *Queries) GetTeaFlavorProfileTags(ctx context.Context, teaID pgtype.UUID
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	items := []string{}
 	for rows.Next() {
 		var name string
 		if err := rows.Scan(&name); err != nil {
@@ -456,7 +456,7 @@ func (q *Queries) GetTeaOriginTags(ctx context.Context, teaID pgtype.UUID) ([]pg
 		return nil, err
 	}
 	defer rows.Close()
-	var items []pgtype.Text
+	items := []pgtype.Text{}
 	for rows.Next() {
 		var name pgtype.Text
 		if err := rows.Scan(&name); err != nil {
@@ -482,7 +482,7 @@ func (q *Queries) GetTeas(ctx context.Context, published bool) ([]Tea, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Tea
+	items := []Tea{}
 	for rows.Next() {
 		var i Tea
 		if err := rows.Scan(
@@ -518,13 +518,13 @@ returning id, name, img_url, description, brew_time, brew_temp, published
 `
 
 type UpdateTeaParams struct {
-	ID          pgtype.UUID
-	Name        string
-	ImgUrl      pgtype.Text
-	Description string
-	BrewTime    pgtype.Text
-	BrewTemp    pgtype.Float8
-	Published   bool
+	ID          pgtype.UUID   `json:"id"`
+	Name        string        `json:"name"`
+	ImgUrl      pgtype.Text   `json:"img_url"`
+	Description string        `json:"description"`
+	BrewTime    pgtype.Text   `json:"brew_time"`
+	BrewTemp    pgtype.Float8 `json:"brew_temp"`
+	Published   bool          `json:"published"`
 }
 
 func (q *Queries) UpdateTea(ctx context.Context, arg UpdateTeaParams) error {
@@ -547,8 +547,8 @@ where id = $1
 `
 
 type UpdateTeaAromaticTagParams struct {
-	ID   pgtype.UUID
-	Name string
+	ID   pgtype.UUID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (q *Queries) UpdateTeaAromaticTag(ctx context.Context, arg UpdateTeaAromaticTagParams) error {
@@ -563,8 +563,8 @@ where id = $1
 `
 
 type UpdateTeaFlavorProfileTagParams struct {
-	ID   pgtype.UUID
-	Name string
+	ID   pgtype.UUID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (q *Queries) UpdateTeaFlavorProfileTag(ctx context.Context, arg UpdateTeaFlavorProfileTagParams) error {
@@ -579,8 +579,8 @@ where id = $1
 `
 
 type UpdateTeaOriginTagParams struct {
-	ID   pgtype.UUID
-	Name pgtype.Text
+	ID   pgtype.UUID `json:"id"`
+	Name pgtype.Text `json:"name"`
 }
 
 func (q *Queries) UpdateTeaOriginTag(ctx context.Context, arg UpdateTeaOriginTagParams) error {
