@@ -3,10 +3,9 @@ package api
 import (
 	"context"
 	"fmt"
-	"os"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
@@ -54,19 +53,15 @@ type userInput struct {
 
 // }
 
-func CreateUser() usecase.Interactor {
+func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 	// Create use case interactor with references to input/output types and interaction function.
 
 	response := usecase.NewInteractor(func(ctx context.Context, input userInput, output *db.User) error {
-		dbCtx := context.Background()
-
-		conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
-
+		conn, err := dbPool.Acquire(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to connect to DB: %w", err)
+			return fmt.Errorf("could not acquire db connection: %w", err)
 		}
-
-		defer conn.Close(dbCtx)
+		defer conn.Release()
 
 		queries := db.New(conn)
 
@@ -96,17 +91,13 @@ func CreateUser() usecase.Interactor {
 	return response
 }
 
-func GetAllUsers() usecase.Interactor {
+func GetAllUsers(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, _ struct{}, output *[]db.User) error {
-		dbCtx := context.Background()
-
-		conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
-
+		conn, err := dbPool.Acquire(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to connect to DB: %w", err)
+			return fmt.Errorf("could not acquire db connection: %w", err)
 		}
-
-		defer conn.Close(dbCtx)
+		defer conn.Release()
 
 		queries := db.New(conn)
 
