@@ -58,9 +58,11 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 
 	response := usecase.NewInteractor(func(ctx context.Context, input userInput, output *db.User) error {
 		conn, err := dbPool.Acquire(ctx)
+
 		if err != nil {
 			return fmt.Errorf("could not acquire db connection: %w", err)
 		}
+
 		defer conn.Release()
 
 		queries := db.New(conn)
@@ -94,9 +96,11 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 func GetAllUsers(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, _ struct{}, output *[]db.User) error {
 		conn, err := dbPool.Acquire(ctx)
+
 		if err != nil {
 			return fmt.Errorf("could not acquire db connection: %w", err)
 		}
+
 		defer conn.Release()
 
 		queries := db.New(conn)

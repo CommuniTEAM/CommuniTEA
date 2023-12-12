@@ -19,8 +19,8 @@ returning id, name, state
 
 type CreateCityParams struct {
 	Column1 pgtype.UUID `json:"column_1"`
-	Column2 *string     `json:"column_2"`
-	Column3 *string     `json:"column_3"`
+	Column2 pgtype.Text `json:"column_2"`
+	Column3 pgtype.Text `json:"column_3"`
 }
 
 func (q *Queries) CreateCity(ctx context.Context, arg CreateCityParams) (LocationsCity, error) {

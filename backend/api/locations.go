@@ -13,29 +13,36 @@ import (
 )
 
 type cityInput struct {
-	Name  string `description:"The name of the city"                         json:"name"`
+	Name string `description:"The name of the city" json:"name"`
+
 	State string `description:"Abbreviated state the city is located within" json:"state"`
 }
 
 func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
 		conn, err := dbPool.Acquire(ctx)
+
 		if err != nil {
 			return fmt.Errorf("could not acquire db connection: %w", err)
 		}
+
 		defer conn.Release()
 
 		queries := db.New(conn)
 
 		newUUID, err := uuid.NewRandom()
+
 		if err != nil {
 			return fmt.Errorf("could not generate new uuid: %w", err)
 		}
 
 		inputArgs := db.CreateCityParams{
+
 			Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-			Column2: &input.Name,
-			Column3: &input.State,
+
+			Column2: pgtype.Text{String: input.Name, Valid: true},
+
+			Column3: pgtype.Text{String: input.State, Valid: true},
 		}
 
 		*output, err = queries.CreateCity(ctx, inputArgs)
@@ -54,6 +61,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 	response.SetTitle("Create Location")
 
 	response.SetDescription("Make a new US city.")
+
 	response.SetTags("Locations")
 
 	response.SetExpectedErrors(status.InvalidArgument)

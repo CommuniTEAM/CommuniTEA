@@ -22,6 +22,7 @@ repos:
         stages: [pre-commit]
         exclude: schema.sql
       - id: sqlfluff-lint
+        args: [-v]
         stages: [pre-commit]
         exclude: schema.sql
   - repo: https://github.com/TekWizely/pre-commit-golang
