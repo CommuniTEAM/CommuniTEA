@@ -9,6 +9,10 @@
     height: 100%;
 }
 
+.image-container img:hover {
+    cursor: pointer;
+}
+
 .image-container .overlay {
     position: absolute;
     bottom: 0;
@@ -26,6 +30,7 @@
 
 .image-container:hover .overlay {
     transform: translateY(0);
+    cursor: pointer;
 }
 
 #overlay-name {
