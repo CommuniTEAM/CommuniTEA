@@ -21,6 +21,68 @@ export default function TeamMemberCarousel(): JSX.Element {
     cssEase: 'linear',
     slide: 'div',
     pauseOnHover: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          dots: false,
+          infinite: true,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          autoplay: true,
+          speed: 3000,
+          autoplaySpeed: 1,
+          cssEase: 'linear',
+          slide: 'div',
+          pauseOnHover: true,
+        },
+      },
+      {
+        breakpoint: 800,
+        settings: {
+          dots: false,
+          infinite: true,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          autoplay: true,
+          speed: 3000,
+          autoplaySpeed: 1,
+          cssEase: 'linear',
+          slide: 'div',
+          pauseOnHover: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          dots: false,
+          infinite: true,
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          autoplay: true,
+          speed: 3000,
+          autoplaySpeed: 1,
+          cssEase: 'linear',
+          slide: 'div',
+          pauseOnHover: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          dots: false,
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: true,
+          speed: 3000,
+          autoplaySpeed: 1,
+          cssEase: 'linear',
+          slide: 'div',
+          pauseOnHover: true,
+        },
+      },
+    ],
   };
 
   return (
@@ -36,6 +98,7 @@ export default function TeamMemberCarousel(): JSX.Element {
         cssEase={settings.cssEase}
         slide={settings.slide}
         pauseOnHover={settings.pauseOnHover}
+        responsive={settings.responsive}
       >
         <div className="image-container">
           <img src={Cory} alt="Cory" />
