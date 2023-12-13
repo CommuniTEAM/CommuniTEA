@@ -60,6 +60,22 @@ type TeaOriginTag struct {
 }
 
 type User struct {
-	ID   int32  `json:"id"`
+	ID        pgtype.UUID `json:"id"`
+	Role      string      `json:"role"`
+	Username  string      `json:"username"`
+	FirstName pgtype.Text `json:"first_name"`
+	LastName  pgtype.Text `json:"last_name"`
+	Email     pgtype.Text `json:"email"`
+	Password  string      `json:"password"`
+	Location  pgtype.UUID `json:"location"`
+}
+
+type UserFavoriteTea struct {
+	ID     pgtype.UUID `json:"id"`
+	UserID pgtype.UUID `json:"user_id"`
+	TeaID  pgtype.UUID `json:"tea_id"`
+}
+
+type UserRole struct {
 	Name string `json:"name"`
 }
