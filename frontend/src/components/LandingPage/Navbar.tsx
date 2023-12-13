@@ -40,6 +40,10 @@ function NavBar(): JSX.Element {
     navigate('/communitea');
   };
 
+  const handleAboutUsNavigation = (): void => {
+    navigate('/about');
+  };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
   };
@@ -122,6 +126,9 @@ function NavBar(): JSX.Element {
                 onClick={() => {
                   if (page === 'CommuniTEA') {
                     handleCommuniTeaNavigation();
+                  }
+                  if (page === 'About Us') {
+                    handleAboutUsNavigation();
                   }
                 }}
                 sx={{
