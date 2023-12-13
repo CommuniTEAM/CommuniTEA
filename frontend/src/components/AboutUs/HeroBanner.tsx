@@ -1,4 +1,3 @@
-import React from 'react';
 import Group from '../../assets/Group.png';
 import '../../App.css';
 
