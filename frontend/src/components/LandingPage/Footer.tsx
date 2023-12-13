@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Typography, IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Typography, IconButton } from '@mui/material';
 import GitHubIcon from '../../assets/GitHubIcon.png';
 
 export default function Footer(): JSX.Element {
@@ -10,6 +11,21 @@ export default function Footer(): JSX.Element {
     'Terms of Service',
     'FAQ',
   ];
+
+  interface MenuItemPaths {
+    'About Us': string
+    'Contact Us': string
+    // Add other menu items
+    [key: string]: string | undefined
+  }
+
+  const menuItemPaths: MenuItemPaths = {
+    'About Us': '/about',
+    'Contact Us': '#',
+    'Privacy Policy': '#',
+    'Terms of Service': '#',
+    FAQ: '#',
+  };
 
   return (
     <div
@@ -46,16 +62,33 @@ export default function Footer(): JSX.Element {
       >
         {footerMenuItems.map((item, index) => (
           <React.Fragment key={item}>
-            <Button
-              style={{
-                color: '#fff',
-                fontFamily: 'Montserrat',
-                textTransform: 'none',
-                fontSize: '.75vw',
-              }}
-            >
-              {item}
-            </Button>
+            {menuItemPaths[item] !== undefined ? (
+              <Link
+                to={menuItemPaths[item] ?? '/'}
+                style={{ textDecoration: 'none', color: '#fff' }}
+              >
+                <Typography
+                  style={{
+                    fontFamily: 'Montserrat',
+                    textTransform: 'none',
+                    fontSize: '.75vw',
+                  }}
+                >
+                  {item}
+                </Typography>
+              </Link>
+            ) : (
+              <Typography
+                style={{
+                  color: '#fff',
+                  fontFamily: 'Montserrat',
+                  textTransform: 'none',
+                  fontSize: '.75vw',
+                }}
+              >
+                {item}
+              </Typography>
+            )}
             {index < footerMenuItems.length - 1 && (
               <Typography
                 style={{
