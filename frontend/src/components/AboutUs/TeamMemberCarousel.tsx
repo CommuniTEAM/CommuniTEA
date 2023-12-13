@@ -103,8 +103,8 @@ export default function TeamMemberCarousel(): JSX.Element {
         <div className="image-container">
           <img src={Cory} alt="Cory" />
           <div className="overlay">
-            <Typography className="overlay-name">Cory DeGuzman</Typography>
-            <Typography className="overlay-title">
+            <Typography id="overlay-name">Cory DeGuzman</Typography>
+            <Typography id="overlay-title">
               Project Manager & Front-end Engineer
             </Typography>
           </div>
@@ -112,40 +112,36 @@ export default function TeamMemberCarousel(): JSX.Element {
         <div className="image-container">
           <img src={Angela} alt="Angela" />
           <div className="overlay">
-            <Typography className="overlay-name">Angela Fisher</Typography>
-            <Typography className="overlay-title">Back-end Engineer</Typography>
+            <Typography id="overlay-name">Angela Fisher</Typography>
+            <Typography id="overlay-title">Back-end Engineer</Typography>
           </div>
         </div>
         <div className="image-container">
           <img src={Brian} alt="Brian" />
           <div className="overlay">
-            <Typography className="overlay-name">Brian La</Typography>
-            <Typography className="overlay-title">Back-end Engineer</Typography>
+            <Typography id="overlay-name">Brian La</Typography>
+            <Typography id="overlay-title">Back-end Engineer</Typography>
           </div>
         </div>
         <div className="image-container">
           <img src={Amanda} alt="Amanda" />
           <div className="overlay">
-            <Typography className="overlay-name">Amanda Taing</Typography>
-            <Typography className="overlay-title">Back-end Engineer</Typography>
+            <Typography id="overlay-name">Amanda Taing</Typography>
+            <Typography id="overlay-title">Back-end Engineer</Typography>
           </div>
         </div>
         <div className="image-container">
           <img src={Hector} alt="Hector" />
           <div className="overlay">
-            <Typography className="overlay-name">Hector Elias</Typography>
-            <Typography className="overlay-title">
-              Front-end Engineer
-            </Typography>
+            <Typography id="overlay-name">Hector Elias</Typography>
+            <Typography id="overlay-title">Front-end Engineer</Typography>
           </div>
         </div>
         <div className="image-container">
           <img src={Alex} alt="Alex" />
           <div className="overlay">
-            <Typography className="overlay-name">Alex Ho</Typography>
-            <Typography className="overlay-title">
-              Front-end Engineer
-            </Typography>
+            <Typography id="overlay-name">Alex Ho</Typography>
+            <Typography id="overlay-title">Front-end Engineer</Typography>
           </div>
         </div>
       </Slider>
