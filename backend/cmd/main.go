@@ -25,15 +25,12 @@ import (
 )
 
 func main() {
-
 	// Init database connection pool
 
 	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
 
 	if err != nil {
-
 		panic(err)
-
 	}
 
 	s := web.NewService(openapi31.NewReflector())
@@ -79,13 +76,9 @@ func main() {
 	pubURL := os.Getenv("PUBLIC_URL")
 
 	if pubURL == "" {
-
 		log.Println("WARN: Could not find PUBLIC_URL var. Update .env file and rebuild docker containers.")
-
 	} else {
-
 		log.Printf("Starting server at %v/docs", pubURL)
-
 	}
 
 	// Run the server
@@ -104,9 +97,6 @@ func main() {
 	err = server.ListenAndServe()
 
 	if err != nil {
-
 		panic(err)
-
 	}
-
 }
