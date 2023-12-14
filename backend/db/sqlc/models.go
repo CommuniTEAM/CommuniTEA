@@ -8,6 +8,37 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Business struct {
+	ID              pgtype.UUID `json:"id"`
+	Name            string      `json:"name"`
+	StreetAddress   string      `json:"street_address"`
+	City            pgtype.UUID `json:"city"`
+	State           string      `json:"state"`
+	Zipcode         string      `json:"zipcode"`
+	BusinessOwnerID pgtype.UUID `json:"business_owner_id"`
+}
+
+type BusinessFollower struct {
+	ID         pgtype.UUID `json:"id"`
+	UserID     pgtype.UUID `json:"user_id"`
+	BusinessID pgtype.UUID `json:"business_id"`
+}
+
+type BusinessOfferedTea struct {
+	ID         pgtype.UUID `json:"id"`
+	BusinessID pgtype.UUID `json:"business_id"`
+	TeaID      pgtype.UUID `json:"tea_id"`
+}
+
+type BusinessReview struct {
+	ID       pgtype.UUID `json:"id"`
+	Business pgtype.UUID `json:"business"`
+	Author   pgtype.UUID `json:"author"`
+	Rating   int16       `json:"rating"`
+	Comment  pgtype.Text `json:"comment"`
+	Date     pgtype.Date `json:"date"`
+}
+
 type LocationsCity struct {
 	ID    pgtype.UUID `json:"id"`
 	Name  string      `json:"name"`
