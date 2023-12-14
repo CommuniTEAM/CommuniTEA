@@ -11,12 +11,8 @@ create table "events" (
     "date" date not null,
     "start_time" time not null,
     "end_time" time not null,
-    "description" text not null,
-    "headliner_one" varchar(250),
-    "headliner_two" varchar(250),
-    "highlight_one" varchar(250),
-    "highlight_two" varchar(250),
-    "highlight_three" varchar(250),
+    "md_description" text,
+    "html_description" text,
     "rsvps" boolean not null,
     "capacity" int
 );

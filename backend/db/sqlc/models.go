@@ -40,25 +40,21 @@ type BusinessReview struct {
 }
 
 type Event struct {
-	ID             pgtype.UUID `json:"id"`
-	Name           string      `json:"name"`
-	Host           pgtype.UUID `json:"host"`
-	LocationName   pgtype.Text `json:"location_name"`
-	StreetAddress  string      `json:"street_address"`
-	City           pgtype.UUID `json:"city"`
-	State          string      `json:"state"`
-	Zipcode        string      `json:"zipcode"`
-	Date           pgtype.Date `json:"date"`
-	StartTime      pgtype.Time `json:"start_time"`
-	EndTime        pgtype.Time `json:"end_time"`
-	Description    string      `json:"description"`
-	HeadlinerOne   pgtype.Text `json:"headliner_one"`
-	HeadlinerTwo   pgtype.Text `json:"headliner_two"`
-	HighlightOne   pgtype.Text `json:"highlight_one"`
-	HighlightTwo   pgtype.Text `json:"highlight_two"`
-	HighlightThree pgtype.Text `json:"highlight_three"`
-	Rsvps          bool        `json:"rsvps"`
-	Capacity       pgtype.Int4 `json:"capacity"`
+	ID              pgtype.UUID `json:"id"`
+	Name            string      `json:"name"`
+	Host            pgtype.UUID `json:"host"`
+	LocationName    pgtype.Text `json:"location_name"`
+	StreetAddress   string      `json:"street_address"`
+	City            pgtype.UUID `json:"city"`
+	State           string      `json:"state"`
+	Zipcode         string      `json:"zipcode"`
+	Date            pgtype.Date `json:"date"`
+	StartTime       pgtype.Time `json:"start_time"`
+	EndTime         pgtype.Time `json:"end_time"`
+	MdDescription   pgtype.Text `json:"md_description"`
+	HtmlDescription pgtype.Text `json:"html_description"`
+	Rsvps           bool        `json:"rsvps"`
+	Capacity        pgtype.Int4 `json:"capacity"`
 }
 
 type EventCategory struct {
