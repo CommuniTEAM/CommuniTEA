@@ -5,8 +5,8 @@ create table "events" (
     "host" uuid not null references businesses (id),
     "location_name" varchar(100),
     "street_address" varchar(100) not null,
-    "city" uuid not null references location_cities (id),
-    "state" varchar(2) not null references location_states (abbreviation),
+    "city" uuid not null references locations_cities (id),
+    "state" varchar(2) not null references locations_states (abbreviation),
     "zipcode" varchar(5) not null,
     "date" date not null,
     "start_time" time not null,
@@ -21,15 +21,15 @@ create table "events" (
     "capacity" int
 );
 
+create table "event_cohost_permissions" (
+    "name" varchar(50) primary key
+);
+
 create table "event_cohosts" (
     "id" uuid primary key,
     "event_id" uuid not null references events (id),
     "user_id" uuid not null references users (id),
     "permissions" varchar(50) not null references event_cohost_permissions (name)
-);
-
-create table "event_cohost_permissions" (
-    "name" varchar(50) primary key
 );
 
 create table "event_watchers" (
@@ -38,14 +38,14 @@ create table "event_watchers" (
     "user_id" uuid not null references users (id)
 );
 
+create table "event_categories" (
+    "name" varchar(50) primary key
+);
+
 create table "event_category_tags" (
     "id" uuid primary key,
     "event_id" uuid not null references events (id),
     "category" varchar(50) not null references event_categories (name)
-);
-
-create table "event_categories" (
-    "name" varchar(50) primary key
 );
 
 create table "event_rsvps" (

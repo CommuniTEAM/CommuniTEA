@@ -19,15 +19,11 @@ type cityInput struct {
 }
 
 func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
-
 	response := usecase.NewInteractor(func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
-
 		conn, err := dbPool.Acquire(ctx)
 
 		if err != nil {
-
 			return fmt.Errorf("could not acquire db connection: %w", err)
-
 		}
 
 		defer conn.Release()
@@ -37,9 +33,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 		newUUID, err := uuid.NewRandom()
 
 		if err != nil {
-
 			return fmt.Errorf("could not generate new uuid: %w", err)
-
 		}
 
 		inputArgs := db.CreateCityParams{
@@ -54,15 +48,12 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 		*output, err = queries.CreateCity(ctx, inputArgs)
 
 		if err != nil {
-
 			return fmt.Errorf("failed to create user: %w", err)
-
 		}
 
 		return nil
 
 		// output.Now = time.Now()
-
 	})
 
 	// Describe use case interactor.
@@ -76,5 +67,4 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
-
 }

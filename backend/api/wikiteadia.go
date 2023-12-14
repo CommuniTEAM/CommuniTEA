@@ -33,9 +33,7 @@ type teaInput struct {
 }
 
 func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
-
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
-
 		// dbCtx := context.Background()
 
 		conn, err := dbPool.Acquire(ctx)
@@ -43,9 +41,7 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 		// conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
 
 		if err != nil {
-
 			return fmt.Errorf("failed to connect to DB: %w", err)
-
 		}
 
 		defer conn.Release()
@@ -57,33 +53,25 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 		newUUID, err := uuid.NewRandom()
 
 		if err != nil {
-
 			return fmt.Errorf("failed to create UUID: %w", err)
-
 		}
 
 		isImgURLValid := true
 
 		if input.ImgURL == "" {
-
 			isImgURLValid = false
-
 		}
 
 		isBrewTimeValid := true
 
 		if input.BrewTime == "" {
-
 			isBrewTimeValid = false
-
 		}
 
 		isBrewTempValid := true
 
 		if input.BrewTemp == 0 {
-
 			isBrewTempValid = false
-
 		}
 
 		teaParams := db.CreateTeaParams{
@@ -106,13 +94,10 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 		*output, err = queries.CreateTea(ctx, teaParams)
 
 		if err != nil {
-
 			return fmt.Errorf("failed to create tea: %w", err)
-
 		}
 
 		return nil
-
 	})
 
 	response.SetTitle("Create Tea")
@@ -124,13 +109,10 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
-
 }
 
 func GetAllTeas(dbPool *pgxpool.Pool) usecase.Interactor {
-
 	response := usecase.NewInteractor(func(ctx context.Context, input getTeasInput, output *[]db.Tea) error {
-
 		// dbCtx := context.Background()
 
 		// conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
@@ -138,9 +120,7 @@ func GetAllTeas(dbPool *pgxpool.Pool) usecase.Interactor {
 		conn, err := dbPool.Acquire(ctx)
 
 		if err != nil {
-
 			return fmt.Errorf("failed to connect to DB: %w", err)
-
 		}
 
 		// defer conn.Close(dbCtx)
@@ -152,17 +132,13 @@ func GetAllTeas(dbPool *pgxpool.Pool) usecase.Interactor {
 		*output, err = queries.GetTeas(ctx, input.Published)
 
 		if err != nil {
-
 			return fmt.Errorf("failed to get all teas from DB: %w", err)
-
 		}
 
 		return nil
-
 	})
 
 	response.SetTags("Teas")
 
 	return response
-
 }

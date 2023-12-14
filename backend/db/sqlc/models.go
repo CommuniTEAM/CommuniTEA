@@ -39,6 +39,61 @@ type BusinessReview struct {
 	Date     pgtype.Date `json:"date"`
 }
 
+type Event struct {
+	ID             pgtype.UUID `json:"id"`
+	Name           string      `json:"name"`
+	Host           pgtype.UUID `json:"host"`
+	LocationName   pgtype.Text `json:"location_name"`
+	StreetAddress  string      `json:"street_address"`
+	City           pgtype.UUID `json:"city"`
+	State          string      `json:"state"`
+	Zipcode        string      `json:"zipcode"`
+	Date           pgtype.Date `json:"date"`
+	StartTime      pgtype.Time `json:"start_time"`
+	EndTime        pgtype.Time `json:"end_time"`
+	Description    string      `json:"description"`
+	HeadlinerOne   pgtype.Text `json:"headliner_one"`
+	HeadlinerTwo   pgtype.Text `json:"headliner_two"`
+	HighlightOne   pgtype.Text `json:"highlight_one"`
+	HighlightTwo   pgtype.Text `json:"highlight_two"`
+	HighlightThree pgtype.Text `json:"highlight_three"`
+	Rsvps          bool        `json:"rsvps"`
+	Capacity       pgtype.Int4 `json:"capacity"`
+}
+
+type EventCategory struct {
+	Name string `json:"name"`
+}
+
+type EventCategoryTag struct {
+	ID       pgtype.UUID `json:"id"`
+	EventID  pgtype.UUID `json:"event_id"`
+	Category string      `json:"category"`
+}
+
+type EventCohost struct {
+	ID          pgtype.UUID `json:"id"`
+	EventID     pgtype.UUID `json:"event_id"`
+	UserID      pgtype.UUID `json:"user_id"`
+	Permissions string      `json:"permissions"`
+}
+
+type EventCohostPermission struct {
+	Name string `json:"name"`
+}
+
+type EventRsvp struct {
+	ID    pgtype.UUID `json:"id"`
+	Event pgtype.UUID `json:"event"`
+	User  pgtype.UUID `json:"user"`
+}
+
+type EventWatcher struct {
+	ID      pgtype.UUID `json:"id"`
+	EventID pgtype.UUID `json:"event_id"`
+	UserID  pgtype.UUID `json:"user_id"`
+}
+
 type LocationsCity struct {
 	ID    pgtype.UUID `json:"id"`
 	Name  string      `json:"name"`
