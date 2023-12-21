@@ -1,0 +1,53 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    outputs:
+      artifact-id: ${{ steps.artifact-upload.outputs.artifact-id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: Install dependencies
+        run: npm install
+      - name: Build app
+        run: npm run build
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v4
+        id: artifact-upload
+        with:
+          name: frontend-artifact
+          path: './frontend/dist'
+          if-no-files-found: error
+          retention-days: 1
+
+  ping-server:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke Webhook
+        uses: johannes-huther/webhook.sh@v1
+        env:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          data: '{"artifact-id": "${{ needs.build-frontend.outputs.artifact-id }}", "needs-parity": true}'
