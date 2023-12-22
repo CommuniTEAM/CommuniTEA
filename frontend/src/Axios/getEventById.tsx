@@ -5,18 +5,19 @@ import DataCoffee from '../assets/DataCoffee.png';
 import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 
 interface Event {
-  id: number
-  image: string
-  tag: string
-  name: string
-  title: string
-  location: string
-  date: string
-  startTime: string
-  endTime: string
+  id?: number
+  image?: string
+  tag?: string
+  host?: string
+  name?: string
+  title?: string
+  location?: string
+  date?: string
+  startTime?: string
+  endTime?: string
   price?: string
-  address: string
-  attending: string
+  address?: string
+  attending?: string
   headline?: string
   headline2?: string
   description: string
@@ -136,12 +137,13 @@ const eventData = [
   },
 ];
 
-const getEventById = async (eventId: number): Promise<Event> => new Promise((resolve, reject) => {
+// eslint-disable-next-line
+const getEventById = async (eventId: number): Promise<Event | undefined> => new Promise((resolve, reject) => {
   setTimeout(() => {
     const foundEvent = eventData.find(
       (eventItem) => eventItem.id === eventId,
     );
-    if (foundEvent !== undefined || foundEvent !== null) {
+    if (foundEvent !== undefined) {
       resolve(foundEvent);
     } else {
       reject(new Error('Event not found'));

@@ -15,13 +15,15 @@ import RsvpForm from './Forms/RsvpForm';
 interface EventData {
   id: number
   image: string
+  tag: string
+  host: string
   name: string
   title: string
   location: string
   date: string
   startTime: string
   endTime: string
-  price: string
+  price?: string
   address: string
   attending: string
   headline?: string

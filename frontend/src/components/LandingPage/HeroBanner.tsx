@@ -1,4 +1,3 @@
-import React from 'react';
 import HeroBannerImage from '../../assets/HeroBannerImage.jpg';
 import '../../App.css';
 
