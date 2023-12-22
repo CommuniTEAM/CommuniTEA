@@ -1,13 +1,3 @@
-// Documentation you'll need to get acquainted with the APIs:
-
-// https://pkg.go.dev/github.com/swaggest/rest#section-readme
-
-// https://docs.sqlc.dev/en/latest/tutorials/getting-started-postgresql.html
-
-// https://github.com/jackc/pgx/wiki/Getting-started-with-pgx
-
-// https://dev.to/vearutop/tutorial-developing-a-restful-api-with-go-json-schema-validation-and-openapi-docs-2490
-
 package main
 
 import (
@@ -18,6 +8,7 @@ import (
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/CommuniTEAM/CommuniTEA/db"
+	"github.com/rs/cors"
 	"github.com/swaggest/openapi-go/openapi31"
 	"github.com/swaggest/rest/response/gzip"
 	"github.com/swaggest/rest/web"
@@ -25,7 +16,7 @@ import (
 )
 
 func main() {
-	// Init database connection pool
+	// Initialize database connection pool
 
 	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
 
@@ -33,9 +24,11 @@ func main() {
 		panic(err)
 	}
 
+	// Initialize web service
+
 	s := web.NewService(openapi31.NewReflector())
 
-	// Init API documentation schema.
+	// Initialize API documentation schema
 
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
 
@@ -43,35 +36,57 @@ func main() {
 
 	s.OpenAPISchema().SetVersion("v0.0.1")
 
-	// Setup middlewares.
+	// Setup middlewares
 
-	s.Wrap(
+	s.Wrap(gzip.Middleware) // Response compression with support for direct gzip pass through
 
-		gzip.Middleware, // Response compression with support for direct gzip pass through.
+	// Add API endpoints to router
 
-	)
+	s.Get("/hello/{name}", api.Greet()) // greeter (example endpoint to be removed for prod)
 
-	// Add API endpoints to router.
+	s.Post("/locations/cities", api.CreateCity(dbPool)) // locations
 
-	// greeter (example endpoint to be removed for prod)
+	s.Get("/teas/{published}", api.GetAllTeas(dbPool)) // wikiteadia
 
-	s.Get("/hello/{name}", api.Greet())
+	s.Post("/teas", api.CreateTea(dbPool)) // wikiteadia
 
-	// locations
-
-	s.Post("/locations/cities", api.CreateCity(dbPool))
-
-	// wikiteadia
-
-	s.Get("/teas/{published}", api.GetAllTeas(dbPool))
-
-	s.Post("/teas", api.CreateTea(dbPool))
-
-	// Swagger UI endpoint at /docs.
+	// Swagger UI endpoint at /docs
 
 	s.Docs("/docs", swgui.New)
 
-	// Start server.
+	// Configure CORS
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:             []string{"http://localhost:3000"}, // Set the allowed origins here
+		AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:             []string{"Content-Type"},
+		ExposedHeaders:             []string{},
+		OptionsPassthrough:         false,
+		OptionsSuccessStatus:       0,
+		Debug:                      false,
+		AllowOriginFunc:            nil,
+		AllowOriginRequestFunc:     nil,
+		AllowOriginVaryRequestFunc: nil,
+		MaxAge:                     0,
+		AllowCredentials:           false,
+		AllowPrivateNetwork:        false,
+		Logger:                     nil,
+	})
+
+	// Configure and start the server
+
+	const serverTimeout = 5
+
+	server := &http.Server{
+
+		Addr: ":8000",
+
+		Handler: c.Handler(s), // Wrap the service with CORS middleware
+
+		ReadHeaderTimeout: serverTimeout * time.Second,
+	}
+
+	// Check for PUBLIC_URL environment variable
 
 	pubURL := os.Getenv("PUBLIC_URL")
 
@@ -81,18 +96,7 @@ func main() {
 		log.Printf("Starting server at %v/docs", pubURL)
 	}
 
-	// Run the server
-
-	const serverTimeout = 5
-
-	server := &http.Server{
-
-		Addr: ":8000",
-
-		Handler: s,
-
-		ReadHeaderTimeout: serverTimeout * time.Second,
-	}
+	// Start the server
 
 	err = server.ListenAndServe()
 

@@ -175,14 +175,14 @@ export default function TeamMemberCarousel({
         </div>
         <div
           className="image-container"
-          onClick={() => {
-            handleSelectTeamMember('Amanda');
-          }}
-          onKeyDown={(e) => {
-            handleKeyPress(e, 'Amanda');
-          }}
-          role="button"
-          tabIndex={0}
+          // onClick={() => {
+          //   handleSelectTeamMember('Amanda');
+          // }}
+          // onKeyDown={(e) => {
+          //   handleKeyPress(e, 'Amanda');
+          // }}
+          // role="button"
+          // tabIndex={0}
           aria-label="Amanda's details"
         >
           <img src={Amanda} alt="Amanda" />
@@ -193,14 +193,14 @@ export default function TeamMemberCarousel({
         </div>
         <div
           className="image-container"
-          onClick={() => {
-            handleSelectTeamMember('Hector');
-          }}
-          onKeyDown={(e) => {
-            handleKeyPress(e, 'Hector');
-          }}
-          role="button"
-          tabIndex={0}
+          // onClick={() => {
+          //   handleSelectTeamMember('Hector');
+          // }}
+          // onKeyDown={(e) => {
+          //   handleKeyPress(e, 'Hector');
+          // }}
+          // role='button'
+          // tabIndex={0}
           aria-label="Hector's details"
         >
           <img src={Hector} alt="Hector" />
@@ -211,14 +211,14 @@ export default function TeamMemberCarousel({
         </div>
         <div
           className="image-container"
-          onClick={() => {
-            handleSelectTeamMember('Alex');
-          }}
-          onKeyDown={(e) => {
-            handleKeyPress(e, 'Alex');
-          }}
-          role="button"
-          tabIndex={0}
+          // onClick={() => {
+          //   handleSelectTeamMember('Alex');
+          // }}
+          // onKeyDown={(e) => {
+          //   handleKeyPress(e, 'Alex');
+          // }}
+          // role='button'
+          // tabIndex={0}
           aria-label="Alex's details"
         >
           <img src={Alex} alt="Alex" />
