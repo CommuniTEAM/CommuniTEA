@@ -36,7 +36,6 @@ export default function TestFetch(): JSX.Element {
             <p>
               Brew Time:
               {tea.brew_time}
-              minutes
             </p>
             <p>
               Brew Temp:
