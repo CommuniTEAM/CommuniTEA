@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../App.css';
 import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import PouringTea from '../../assets/PouringTea.png';

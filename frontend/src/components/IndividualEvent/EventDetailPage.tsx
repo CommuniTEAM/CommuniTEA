@@ -13,20 +13,22 @@ import Footer from '../LandingPage/Footer';
 import RsvpForm from './Forms/RsvpForm';
 
 interface EventData {
-  id: number
-  image: string
-  name: string
-  title: string
-  location: string
-  date: string
-  startTime: string
-  endTime: string
-  price: string
-  address: string
-  attending: string
+  id?: number
+  image?: string
+  tag?: string
+  host?: string
+  name?: string
+  title?: string
+  location?: string
+  date?: string
+  startTime?: string
+  endTime?: string
+  price?: string
+  address?: string
+  attending?: string
   headline?: string
   headline2?: string
-  description: string
+  description?: string
   eventHighlight1?: string
   eventHighlight1Bullet1?: string
   eventHighlight1Bullet2?: string
@@ -61,7 +63,11 @@ export default function EventDetailPage(): JSX.Element {
       try {
         if (eventId !== null && eventId !== undefined) {
           const response = await getEventById(Number(eventId));
-          setEventData(response);
+          if (response !== null && response !== undefined) {
+            setEventData(response);
+          } else {
+            setEventData(null);
+          }
         }
       } catch (error) {
         // eslint-disable-next-line no-console
