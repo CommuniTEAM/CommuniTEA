@@ -86,6 +86,8 @@ const eventData = [
   {
     id: 2,
     image: TeaTasting,
+    tag: '',
+    host: '',
     name: 'Tea Tasting',
     title: 'Tea Tasting',
     location: "Coyle's Bakeshop",
@@ -95,10 +97,39 @@ const eventData = [
     price: 'Free',
     address: '8300 Greenwood Ave N',
     attending: '20',
+    headline:
+      'Join us on this extraordinary journey through the world of tea. Elevate your tea experience, broaden our horizons, and become a part of the vibrant tapestry that is the World Tea Conference and Expo! ',
+    headline2: 'Let’s sip, learn, and celebrate tea together!',
+    description:
+      'Welcome to the premier global gathering for the tea community - the World Tea Conference and Expo! Join us for an immersive experience where tea enthusiasts, industry experts, and businesses converge to celebrate, learn, and explore the fascinating world of tea.',
+    eventHighlight1: 'Explore the Global Tea Landscape',
+    eventHighlight1Bullet1:
+      'Immerse yourself in a diverse showcase of teas from around the world.',
+    eventHighlight1Bullet2:
+      'Engage with leading tea producers, distributors, and brands.',
+    eventHighlight2: 'Educational Sessions and Workshops',
+    eventHighlight2Bullet1:
+      'Gain insights from industry leaders through a series of educational sessions.',
+    eventHighlight2Bullet2:
+      'Participate in hands-on workshops to redefine your tea knowledge and skills.',
+    eventHighlight3: 'Networking Opportunities',
+    eventHighlight3Bullet1:
+      'Connect with fellow tea enthusiasts, professionals, and potential collaborators.',
+    eventHighlight3Bullet2:
+      'Forge valuable relationships that extends beyond the conference. ',
+    eventHighlight4: 'Innovation and Trends:',
+    eventHighlight4Bullet1:
+      'Stay ahead of the curve by discovering the latest innovations and trends in the tea industry',
+    eventHighlight4Bullet2:
+      'Access exclusive previews of upcoming tea products and technologies',
+    whyAttend:
+      'The World Tea Conference and Expo is more than an event; it’s a celebration of the global tea community. Whether you’re a seasoned professional, a budding entrepreneur, or simply passionate about tea, this conference offers a platform to expand your knowledge, connect with like-minded individuals, and contribute to the ongoing evolution of the tea industry.',
   },
   {
     id: 3,
     image: FourSeasonsTea,
+    tag: '',
+    host: '',
     name: 'Four Seasons Tea Gatherings',
     title: 'Four Seasons Tea Gatherings',
     location: 'East-West Chanoyu Center',
@@ -108,10 +139,39 @@ const eventData = [
     price: 'Free',
     address: '1414 S Weller St.',
     attending: '10',
+    headline:
+      'Join us on this extraordinary journey through the world of tea. Elevate your tea experience, broaden our horizons, and become a part of the vibrant tapestry that is the World Tea Conference and Expo! ',
+    headline2: 'Let’s sip, learn, and celebrate tea together!',
+    description:
+      'Welcome to the premier global gathering for the tea community - the World Tea Conference and Expo! Join us for an immersive experience where tea enthusiasts, industry experts, and businesses converge to celebrate, learn, and explore the fascinating world of tea.',
+    eventHighlight1: 'Explore the Global Tea Landscape',
+    eventHighlight1Bullet1:
+      'Immerse yourself in a diverse showcase of teas from around the world.',
+    eventHighlight1Bullet2:
+      'Engage with leading tea producers, distributors, and brands.',
+    eventHighlight2: 'Educational Sessions and Workshops',
+    eventHighlight2Bullet1:
+      'Gain insights from industry leaders through a series of educational sessions.',
+    eventHighlight2Bullet2:
+      'Participate in hands-on workshops to redefine your tea knowledge and skills.',
+    eventHighlight3: 'Networking Opportunities',
+    eventHighlight3Bullet1:
+      'Connect with fellow tea enthusiasts, professionals, and potential collaborators.',
+    eventHighlight3Bullet2:
+      'Forge valuable relationships that extends beyond the conference. ',
+    eventHighlight4: 'Innovation and Trends:',
+    eventHighlight4Bullet1:
+      'Stay ahead of the curve by discovering the latest innovations and trends in the tea industry',
+    eventHighlight4Bullet2:
+      'Access exclusive previews of upcoming tea products and technologies',
+    whyAttend:
+      'The World Tea Conference and Expo is more than an event; it’s a celebration of the global tea community. Whether you’re a seasoned professional, a budding entrepreneur, or simply passionate about tea, this conference offers a platform to expand your knowledge, connect with like-minded individuals, and contribute to the ongoing evolution of the tea industry.',
   },
   {
     id: 4,
     image: DataCoffee,
+    tag: '',
+    host: '',
     name: 'Seattle Data Professionals',
     title: 'Seattle Data Professionals',
     location: 'Cafe Hagen Modern Cafe',
@@ -121,10 +181,39 @@ const eventData = [
     price: 'Free',
     address: '1252 Thomas St. Seattle, WA 98109',
     attending: '22',
+    headline:
+      'Join us on this extraordinary journey through the world of tea. Elevate your tea experience, broaden our horizons, and become a part of the vibrant tapestry that is the World Tea Conference and Expo! ',
+    headline2: 'Let’s sip, learn, and celebrate tea together!',
+    description:
+      'Welcome to the premier global gathering for the tea community - the World Tea Conference and Expo! Join us for an immersive experience where tea enthusiasts, industry experts, and businesses converge to celebrate, learn, and explore the fascinating world of tea.',
+    eventHighlight1: 'Explore the Global Tea Landscape',
+    eventHighlight1Bullet1:
+      'Immerse yourself in a diverse showcase of teas from around the world.',
+    eventHighlight1Bullet2:
+      'Engage with leading tea producers, distributors, and brands.',
+    eventHighlight2: 'Educational Sessions and Workshops',
+    eventHighlight2Bullet1:
+      'Gain insights from industry leaders through a series of educational sessions.',
+    eventHighlight2Bullet2:
+      'Participate in hands-on workshops to redefine your tea knowledge and skills.',
+    eventHighlight3: 'Networking Opportunities',
+    eventHighlight3Bullet1:
+      'Connect with fellow tea enthusiasts, professionals, and potential collaborators.',
+    eventHighlight3Bullet2:
+      'Forge valuable relationships that extends beyond the conference. ',
+    eventHighlight4: 'Innovation and Trends:',
+    eventHighlight4Bullet1:
+      'Stay ahead of the curve by discovering the latest innovations and trends in the tea industry',
+    eventHighlight4Bullet2:
+      'Access exclusive previews of upcoming tea products and technologies',
+    whyAttend:
+      'The World Tea Conference and Expo is more than an event; it’s a celebration of the global tea community. Whether you’re a seasoned professional, a budding entrepreneur, or simply passionate about tea, this conference offers a platform to expand your knowledge, connect with like-minded individuals, and contribute to the ongoing evolution of the tea industry.',
   },
   {
     id: 5,
     image: TeaAndPainting,
+    tag: '',
+    host: '',
     name: 'Paint & Sip: Night Owl',
     title: 'Paint & Sip: Night Owl',
     location: 'Friday Afternoon Tea',
@@ -134,6 +223,33 @@ const eventData = [
     price: '$50',
     address: '4228 Stone Way N',
     attending: '30',
+    headline:
+      'Join us on this extraordinary journey through the world of tea. Elevate your tea experience, broaden our horizons, and become a part of the vibrant tapestry that is the World Tea Conference and Expo! ',
+    headline2: 'Let’s sip, learn, and celebrate tea together!',
+    description:
+      'Welcome to the premier global gathering for the tea community - the World Tea Conference and Expo! Join us for an immersive experience where tea enthusiasts, industry experts, and businesses converge to celebrate, learn, and explore the fascinating world of tea.',
+    eventHighlight1: 'Explore the Global Tea Landscape',
+    eventHighlight1Bullet1:
+      'Immerse yourself in a diverse showcase of teas from around the world.',
+    eventHighlight1Bullet2:
+      'Engage with leading tea producers, distributors, and brands.',
+    eventHighlight2: 'Educational Sessions and Workshops',
+    eventHighlight2Bullet1:
+      'Gain insights from industry leaders through a series of educational sessions.',
+    eventHighlight2Bullet2:
+      'Participate in hands-on workshops to redefine your tea knowledge and skills.',
+    eventHighlight3: 'Networking Opportunities',
+    eventHighlight3Bullet1:
+      'Connect with fellow tea enthusiasts, professionals, and potential collaborators.',
+    eventHighlight3Bullet2:
+      'Forge valuable relationships that extends beyond the conference. ',
+    eventHighlight4: 'Innovation and Trends:',
+    eventHighlight4Bullet1:
+      'Stay ahead of the curve by discovering the latest innovations and trends in the tea industry',
+    eventHighlight4Bullet2:
+      'Access exclusive previews of upcoming tea products and technologies',
+    whyAttend:
+      'The World Tea Conference and Expo is more than an event; it’s a celebration of the global tea community. Whether you’re a seasoned professional, a budding entrepreneur, or simply passionate about tea, this conference offers a platform to expand your knowledge, connect with like-minded individuals, and contribute to the ongoing evolution of the tea industry.',
   },
 ];
 
