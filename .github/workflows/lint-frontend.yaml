@@ -1,8 +1,8 @@
-name: Deploy Frontend
+name: Verify Frontend Build
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - 'main'
     paths:
       - 'frontend/**'

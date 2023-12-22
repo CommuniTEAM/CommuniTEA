@@ -17,45 +17,37 @@ import (
 
 func main() {
 	// Initialize database connection pool
-
 	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
-
 	if err != nil {
 		panic(err)
 	}
 
 	// Initialize web service
-
 	s := web.NewService(openapi31.NewReflector())
 
 	// Initialize API documentation schema
-
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
-
 	s.OpenAPISchema().SetDescription("Bringing your community together over a cuppa")
-
 	s.OpenAPISchema().SetVersion("v0.0.1")
 
 	// Setup middlewares
-
 	s.Wrap(gzip.Middleware) // Response compression with support for direct gzip pass through
 
-	// Add API endpoints to router
+	// Add API endpoints to router.
+	// greeter (example endpoint to be removed for prod)
+	s.Get("/hello/{name}", api.Greet())
 
-	s.Get("/hello/{name}", api.Greet()) // greeter (example endpoint to be removed for prod)
+	// locations
+	s.Post("/locations/cities", api.CreateCity(dbPool))
 
-	s.Post("/locations/cities", api.CreateCity(dbPool)) // locations
+	// wikiteadia
+	s.Get("/teas/{published}", api.GetAllTeas(dbPool))
+	s.Post("/teas", api.CreateTea(dbPool))
 
-	s.Get("/teas/{published}", api.GetAllTeas(dbPool)) // wikiteadia
-
-	s.Post("/teas", api.CreateTea(dbPool)) // wikiteadia
-
-	// Swagger UI endpoint at /docs
-
+	// Swagger UI endpoint at /docs.
 	s.Docs("/docs", swgui.New)
 
 	// Configure CORS
-
 	c := cors.New(cors.Options{
 		AllowedOrigins:             []string{"http://localhost:3000"}, // Set the allowed origins here
 		AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -74,32 +66,22 @@ func main() {
 	})
 
 	// Configure and start the server
-
 	const serverTimeout = 5
-
 	server := &http.Server{
-
-		Addr: ":8000",
-
-		Handler: c.Handler(s), // Wrap the service with CORS middleware
-
+		Addr:              ":8000",
+		Handler:           c.Handler(s), // Wrap the service with CORS middleware
 		ReadHeaderTimeout: serverTimeout * time.Second,
 	}
 
 	// Check for PUBLIC_URL environment variable
-
 	pubURL := os.Getenv("PUBLIC_URL")
-
 	if pubURL == "" {
 		log.Println("WARN: Could not find PUBLIC_URL var. Update .env file and rebuild docker containers.")
 	} else {
 		log.Printf("Starting server at %v/docs", pubURL)
 	}
 
-	// Start the server
-
 	err = server.ListenAndServe()
-
 	if err != nil {
 		panic(err)
 	}
