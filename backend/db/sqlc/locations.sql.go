@@ -59,6 +59,7 @@ select "id" from locations_cities
 where ("name" = 'string')
 `
 
+// ! THIS IS A DEBUG QUERY: DELETE FOR PROD
 func (q *Queries) GetCity(ctx context.Context) (pgtype.UUID, error) {
 	row := q.db.QueryRow(ctx, getCity)
 	var id pgtype.UUID
