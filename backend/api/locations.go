@@ -68,3 +68,16 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 	return response
 }
+
+// ! ONLY A TEMP FUNCTION -- DELETE FOR PROD
+func GetCity(dbPool *pgxpool.Pool) pgtype.UUID {
+	conn, _ := dbPool.Acquire(context.Background())
+
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	city, _ := queries.GetCity(context.Background())
+
+	return city
+}

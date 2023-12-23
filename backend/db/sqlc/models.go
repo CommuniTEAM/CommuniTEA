@@ -148,7 +148,7 @@ type User struct {
 	FirstName pgtype.Text `json:"first_name"`
 	LastName  pgtype.Text `json:"last_name"`
 	Email     pgtype.Text `json:"email"`
-	Password  string      `json:"password"`
+	Password  []byte      `json:"password"`
 	Location  pgtype.UUID `json:"location"`
 }
 

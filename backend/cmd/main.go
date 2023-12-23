@@ -37,6 +37,9 @@ func main() {
 	// greeter (example endpoint to be removed for prod)
 	s.Get("/hello/{name}", api.Greet())
 
+	// accounts
+	s.Post("/users", api.CreateUser(dbPool))
+
 	// locations
 	s.Post("/locations/cities", api.CreateCity(dbPool))
 

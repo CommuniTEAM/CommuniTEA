@@ -10,7 +10,7 @@ create table if not exists "users" (
     "first_name" varchar(50),
     "last_name" varchar(50),
     "email" varchar(200) unique,
-    "password" varchar(1000) not null,
+    "password" bytea not null,
     "location" uuid not null references locations_cities (id)
 );
 

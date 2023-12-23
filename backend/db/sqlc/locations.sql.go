@@ -53,3 +53,15 @@ func (q *Queries) GetAllCities(ctx context.Context) ([]LocationsCity, error) {
 	}
 	return items, nil
 }
+
+const getCity = `-- name: GetCity :one
+select "id" from locations_cities
+where ("name" = 'string')
+`
+
+func (q *Queries) GetCity(ctx context.Context) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, getCity)
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
+}
