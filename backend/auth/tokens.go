@@ -14,7 +14,7 @@ import (
 var signingKey = generateSigningKey() //nolint: gochecknoglobals // key needs to be randomly generated once at app start
 
 type TokenData struct {
-	Token     string    `cookie:"auth_bearer,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
+	Token     string    `cookie:"jwt,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
 	TokenType string    `json:"token_type"`
 	ExpiresIn int       `json:"expires_in"`
 	ID        uuid.UUID `json:"id"`
@@ -25,22 +25,28 @@ type TokenData struct {
 	Location  uuid.UUID `json:"location"`
 }
 
-// GenerateNewJWT takes a struct of a validated user's information and appends a signed JWT
-// with their information enclosed to the struct. The JWT is valid for one hour.
-func GenerateNewJWT(tokenData *TokenData) (*TokenData, error) {
+// GenerateNewJWT takes a struct of a validated user's information and appends
+// a signed JWT with their information enclosed to the struct. The JWT is valid
+// for one hour.
+func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 	// Instantiate JWT builder
 	jwtBuilder := jwt.NewBuilder()
 
-	// Modify the JWT with the user's information (and issue/expiry time)
 	jwtBuilder.Issuer("communitea.life")
-	jwtBuilder.Claim(`id`, tokenData.ID)
-	jwtBuilder.Claim(`role`, tokenData.Role)
-	jwtBuilder.Claim(`username`, tokenData.Username)
-	jwtBuilder.Claim(`first_name`, tokenData.FirstName)
-	jwtBuilder.Claim(`last_name`, tokenData.LastName)
-	jwtBuilder.Claim(`location`, tokenData.Location)
-	jwtBuilder.IssuedAt(time.Now())
-	jwtBuilder.Expiration(time.Now().Add(time.Hour))
+
+	if !expired {
+		// Modify the JWT with the user's information (and issue/expiry time)
+		jwtBuilder.Claim(`id`, tokenData.ID)
+		jwtBuilder.Claim(`role`, tokenData.Role)
+		jwtBuilder.Claim(`username`, tokenData.Username)
+		jwtBuilder.Claim(`first_name`, tokenData.FirstName)
+		jwtBuilder.Claim(`last_name`, tokenData.LastName)
+		jwtBuilder.Claim(`location`, tokenData.Location)
+		jwtBuilder.IssuedAt(time.Now())
+		jwtBuilder.Expiration(time.Now().Add(time.Hour))
+	} else {
+		jwtBuilder.Expiration(time.Now().Add(-time.Hour))
+	}
 
 	// Create the JWT
 	token, err := jwtBuilder.Build()
@@ -57,6 +63,17 @@ func GenerateNewJWT(tokenData *TokenData) (*TokenData, error) {
 	tokenData.Token = string(signedToken)
 
 	return tokenData, nil
+}
+
+// ValidateJWT takes a signed JWT, verifies it against the key, then parses
+// the enclosed data and returns it. Returns nil if the token is invalid.
+func ValidateJWT(token string) map[string]interface{} {
+	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, signingKey))
+	if err != nil {
+		return nil
+	}
+
+	return verifiedToken.PrivateClaims()
 }
 
 func generateSigningKey() *rsa.PrivateKey {

@@ -73,6 +73,7 @@ func main() {
 
 	// auth
 	s.Post("/login", api.UserLogin(dbPool))
+	s.Delete("/logout", api.UserLogout())
 
 	// accounts
 	s.Post("/users", api.CreateUser(dbPool))

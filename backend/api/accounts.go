@@ -29,52 +29,62 @@ type loginInput struct {
 	Password string `json:"password"`
 }
 
+type logoutInput struct {
+	Cookie string `cookie:"jwt" json:"-"`
+}
+
+type logoutOutput struct {
+	Message string `json:"message"`
+	Cookie  string `cookie:"jwt,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
+}
+
 func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
-	response := usecase.NewInteractor(func(ctx context.Context, input loginInput, output *auth.TokenData) error {
-		conn, err := dbPool.Acquire(ctx)
-		if err != nil {
-			return fmt.Errorf("could not acquire db connection: %w", err)
-		}
-		defer conn.Release()
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
+			conn, err := dbPool.Acquire(ctx)
+			if err != nil {
+				return fmt.Errorf("could not acquire db connection: %w", err)
+			}
+			defer conn.Release()
 
-		queries := db.New(conn)
+			queries := db.New(conn)
 
-		userData, err := queries.Login(ctx, input.Username)
-		if err != nil {
-			return fmt.Errorf("could not get user from database: %w", err)
-		}
+			userData, err := queries.Login(ctx, input.Username)
+			if err != nil {
+				return fmt.Errorf("could not get user from database: %w", err)
+			}
 
-		if bcrypt.CompareHashAndPassword(userData.Password, []byte(input.Password)) != nil {
-			return fmt.Errorf("could not authenticate: passwords do not match")
-		}
+			if bcrypt.CompareHashAndPassword(userData.Password, []byte(input.Password)) != nil {
+				return fmt.Errorf("could not authenticate: passwords do not match")
+			}
 
-		userUUID, err := uuid.FromBytes(userData.ID.Bytes[:])
-		if err != nil {
-			return fmt.Errorf("could not convert user uuid to uuid type: %w", err)
-		}
-		output.ID = userUUID
+			userUUID, err := uuid.FromBytes(userData.ID.Bytes[:])
+			if err != nil {
+				return fmt.Errorf("could not convert user uuid to uuid type: %w", err)
+			}
+			output.ID = userUUID
 
-		locationUUID, err := uuid.FromBytes(userData.Location.Bytes[:])
-		if err != nil {
-			return fmt.Errorf("could not convert location uuid to uuid type: %w", err)
-		}
-		output.Location = locationUUID
+			locationUUID, err := uuid.FromBytes(userData.Location.Bytes[:])
+			if err != nil {
+				return fmt.Errorf("could not convert location uuid to uuid type: %w", err)
+			}
+			output.Location = locationUUID
 
-		output.Role = userData.Role
-		output.Username = userData.Username
-		output.FirstName = userData.FirstName.String
-		output.LastName = userData.LastName.String
+			output.Role = userData.Role
+			output.Username = userData.Username
+			output.FirstName = userData.FirstName.String
+			output.LastName = userData.LastName.String
 
-		output, err = auth.GenerateNewJWT(output)
-		if err != nil {
-			return fmt.Errorf("could not generate new JWT: %w", err)
-		}
+			output, err = auth.GenerateNewJWT(output, false)
+			if err != nil {
+				return fmt.Errorf("could not generate new JWT: %w", err)
+			}
 
-		output.ExpiresIn = 3600
-		output.TokenType = "bearer"
+			output.ExpiresIn = 3600
+			output.TokenType = "bearer"
 
-		return nil
-	})
+			return nil
+		})
 
 	response.SetTitle("Login")
 	response.SetDescription("Log in to an existing account.")
@@ -84,44 +94,77 @@ func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 	return response
 }
 
+func UserLogout() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input logoutInput, output *logoutOutput) error {
+			userData := auth.ValidateJWT(input.Cookie)
+			if userData == nil {
+				output.Message = "success"
+				output.Cookie = ""
+				return nil
+			}
+
+			token, err := auth.GenerateNewJWT(
+				&auth.TokenData{}, //nolint: exhaustruct // struct only serves to hold the JWT in this case
+				true,
+			)
+			if err != nil {
+				return fmt.Errorf("could not generate new JWT: %w", err)
+			}
+
+			output.Cookie = token.Token
+			output.Message = "success"
+
+			return nil
+		})
+
+	response.SetTitle("Logout")
+	response.SetDescription("Log out of an account.")
+	response.SetTags("Auth")
+	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
 func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
-	response := usecase.NewInteractor(func(ctx context.Context, input newUserInput, output *db.User) error {
-		conn, err := dbPool.Acquire(ctx)
-		if err != nil {
-			return fmt.Errorf("could not acquire db connection: %w", err)
-		}
-		defer conn.Release()
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input newUserInput, output *db.User) error {
+			conn, err := dbPool.Acquire(ctx)
+			if err != nil {
+				return fmt.Errorf("could not acquire db connection: %w", err)
+			}
+			defer conn.Release()
 
-		queries := db.New(conn)
+			queries := db.New(conn)
 
-		newUUID, err := uuid.NewRandom()
-		if err != nil {
-			return fmt.Errorf("could not generate new uuid: %w", err)
-		}
+			newUUID, err := uuid.NewRandom()
+			if err != nil {
+				return fmt.Errorf("could not generate new uuid: %w", err)
+			}
 
-		hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return fmt.Errorf("could not hash inputted password: %w", err)
-		}
+			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+			if err != nil {
+				return fmt.Errorf("could not hash inputted password: %w", err)
+			}
 
-		inputArgs := db.CreateUserParams{
-			Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-			Column2: pgtype.Text{String: input.Role, Valid: true},
-			Column3: pgtype.Text{String: input.Username, Valid: true},
-			Column4: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
-			Column5: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
-			Column6: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
-			Column7: hashPass,
-			Column8: GetCity(dbPool),
-		}
+			inputArgs := db.CreateUserParams{
+				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
+				Column2: pgtype.Text{String: input.Role, Valid: true},
+				Column3: pgtype.Text{String: input.Username, Valid: true},
+				Column4: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
+				Column5: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				Column6: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Column7: hashPass,
+				Column8: GetCity(dbPool),
+			}
 
-		*output, err = queries.CreateUser(ctx, inputArgs)
-		if err != nil {
-			return fmt.Errorf("failed to create user: %w", err)
-		}
+			*output, err = queries.CreateUser(ctx, inputArgs)
+			if err != nil {
+				return fmt.Errorf("failed to create user: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
 	response.SetTitle("Create User")
 	response.SetDescription("Make a new user account.")
