@@ -14,7 +14,7 @@ import (
 var signingKey = generateSigningKey() //nolint: gochecknoglobals // key needs to be randomly generated once at app start
 
 type TokenData struct {
-	Token     string    `cookie:"jwt,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
+	Token     string    `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
 	TokenType string    `json:"token_type"`
 	ExpiresIn int       `json:"expires_in"`
 	ID        uuid.UUID `json:"id"`
@@ -23,6 +23,17 @@ type TokenData struct {
 	FirstName string    `json:"first_name,omitempty"`
 	LastName  string    `json:"last_name,omitempty"`
 	Location  uuid.UUID `json:"location"`
+}
+
+// ValidateJWT takes a signed JWT, verifies it against the key, then parses
+// the enclosed data and returns it. Returns nil if the token is invalid.
+func ValidateJWT(token string) map[string]interface{} {
+	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, signingKey))
+	if err != nil {
+		return nil
+	}
+
+	return verifiedToken.PrivateClaims()
 }
 
 // GenerateNewJWT takes a struct of a validated user's information and appends
@@ -63,17 +74,6 @@ func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 	tokenData.Token = string(signedToken)
 
 	return tokenData, nil
-}
-
-// ValidateJWT takes a signed JWT, verifies it against the key, then parses
-// the enclosed data and returns it. Returns nil if the token is invalid.
-func ValidateJWT(token string) map[string]interface{} {
-	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, signingKey))
-	if err != nil {
-		return nil
-	}
-
-	return verifiedToken.PrivateClaims()
 }
 
 func generateSigningKey() *rsa.PrivateKey {

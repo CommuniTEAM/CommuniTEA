@@ -57,6 +57,7 @@ func (q *Queries) GetAllCities(ctx context.Context) ([]LocationsCity, error) {
 const getCity = `-- name: GetCity :one
 select "id" from locations_cities
 where ("name" = 'string')
+limit 1
 `
 
 // ! THIS IS A DEBUG QUERY: DELETE FOR PROD

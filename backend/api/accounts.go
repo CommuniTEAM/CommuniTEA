@@ -30,12 +30,12 @@ type loginInput struct {
 }
 
 type logoutInput struct {
-	Cookie string `cookie:"jwt" json:"-"`
+	Cookie string `cookie:"bearer-token" json:"-"`
 }
 
 type logoutOutput struct {
 	Message string `json:"message"`
-	Cookie  string `cookie:"jwt,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
+	Cookie  string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
 }
 
 func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
