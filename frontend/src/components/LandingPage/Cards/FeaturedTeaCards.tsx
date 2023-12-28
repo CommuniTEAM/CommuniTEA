@@ -1,33 +1,17 @@
+import '../styles/FeaturedTeaCardStyles.css';
 import {
-  Card, CardContent, CardMedia, Typography, CardActionArea,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  CardActionArea,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import ChamomileTea from '../../../assets/ChamomileTea.jpg';
 import DarjeelingTea from '../../../assets/DarjeelingTea.jpg';
 import OolongTea from '../../../assets/OolongTea.png';
 import GreenTea from '../../../assets/GreenTea.jpg';
 
 export default function FeaturedTeaCards(): JSX.Element {
-  const theme = useTheme();
-  const largeScreen = useMediaQuery(theme.breakpoints.up('lg'));
-  const mediumScreen = useMediaQuery(theme.breakpoints.between('md', 'lg'));
-  const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
-
-  const getImageHeight = (): string => {
-    if (largeScreen) return '10vw';
-    if (mediumScreen) return '10vw';
-    if (smallScreen) return '10vw';
-    return '60vw';
-  };
-
-  const getCardHeight = (): string => {
-    if (largeScreen) return '18vw';
-    if (mediumScreen) return '20vw';
-    if (smallScreen) return '20vw';
-    return '60vw';
-  };
-
   // This is test data. Replace when API is ready.
   const teaData = [
     {
@@ -63,15 +47,19 @@ export default function FeaturedTeaCards(): JSX.Element {
   return (
     <>
       {teaData.map((tea) => (
-        <Card key={tea.name} sx={{ width: '20vw', height: getCardHeight(), borderRadius: 10 }}>
-          <CardActionArea sx={{ height: '100%' }}>
-            <CardMedia sx={{ height: getImageHeight() }} image={tea.image} title={tea.title} />
-            <CardContent sx={{ height: '40%' }}>
+        <Card key={tea.name} className="featuredTeaCard">
+          <CardActionArea className="featuredTeaCardActionArea">
+            <CardMedia
+              className="featuredTeaCardMedia"
+              image={tea.image}
+              title={tea.title}
+            />
+            <CardContent className="featuredTeaCardContent">
               <Typography
                 gutterBottom
                 variant="body1"
                 component="div"
-                sx={{ fontFamily: 'Montserrat', color: '#29C6CF', fontWeight: 300 }}
+                className="featuredTypographyBody1"
               >
                 Featured
               </Typography>
@@ -79,11 +67,11 @@ export default function FeaturedTeaCards(): JSX.Element {
                 gutterBottom
                 variant="h5"
                 component="div"
-                sx={{ fontFamily: 'Montserrat', fontWeight: 700 }}
+                className="featuredTypographyH5"
               >
                 {tea.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Montserrat' }}>
+              <Typography variant="body2" className="featuredTypographyBody2">
                 {tea.description}
               </Typography>
             </CardContent>

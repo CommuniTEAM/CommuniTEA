@@ -1,0 +1,66 @@
+.businessShowcaseButton:hover {
+    background-color: #D2B48C;
+    color: black;
+}
+
+.businessShowcaseContainer {
+    background-color: rgba(85, 107, 47, 0.6);
+    display: flex;
+    padding: 50px
+}
+
+.businessShowcaseTextContainer {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.businessShowcaseTitle {
+    font-family: 'Roboto Slab';
+    font-size: 4rem;
+    font-weight: 700;
+}
+
+.businessShowcaseDescription {
+    font-family: 'Roboto';
+    font-size: 2rem;
+    font-weight: 300;
+    padding: 100px 0;
+}
+
+.businessPartnerCardsContainer {
+    flex-grow: 1;
+    max-width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 1200px) {
+    .businessShowcaseContainer {
+        flex-direction: column;
+        padding: 0 5vw;
+    }
+
+    .businessShowcaseTextContainer {
+        max-width: 100%;
+        padding: 50px;
+    }
+
+    .businessShowcaseTitle {
+        font-size: 3rem;
+    }
+
+    .businessShowcaseDescription {
+        font-size: 1.5rem;
+        padding: 50px 0;
+    }
+
+    .businessPartnerCardsContainer {
+        max-width: 100%;
+        padding: 0;
+    }
+}
