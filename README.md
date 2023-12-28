@@ -20,8 +20,8 @@
   &nbsp;
   <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo" title="MaterialUI">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/oauth/oauth-original.svg" width="50" height="50" alt="OAuth Logo" title="OAuth">
-  &nbsp;
+  <!-- <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/oauth/oauth-original.svg" width="50" height="50" alt="OAuth Logo" title="OAuth">
+  &nbsp; -->
   <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/openapi/openapi-original-wordmark.svg" width="50" height="50" alt="OpenAPI Logo" title="OpenAPI">
   &nbsp;
   <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo" title="PostgreSQL">

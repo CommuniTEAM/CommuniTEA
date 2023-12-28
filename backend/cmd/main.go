@@ -12,10 +12,17 @@ import (
 	"github.com/google/uuid"
 	"github.com/rs/cors"
 	"github.com/swaggest/jsonschema-go"
+	oapi "github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi31"
+	"github.com/swaggest/rest/nethttp"
 	"github.com/swaggest/rest/web"
 	swgui "github.com/swaggest/swgui/v5emb"
 )
+
+type httpResponse struct {
+	Status string `json:"status"`
+	Error  string `json:"error"`
+}
 
 func main() {
 	// Initialize database connection pool
@@ -24,15 +31,22 @@ func main() {
 		panic(err)
 	}
 
+	// Initialize openAPI 3.1 reflector
+	reflector := openapi31.NewReflector()
+
+	// Declare security scheme
+	securityName := "authCookie"
+	reflector.SpecEns().SetHTTPBearerTokenSecurity(securityName, "cookie", "User Authentication")
+
 	// Initialize web service
-	s := web.NewService(openapi31.NewReflector())
+	s := web.NewService(reflector)
 
 	// Initialize API documentation schema
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
 	s.OpenAPISchema().SetDescription("Bringing your community together over a cuppa")
 	s.OpenAPISchema().SetVersion("v0.0.1")
 
-	// Create custom schema mapping for 3rd party type uuid.
+	// Create custom schema mapping for 3rd party type uuid
 	uuidDef := jsonschema.Schema{}
 	uuidDef.AddType(jsonschema.String)
 	uuidDef.WithFormat("uuid")
@@ -42,6 +56,7 @@ func main() {
 
 	// Set up middleware wraps
 	s.Wrap(
+		middleware.Logger,
 		cors.New(cors.Options{
 			AllowedOrigins:             []string{"http://localhost:3000", "https://communitea.life"},
 			AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -58,7 +73,13 @@ func main() {
 			AllowPrivateNetwork:        false,
 			Logger:                     nil,
 		}).Handler,
-		middleware.Logger,
+		// Describe bad request (400) response
+		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
+			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+				cu.HTTPStatus = http.StatusBadRequest
+			})
+			return nil
+		}),
 	)
 
 	// Forgive appended slashes on URLs
@@ -67,19 +88,36 @@ func main() {
 	// ! remove for prod - debug profiler
 	s.Mount("/debug", middleware.Profiler())
 
-	// Add API endpoints to router.
+	// Set up auth requirement option for routes
+	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
+		// Add security requirement to operation
+		oc.AddSecurity(securityName)
+
+		// Describe unauthenticated response
+		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+			cu.HTTPStatus = http.StatusUnauthorized
+		})
+
+		// Describe unauthorized (forbidden) response
+		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+			cu.HTTPStatus = http.StatusForbidden
+		})
+		return nil
+	})
+
+	// Add API endpoints to router
 	// greeter (example endpoint to be removed for prod)
 	s.Get("/hello/{name}", api.Greet())
 
 	// auth
 	s.Post("/login", api.UserLogin(dbPool))
-	s.Delete("/logout", api.UserLogout())
+	s.Delete("/logout", api.UserLogout(), requireAuth)
 
-	// accounts
+	// users
 	s.Post("/users", api.CreateUser(dbPool))
 
 	// locations
-	s.Post("/locations/cities", api.CreateCity(dbPool))
+	s.Post("/locations/cities", api.CreateCity(dbPool), requireAuth)
 
 	// wikiteadia
 	s.Get("/teas/{published}", api.GetAllTeas(dbPool))

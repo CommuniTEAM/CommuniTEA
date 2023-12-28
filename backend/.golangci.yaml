@@ -66,6 +66,8 @@ linters-settings:
       - '^google.golang.org/protobuf/.+Options$'
       - '^gopkg.in/yaml.v3.Node$'
       - '^github.com/swaggest/jsonschema-go.Schema$'
+      # project libs
+      - '^github.com/CommuniTEAM/CommuniTEA/cmd.httpResponse$'
 
   funlen:
     # Checks the number of lines in a function.

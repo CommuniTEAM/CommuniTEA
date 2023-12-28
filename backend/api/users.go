@@ -179,7 +179,7 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 
 	response.SetTitle("Create User")
 	response.SetDescription("Make a new user account.")
-	response.SetTags("Accounts")
+	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
