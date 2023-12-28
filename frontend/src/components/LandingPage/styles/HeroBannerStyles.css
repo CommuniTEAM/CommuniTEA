@@ -1,0 +1,84 @@
+/* HeroBannerStyles.css */
+
+.heroBannerContainer {
+    position: relative;
+    width: 100vw;
+    text-align: center;
+    color: white;
+}
+
+.heroBannerImage {
+    width: 100vw;
+    height: auto;
+    display: block;
+}
+
+.heroBannerTextContainer {
+    position: absolute;
+    top: 25vw;
+    left: 20vw;
+    transform: translate(-50%, -50%);
+    width: 40vw;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.heroBannerHeading {
+    font-family: 'Roboto Slab';
+    font-size: 4vw;
+    font-weight: 300;
+}
+
+.heroBannerParagraph {
+    font-family: 'Roboto';
+    font-size: 2vw;
+    font-weight: 300;
+}
+
+/* Media Query for screens at or below 768px */
+@media (max-width: 768px) {
+    .heroBannerContainer {
+        /* Adjust styles for smaller screens */
+    }
+
+    .heroBannerOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        }
+
+    .heroBannerImage {
+        /* Adjust image styles for smaller screens, if necessary */
+    }
+
+    .heroBannerTextContainer {
+        top: 50%;
+        /* Centering the text block vertically */
+        left: 50%;
+        /* Centering the text block horizontally */
+        width: 90%;
+        /* Adjust width to fit smaller screens */
+        padding: 10px;
+    }
+
+    .heroBannerHeading {
+        font-size: 2.5rem;
+    }
+
+    .heroBannerParagraph {
+        font-size: 1.25rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .heroBannerHeading {
+            font-size: 2rem;
+        }
+
+        .heroBannerParagraph {
+            font-size: 1rem;
+        }
+}

@@ -1,15 +1,12 @@
 import { Grid } from '@mui/material';
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import One from '../../assets/One.svg';
 import Two from '../../assets/Two.svg';
 import Three from '../../assets/Three.svg';
 import '../../App.css';
 
 export default function HowItWorks(): JSX.Element {
-  const responsiveHeight = useResponsiveHeight(); // custom hook
-
   return (
-    <div style={{ height: responsiveHeight }}>
+    <div>
       <h1
         style={{
           fontFamily: 'Roboto Slab',

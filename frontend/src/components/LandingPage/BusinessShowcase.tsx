@@ -1,9 +1,7 @@
 import { Button } from '@mui/material';
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import BusinessPartnerCards from './Cards/BusinessPartnerCards';
 
 export default function BusinessShowcase(): JSX.Element {
-  const responsiveHeight = useResponsiveHeight(); // custom hook
   return (
     <>
       <div>
@@ -27,7 +25,7 @@ export default function BusinessShowcase(): JSX.Element {
       </div>
       <div
         style={{
-          height: responsiveHeight,
+          // height: responsiveHeight,
           backgroundColor: 'rgba(85, 107, 47, 0.6)',
           display: 'flex',
         }}

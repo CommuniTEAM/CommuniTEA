@@ -1,12 +1,9 @@
 import '../../App.css';
-import useResponsiveHeight from '../../Hooks/useResponsiveHeight';
 import FeaturedTeaCards from './Cards/FeaturedTeaCards';
 
 export default function FeaturedTeas(): JSX.Element {
-  const responsiveHeight = useResponsiveHeight(); // custom hook
-
   return (
-    <div style={{ backgroundColor: '#D2B48C', height: responsiveHeight }}>
+    <div style={{ backgroundColor: '#D2B48C' }}>
       <div>
         <h1
           style={{

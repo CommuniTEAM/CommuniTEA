@@ -1,42 +1,21 @@
 import HeroBannerImage from '../../assets/HeroBannerImage.jpg';
 import '../../App.css';
+import './styles/HeroBannerStyles.css';
 
 function HeroBanner(): JSX.Element {
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100vw',
-        textAlign: 'center',
-        color: 'white',
-      }}
-    >
+    <div className="heroBannerContainer">
+      <div className="heroBannerOverlay" />
       <img
         src={HeroBannerImage}
         alt="Assorted teas and herbs"
-        style={{ width: '100vw', height: 'auto', display: 'block' }}
+        className="heroBannerImage"
       />
-      <div
-        style={{
-          position: 'absolute',
-          top: '25vw',
-          left: '20vw',
-          transform: 'translate(-50%, -50%)',
-          width: '40vw',
-          padding: '20px',
-          boxSizing: 'border-box',
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: 'Roboto Slab',
-            fontSize: '4vw',
-            fontWeight: 300,
-          }}
-        >
+      <div className="heroBannerTextContainer">
+        <h1 className="heroBannerHeading">
           Discover the World of Tea with CommuniTEA!
         </h1>
-        <p style={{ fontFamily: 'Roboto', fontSize: '2vw', fontWeight: 300 }}>
+        <p className="heroBannerParagraph">
           Connecting Tea Enthusiasts with Local Businesses for a Shared Tea
           Experience
         </p>

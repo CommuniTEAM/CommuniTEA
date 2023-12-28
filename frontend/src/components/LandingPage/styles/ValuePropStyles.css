@@ -1,0 +1,167 @@
+.valuePropContainer {
+    background-color: #FFFFF0;
+    display: flex;
+    height: auto;
+    padding: 50px;
+}
+
+.imageSection {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.imageStyle {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.textSection {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.textContainer {
+    width: 100%;
+}
+
+.headingStyle {
+    font-family: 'Roboto Slab';
+    font-size: 3vw;
+    font-weight: 300;
+    color: #416543;
+}
+
+.paragraphStyle {
+    font-family: 'Roboto';
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #416543;
+    overflow-x: hidden;
+}
+
+@media (max-width: 1200px) {
+    .valuePropContainer {
+            padding: 50px;
+        }
+}
+
+@media (max-width: 992px) {
+    .valuePropContainer {
+            flex-direction: column-reverse;
+            padding: 0 5vw;
+            height: auto;
+        }
+
+
+    .textSection {
+        width: 100%;
+        text-align: center;
+    }
+
+    .imageSection {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px
+    }
+
+    .imageStyle {
+        width: 200px;
+        height: 200px;
+    }
+
+    .headingStyle {
+        font-size: 2.5rem;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .paragraphStyle {
+        font-size: 1.25rem;
+    }
+
+    .imageContainerFirst {
+        transform: translate(0);
+    }
+
+    .imageContainerSecond {
+        transform: translate(0);
+    }
+
+    .imageContainerThird {
+        transform: translate(0);
+    }
+}
+@media (max-width: 768px) {
+    .valuePropContainer {
+        flex-direction: column-reverse;
+        padding: 0 5vw;
+        height: auto;
+    }
+
+
+    .textSection {
+        width: 100%;
+        text-align: center;
+    }
+
+    .imageSection {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px
+    }
+
+    .imageStyle {
+        width: 200px;
+        height: 200px;
+    }
+
+    .headingStyle {
+        font-size: 2.5rem;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .paragraphStyle {
+        font-size: 1.25rem;
+    }
+
+    .imageContainerFirst {
+    transform: translate(0);
+    }
+
+    .imageContainerSecond {
+        transform: translate(0);
+    }
+
+    .imageContainerThird {
+        transform: translate(0);
+    }
+
+}
+
+@media only screen and (max-width: 600px) {
+
+    .imageSection {
+
+    }
+
+    .headingStyle {
+            font-size: 2rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .paragraphStyle {
+            font-size: 1rem;
+        }
+}

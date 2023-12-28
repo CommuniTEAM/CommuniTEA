@@ -1,17 +1,21 @@
-import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const useResponsiveHeight = (): string => {
-  const extraLargeScreen = useMediaQuery('(min-width:2300px)');
-  const largeScreen = useMediaQuery('(min-width:1500px)');
-  const mediumScreen = useMediaQuery('(min-width:1000px)');
-  const smallScreen = useMediaQuery('(min-width:400px)');
+  const theme = useTheme();
+
+  // Define media queries at the top level
+  const extraLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
+  const largeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const mediumScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const smallScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
   if (extraLargeScreen) return '60vh';
   if (largeScreen) return '50vh';
   if (mediumScreen) return '40vh';
-  if (smallScreen) return '30vw';
+  if (smallScreen) return '35vh';
 
-  return 'auto';
+  return '30vh'; // Fallback for extra small screens
 };
 
 export default useResponsiveHeight;
