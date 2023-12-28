@@ -25,6 +25,9 @@ type httpResponse struct {
 }
 
 func main() {
+	// Set environment status
+	isDevEnv := os.Getenv("DEV")
+
 	// Initialize database connection pool
 	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
 	if err != nil {
@@ -85,8 +88,10 @@ func main() {
 	// Forgive appended slashes on URLs
 	s.Use(middleware.StripSlashes)
 
-	// ! remove for prod - debug profiler
-	s.Mount("/debug", middleware.Profiler())
+	// Mount debug profiler in dev environment
+	if isDevEnv == "true" {
+		s.Mount("/debug", middleware.Profiler())
+	}
 
 	// Set up auth requirement option for routes
 	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
@@ -134,13 +139,14 @@ func main() {
 		ReadHeaderTimeout: serverTimeout * time.Second,
 	}
 
-	// Check for VITE_API_HOST environment variable
-	// ! Remove this code block for prod
-	pubURL := os.Getenv("VITE_API_HOST")
-	if pubURL == "" {
-		log.Println("WARN: Could not find VITE_API_HOST var. Update .env file and rebuild docker containers.")
-	} else {
-		log.Printf("Starting server at %v/docs", pubURL)
+	// Check for VITE_API_HOST environment variable if dev environment
+	if isDevEnv == "true" {
+		pubURL := os.Getenv("VITE_API_HOST")
+		if pubURL == "" {
+			log.Println("WARN: Could not find VITE_API_HOST var. Update .env file and rebuild docker containers.")
+		} else {
+			log.Printf("Starting server at %v/docs", pubURL)
+		}
 	}
 
 	err = server.ListenAndServe()
