@@ -65,12 +65,16 @@ linters-settings:
       - '^golang.org/x/tools/go/analysis.Analyzer$'
       - '^google.golang.org/protobuf/.+Options$'
       - '^gopkg.in/yaml.v3.Node$'
+      - '^github.com/swaggest/jsonschema-go.Schema$'
+      # project libs
+      - '^github.com/CommuniTEAM/CommuniTEA/cmd.httpResponse$'
+      - '^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$'
 
   funlen:
     # Checks the number of lines in a function.
     # If lower than 0, disable the check.
     # Default: 60
-    lines: 100
+    lines: 150
     # Checks the number of statements in a function.
     # If lower than 0, disable the check.
     # Default: 40

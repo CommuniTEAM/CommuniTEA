@@ -27,7 +27,7 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/app
-    command: bash -c "/wait && dbmate -e DBMATE up && sqlc generate && air /cmd/main.go -b 0.0.0.0"
+    command: bash -c "/wait && dbmate -e DBMATE up && sqlc generate && go mod tidy && air /cmd/main.go -b 0.0.0.0"
 
   webapp:
     image: node:lts-bullseye
