@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -14,11 +15,14 @@ import (
 )
 
 type cityInput struct {
-	AccessToken string `cookie:"bearer-token"                                      json:"-"`
-	Name        string `description:"The name of the city"                         json:"name"  required:"true"`
-	State       string `description:"Abbreviated state the city is located within" json:"state" required:"true"`
+	AccessToken string `cookie:"bearer-token" json:"-"`
+	Name        string `json:"name"           required:"true"`
+	State       string `json:"state"          required:"true"`
 }
 
+// Example endpoint that is not yet fully-functional, but serves to
+// showcase authentication in action.
+// TEA-62 will flesh it out with data validation and error handling
 func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
@@ -28,7 +32,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			// If the token was invalid or nonexistent then userData will be nil
 			if userData == nil {
-				return fmt.Errorf("401: unauthenticated user")
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			// For this authentication test, only proceed with the POST request
@@ -36,13 +40,14 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 			// Note: currently the admin role is only possible via an UPDATE SQL
 			// request to change the role of an existing user through Beekeeper
 			if userData["role"] != "admin" {
-				return fmt.Errorf("403: user unauthorized")
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			// Authenticate complete; now carry out the request
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
-				return fmt.Errorf("could not acquire db connection: %w", err)
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 			defer conn.Release()
 
@@ -50,7 +55,8 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
-				return fmt.Errorf("could not generate new uuid: %w", err)
+				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			inputArgs := db.CreateCityParams{
@@ -61,7 +67,8 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
 			if err != nil {
-				return fmt.Errorf("failed to create city: %w", err)
+				log.Println(fmt.Errorf("failed to create city: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			return nil
@@ -70,7 +77,11 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 	response.SetTitle("Create Location")
 	response.SetDescription("Make a new US city.")
 	response.SetTags("Locations")
-	response.SetExpectedErrors(status.InvalidArgument)
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
+	)
 
 	return response
 }

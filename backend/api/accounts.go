@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -43,7 +44,8 @@ func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
-				return fmt.Errorf("could not acquire db connection: %w", err)
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 			defer conn.Release()
 
@@ -51,22 +53,25 @@ func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			userData, err := queries.Login(ctx, input.Username)
 			if err != nil {
-				return fmt.Errorf("could not get user from database: %w", err)
+				log.Println(fmt.Errorf("could not get user from database: %w", err))
+				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
 			}
 
 			if bcrypt.CompareHashAndPassword(userData.Password, []byte(input.Password)) != nil {
-				return fmt.Errorf("could not authenticate: passwords do not match")
+				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
 			}
 
 			userUUID, err := uuid.FromBytes(userData.ID.Bytes[:])
 			if err != nil {
-				return fmt.Errorf("could not convert user uuid to uuid type: %w", err)
+				log.Println(fmt.Errorf("could not convert user uuid to uuid type: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 			output.ID = userUUID
 
 			locationUUID, err := uuid.FromBytes(userData.Location.Bytes[:])
 			if err != nil {
-				return fmt.Errorf("could not convert location uuid to uuid type: %w", err)
+				log.Println(fmt.Errorf("could not convert location uuid to uuid type: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 			output.Location = locationUUID
 
@@ -77,7 +82,8 @@ func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			output, err = auth.GenerateNewJWT(output, false)
 			if err != nil {
-				return fmt.Errorf("could not generate new JWT: %w", err)
+				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -109,7 +115,8 @@ func UserLogout() usecase.Interactor {
 				true,
 			)
 			if err != nil {
-				return fmt.Errorf("could not generate new JWT: %w", err)
+				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			output.Cookie = token.Token
@@ -131,7 +138,8 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 		func(ctx context.Context, input newUserInput, output *db.User) error {
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
-				return fmt.Errorf("could not acquire db connection: %w", err)
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 			defer conn.Release()
 
@@ -139,12 +147,14 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
-				return fmt.Errorf("could not generate new uuid: %w", err)
+				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 			if err != nil {
-				return fmt.Errorf("could not hash inputted password: %w", err)
+				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			inputArgs := db.CreateUserParams{
@@ -160,7 +170,8 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			*output, err = queries.CreateUser(ctx, inputArgs)
 			if err != nil {
-				return fmt.Errorf("failed to create user: %w", err)
+				log.Println(fmt.Errorf("failed to create user: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
 
 			return nil
