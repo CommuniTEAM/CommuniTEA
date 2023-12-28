@@ -1,0 +1,34 @@
+.featuredTeaCard {
+    width: 500px;
+    border-radius: 10px;
+    margin: 10px
+}
+
+.featuredTeaCardActionArea {
+    height: 500px;
+}
+
+.featuredTeaCardMedia {
+    height: 300px;
+}
+
+.featuredTeaCardContent {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.featuredTypographyBody1 {
+    font-family: 'Montserrat';
+    color: '#29C6CF';
+    font-weight: 300;
+}
+
+.featuredTypographyH5 {
+    font-family: 'Montserrat';
+    font-weight: 700;
+}
+
+.featuredTypographyBody2 {
+    font-family: 'Montserrat';
+    color: text.secondary;
+}

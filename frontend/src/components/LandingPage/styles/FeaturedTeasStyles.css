@@ -1,0 +1,19 @@
+.featuredTeasContainer {
+    background-color: #D2B48C;
+}
+
+.featuredTeasHeading {
+    font-family: 'Roboto Slab';
+    font-size: 2rem;
+    font-weight: 300;
+    text-align: center;
+    padding-top: 5vh;
+}
+
+.featuredTeasCardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 50px 0;
+}

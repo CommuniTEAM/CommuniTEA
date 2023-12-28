@@ -1,14 +1,21 @@
-/* HeroBannerStyles.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Ensures padding does not add to the total width */
+}
 
 .heroBannerContainer {
     position: relative;
-    width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
     text-align: center;
     color: white;
 }
 
 .heroBannerImage {
-    width: 100vw;
+    width: 100%;
     height: auto;
     display: block;
 }
@@ -51,7 +58,7 @@
         }
 
     .heroBannerImage {
-        /* Adjust image styles for smaller screens, if necessary */
+        overflow-x: hidden;
     }
 
     .heroBannerTextContainer {

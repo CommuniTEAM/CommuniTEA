@@ -1,29 +1,14 @@
 import '../../App.css';
+import './styles/FeaturedTeasStyles.css';
 import FeaturedTeaCards from './Cards/FeaturedTeaCards';
 
 export default function FeaturedTeas(): JSX.Element {
   return (
-    <div style={{ backgroundColor: '#D2B48C' }}>
+    <div className="featuredTeasContainer">
       <div>
-        <h1
-          style={{
-            fontFamily: 'Roboto Slab',
-            fontSize: '2vw',
-            fontWeight: 300,
-            textAlign: 'center',
-            paddingTop: '5vh',
-          }}
-        >
-          Explore Our Featured Teas
-        </h1>
+        <h1 className="featuredTeasHeading">Explore Our Featured Teas</h1>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-        }}
-      >
+      <div className="featuredTeasCardsContainer">
         <FeaturedTeaCards />
       </div>
     </div>
