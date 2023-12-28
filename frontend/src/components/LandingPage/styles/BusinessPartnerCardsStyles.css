@@ -1,0 +1,40 @@
+.businessPartnerCard {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.businessPartnerCardActionArea {
+    height: 100%;
+}
+
+.businessPartnerCardContent {
+    height: 40%;
+}
+
+.businessPartnerTypographyBody1 {
+    font-family: 'Montserrat';
+    color: '#29C6CF';
+    font-weight: 300;
+}
+
+.businessPartnerTypographyH5 {
+    font-family: 'Montserrat';
+    font-weight: 700;
+}
+
+.businessPartnerTypographyBody2 {
+    font-family: 'Montserrat';
+    color: text.secondary;
+    font-weight: 300;
+}
+
+@media (max-width: 900px) {
+
+    .businessShowcaseDescription {
+        font-size: 0.5rem;
+    }
+
+    .businessShowcaseButton {
+        font-size: 20px;
+    }
+}
