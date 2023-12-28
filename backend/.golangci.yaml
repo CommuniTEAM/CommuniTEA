@@ -68,6 +68,7 @@ linters-settings:
       - '^github.com/swaggest/jsonschema-go.Schema$'
       # project libs
       - '^github.com/CommuniTEAM/CommuniTEA/cmd.httpResponse$'
+      - '^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$'
 
   funlen:
     # Checks the number of lines in a function.

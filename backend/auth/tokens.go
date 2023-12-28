@@ -76,6 +76,9 @@ func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 	return tokenData, nil
 }
 
+// generateSigningKey creates a new cryptographically secure RSA private key.
+// It will panic in the event of an error so that the program does not continue
+// unsecured.
 func generateSigningKey() *rsa.PrivateKey {
 	const bits = 2048
 

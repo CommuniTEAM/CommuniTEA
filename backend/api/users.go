@@ -39,6 +39,8 @@ type logoutOutput struct {
 	Cookie  string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
 }
 
+// UserLogin takes an inputted username and password and, if the credentials
+// are valid, returns the user's data along with an authenticating jwt cookie.
 func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
@@ -100,6 +102,10 @@ func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
 	return response
 }
 
+// UserLogout takes in an optional auth cookie and, if valid, returns a new
+// auth cookie with an expiry time one hour in the past, rendering it invalid.
+// If the passed-in cookie is already invalid or there is no cookie, an empty
+// 200 response is returned as the user is already not logged in.
 func UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input logoutInput, output *logoutOutput) error {
@@ -111,7 +117,7 @@ func UserLogout() usecase.Interactor {
 			}
 
 			token, err := auth.GenerateNewJWT(
-				&auth.TokenData{}, //nolint: exhaustruct // struct only serves to hold the JWT in this case
+				&auth.TokenData{},
 				true,
 			)
 			if err != nil {
@@ -133,9 +139,11 @@ func UserLogout() usecase.Interactor {
 	return response
 }
 
+// CreateUser takes in a user's information, saves it to the database, then
+// logs them in and returns the user's data and an authenticating jwt cookie.
 func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input newUserInput, output *db.User) error {
+		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
 				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
@@ -168,11 +176,27 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 				Column8: GetCity(dbPool),
 			}
 
-			*output, err = queries.CreateUser(ctx, inputArgs)
+			userData, err := queries.CreateUser(ctx, inputArgs)
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create user: %w", err))
 				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
+
+			output.ID = userData.ID.Bytes
+			output.Role = userData.Role
+			output.Username = userData.Username
+			output.FirstName = userData.FirstName.String
+			output.LastName = userData.LastName.String
+			output.Location = userData.Location.Bytes
+
+			output, err = auth.GenerateNewJWT(output, false)
+			if err != nil {
+				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
+				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+			}
+
+			output.ExpiresIn = 3600
+			output.TokenType = "bearer"
 
 			return nil
 		})
