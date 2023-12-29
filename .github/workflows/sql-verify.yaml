@@ -15,19 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout DB Folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             .sqlfluff
-            backend/db
+            backend/db/migrations
+            backend/db/queries
+          sparse-checkout-cone-mode: false
       - name: Install Python
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v5"
         with:
           python-version: "3.8"
       - name: Install SQLFuff
         run: "pip install sqlfluff"
       - name: Lint SQL
-        run: "sqlfluff lint --format github-annotation-native --annotation-level warning --nofail"
+        run: "sqlfluff lint --format github-annotation-native --annotation-level warning"
 
   sqlc-codegen-check:
     runs-on: ubuntu-latest
