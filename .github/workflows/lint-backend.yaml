@@ -1,0 +1,36 @@
+name: Lint API Application
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+  # Replace the above three lines with the following before merging into main:
+  #   pull_request:
+  #   branches:
+  #     - 'main'
+    paths:
+      - 'backend/**'
+
+permissions:
+  checks: write
+
+jobs:
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Backend Folder
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            backend
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: false
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.55.2
+          working-directory: backend
+          args: --config=/backend/.golangci.yaml
