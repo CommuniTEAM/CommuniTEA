@@ -30,4 +30,3 @@ jobs:
         with:
           version: v1.55.2
           working-directory: backend
-          args: --config=/backend/.golangci.yaml

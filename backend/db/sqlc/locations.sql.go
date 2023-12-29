@@ -67,27 +67,3 @@ func (q *Queries) GetCity(ctx context.Context) (pgtype.UUID, error) {
 	err := row.Scan(&id)
 	return id, err
 }
-
-const test = `-- name: test :many
-select name, abbreviation from locations_states
-`
-
-func (q *Queries) test(ctx context.Context) ([]LocationsState, error) {
-	rows, err := q.db.Query(ctx, test)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []LocationsState{}
-	for rows.Next() {
-		var i LocationsState
-		if err := rows.Scan(&i.Name, &i.Abbreviation); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}

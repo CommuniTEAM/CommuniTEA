@@ -11,6 +11,3 @@ select * from locations_cities;
 select "id" from locations_cities
 where ("name" = 'string')
 limit 1;
-
--- name: test :many
-select * from locations_states;
