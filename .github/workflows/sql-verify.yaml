@@ -1,0 +1,45 @@
+name: Verify SQL & Codegen
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+  # Replace the above three lines with the following before merging into main:
+  #   pull_request:
+  #   branches:
+  #     - 'main'
+    paths:
+      - 'backend/db/**'
+
+jobs:
+  lint-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout DB Folder
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            .sqlfluff
+            backend/db
+      - name: Install Python
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.8"
+      - name: Install SQLFuff
+        run: "pip install sqlfluff"
+      - name: Lint SQL
+        run: "sqlfluff lint --format github-annotation-native --annotation-level warning --nofail"
+
+  sqlc-codegen-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout DB Folder
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            backend/db
+      - name: Verify sqlc Codegen
+        uses: sqlc-dev/setup-sqlc@v3
+        with:
+          sqlc-version: '1.24.0'
+      - run: sqlc diff
