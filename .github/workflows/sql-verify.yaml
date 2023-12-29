@@ -11,6 +11,9 @@ on:
     paths:
       - 'backend/db/**'
 
+permissions:
+  checks: write
+
 jobs:
   lint-sql:
     runs-on: ubuntu-latest
