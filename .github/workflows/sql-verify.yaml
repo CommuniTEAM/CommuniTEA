@@ -1,13 +1,9 @@
 name: Verify SQL & Codegen
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - 'main'
-  # Replace the above three lines with the following before merging into main:
-  #   pull_request:
-  #   branches:
-  #     - 'main'
     paths:
       - 'backend/db/**'
 
