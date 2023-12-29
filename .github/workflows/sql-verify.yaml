@@ -31,6 +31,9 @@ jobs:
 
   sqlc-codegen-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - name: Checkout DB Folder
         uses: actions/checkout@v3
