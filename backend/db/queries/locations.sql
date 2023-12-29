@@ -1,5 +1,5 @@
 -- name: CreateCity :one
-insert into locations_cities
+insert into locations_cities ("id", "name", "state")
 values ($1, $2, $3)
 returning *;
 

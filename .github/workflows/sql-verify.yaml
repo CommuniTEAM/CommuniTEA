@@ -1,4 +1,4 @@
-name: Verify SQL / Codegen
+name: Verify SQL
 
 on:
   pull_request:
