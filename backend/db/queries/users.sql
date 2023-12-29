@@ -13,7 +13,7 @@ values ($1, $2, $3, $4, $5, $6, $7, $8)
 returning *;
 
 -- name: Login :one
-select (
+select
     "id",
     "role",
     "username",
@@ -21,6 +21,5 @@ select (
     "last_name",
     "location",
     "password"
-)
 from users
 where "username" = $1;

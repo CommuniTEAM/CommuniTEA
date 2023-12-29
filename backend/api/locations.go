@@ -60,9 +60,9 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateCityParams{
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-				Column2: pgtype.Text{String: input.Name, Valid: true},
-				Column3: pgtype.Text{String: input.State, Valid: true},
+				ID:    pgtype.UUID{Bytes: newUUID, Valid: true},
+				Name:  input.Name,
+				State: input.State,
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)

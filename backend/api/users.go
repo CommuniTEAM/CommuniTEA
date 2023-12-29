@@ -166,14 +166,14 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateUserParams{
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-				Column2: pgtype.Text{String: input.Role, Valid: true},
-				Column3: pgtype.Text{String: input.Username, Valid: true},
-				Column4: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
-				Column5: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
-				Column6: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
-				Column7: hashPass,
-				Column8: GetCity(dbPool),
+				ID:        pgtype.UUID{Bytes: newUUID, Valid: true},
+				Role:      input.Role,
+				Username:  input.Username,
+				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
+				LastName:  pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				Email:     pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Password:  hashPass,
+				Location:  GetCity(dbPool),
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
