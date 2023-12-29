@@ -12,32 +12,32 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-insert into users
+insert into users ("id", "role", "username", "first_name", "last_name", "email", "password", "location")
 values ($1, $2, $3, $4, $5, $6, $7, $8)
 returning id, role, username, first_name, last_name, email, password, location
 `
 
 type CreateUserParams struct {
-	Column1 pgtype.UUID `json:"column_1"`
-	Column2 pgtype.Text `json:"column_2"`
-	Column3 pgtype.Text `json:"column_3"`
-	Column4 pgtype.Text `json:"column_4"`
-	Column5 pgtype.Text `json:"column_5"`
-	Column6 pgtype.Text `json:"column_6"`
-	Column7 []byte      `json:"column_7"`
-	Column8 pgtype.UUID `json:"column_8"`
+	ID        pgtype.UUID `json:"id"`
+	Role      string      `json:"role"`
+	Username  string      `json:"username"`
+	FirstName pgtype.Text `json:"first_name"`
+	LastName  pgtype.Text `json:"last_name"`
+	Email     pgtype.Text `json:"email"`
+	Password  []byte      `json:"password"`
+	Location  pgtype.UUID `json:"location"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser,
-		arg.Column1,
-		arg.Column2,
-		arg.Column3,
-		arg.Column4,
-		arg.Column5,
-		arg.Column6,
-		arg.Column7,
-		arg.Column8,
+		arg.ID,
+		arg.Role,
+		arg.Username,
+		arg.FirstName,
+		arg.LastName,
+		arg.Email,
+		arg.Password,
+		arg.Location,
 	)
 	var i User
 	err := row.Scan(
@@ -54,39 +54,19 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const login = `-- name: Login :one
-select
-    "id",
-    "role",
+SELECT ("id", "role",
     "username",
     "first_name",
     "last_name",
     "location",
-    "password"
+    "password")
 from users
 where "username" = $1
 `
 
-type LoginRow struct {
-	ID        pgtype.UUID `json:"id"`
-	Role      string      `json:"role"`
-	Username  string      `json:"username"`
-	FirstName pgtype.Text `json:"first_name"`
-	LastName  pgtype.Text `json:"last_name"`
-	Location  pgtype.UUID `json:"location"`
-	Password  []byte      `json:"password"`
-}
-
-func (q *Queries) Login(ctx context.Context, username string) (LoginRow, error) {
+func (q *Queries) Login(ctx context.Context, username string) (interface{}, error) {
 	row := q.db.QueryRow(ctx, login, username)
-	var i LoginRow
-	err := row.Scan(
-		&i.ID,
-		&i.Role,
-		&i.Username,
-		&i.FirstName,
-		&i.LastName,
-		&i.Location,
-		&i.Password,
-	)
-	return i, err
+	var column_1 interface{}
+	err := row.Scan(&column_1)
+	return column_1, err
 }
