@@ -32,7 +32,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			// If the token was invalid or nonexistent then userData will be nil
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this actionnnn"), status.Unauthenticated)
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			// For this authentication test, only proceed with the POST request
