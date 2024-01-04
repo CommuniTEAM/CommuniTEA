@@ -1,4 +1,4 @@
-name: Verify Backend Build
+name: API App CI
 
 on:
   pull_request:
@@ -18,10 +18,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  lint-backend:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Backend Folder
+      - name: Checkout 'backend' folder
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
@@ -37,13 +37,13 @@ jobs:
           version: v1.55.2
           working-directory: backend
 
-  backend-unit-tests:
+  unit-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
     steps:
-      - name: Checkout Backend Folder
+      - name: Checkout 'backend' folder
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
@@ -58,7 +58,7 @@ jobs:
       - name: Build app
         run: go build -v cmd
       - name: Run unit tests w/ coverage report
-        run: go test backend/cmd/.. -args -race -coverprofile+coverage.out -covermode=atomic
+        run: go test cmd/.. -args -race -coverprofile+coverage.out -covermode=atomic
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v3
         env:

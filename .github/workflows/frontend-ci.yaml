@@ -1,4 +1,4 @@
-name: Verify Frontend Build
+name: React App CI
 
 on:
   pull_request:
@@ -24,7 +24,7 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout
+      - name: Checkout 'frontend' folder
         uses: actions/checkout@v4
         with:
           sparse-checkout: |

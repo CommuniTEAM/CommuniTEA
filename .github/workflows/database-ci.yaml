@@ -1,4 +1,4 @@
-name: Lint/Verify SQL
+name: Database CI
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ jobs:
   lint-sql:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout DB Folder
+      - name: Checkout 'db' folder
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
@@ -42,7 +42,7 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - name: Checkout DB Folder
+      - name: Checkout 'db' folder
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
@@ -51,5 +51,5 @@ jobs:
         uses: sqlc-dev/setup-sqlc@v3
         with:
           sqlc-version: '1.24.0'
-      - name: Verify sqlc Codegen
+      - name: Verify sqlc codegen
         run: sqlc diff
