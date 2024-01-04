@@ -58,7 +58,7 @@ jobs:
       - name: Build app
         run: go build -v cmd
       - name: Run unit tests w/ coverage report
-        run: go test -race -coverprofile+coverage.out -covermode=atomic
+        run: go test ./.. -args -race -coverprofile+coverage.out -covermode=atomic
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v3
         env:

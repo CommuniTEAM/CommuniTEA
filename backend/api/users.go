@@ -9,7 +9,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 	"golang.org/x/crypto/bcrypt"
@@ -41,7 +40,7 @@ type logoutOutput struct {
 
 // UserLogin takes an inputted username and password and, if the credentials
 // are valid, returns the user's data along with an authenticating jwt cookie.
-func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
+func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
@@ -141,7 +140,7 @@ func UserLogout() usecase.Interactor {
 
 // CreateUser takes in a user's information, saves it to the database, then
 // logs them in and returns the user's data and an authenticating jwt cookie.
-func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)

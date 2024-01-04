@@ -7,7 +7,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
@@ -32,7 +31,7 @@ type teaInput struct {
 	Published bool
 }
 
-func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
 		// dbCtx := context.Background()
 
@@ -111,7 +110,7 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 	return response
 }
 
-func GetAllTeas(dbPool *pgxpool.Pool) usecase.Interactor {
+func GetAllTeas(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input getTeasInput, output *[]db.Tea) error {
 		// dbCtx := context.Background()
 
