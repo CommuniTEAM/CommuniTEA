@@ -7,7 +7,6 @@ on:
     paths:
       - 'backend/**'
       - '!backend/db/**'
-      - 'backend/db/dbpool.go'
 
 # Cancel the workflow in progress if newer build is about to start.
 concurrency:
@@ -59,7 +58,7 @@ jobs:
       - name: Build app
         run: go build -v cmd
       - name: Run unit tests w/ coverage report
-        run: go test -race -coverprofile+coverage.out -covermode=atmoic
+        run: go test -race -coverprofile+coverage.out -covermode=atomic
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v3
         env:

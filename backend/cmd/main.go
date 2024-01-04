@@ -1,15 +1,17 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
-	"github.com/CommuniTEAM/CommuniTEA/db"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/cors"
 	"github.com/swaggest/jsonschema-go"
 	oapi "github.com/swaggest/openapi-go"
@@ -28,10 +30,15 @@ func main() {
 	// Set environment status
 	isDevEnv := os.Getenv("DEV")
 
-	// Initialize database connection pool
-	dbPool, err := db.NewDBPool(os.Getenv("DB_URI"))
+	// Initialize database connection
+	pgxConfig, err := pgxpool.ParseConfig(os.Getenv("DB_URI"))
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("could not parse db conn string: %w", err))
+	}
+
+	dbPool, err := pgxpool.NewWithConfig(context.TODO(), pgxConfig)
+	if err != nil {
+		panic(fmt.Errorf("could not create new db pool: %w", err))
 	}
 
 	// Initialize openAPI 3.1 reflector
@@ -62,7 +69,7 @@ func main() {
 		middleware.Logger,
 		cors.New(cors.Options{
 			AllowedOrigins:             []string{"http://localhost:3000", "https://communitea.life"},
-			AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE"},
 			AllowedHeaders:             []string{"Content-Type"},
 			ExposedHeaders:             []string{},
 			OptionsPassthrough:         false,
