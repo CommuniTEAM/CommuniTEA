@@ -1,4 +1,4 @@
-name: Verify SQL
+name: Lint/Verify SQL
 
 on:
   pull_request:

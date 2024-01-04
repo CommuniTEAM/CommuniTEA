@@ -6,11 +6,16 @@ on:
       - 'main'
     paths:
       - 'frontend/**'
+      - '!frontend/node_modules'
 
 # Cancel the workflow in progress if newer build is about to start.
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
+
+# Uncomment when ready to add unit tests
+# permissions:
+#   pull-requests: write
 
 jobs:
   build-frontend:
@@ -34,3 +39,15 @@ jobs:
         run: npm install
       - name: Build app
         run: npm run build
+
+# Uncomment & fill in when ready to add unit tests
+  # frontend-unit-tests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     # Add steps to run the tests here -- upload is the final step
+  #     - name: Upload test coverage to Codecov
+  #       uses: codecov/codecov-action@v3
+  #       env:
+  #         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  #       with:
+  #         flags: frontend
