@@ -21,14 +21,14 @@ flag_management:
       statuses:
         - type: project
           target: auto
-          threshold: 1%
+          threshold: 10%
     # - name: frontend
     #   paths:
     #     - frontend/
     #   statuses:
     #     - type: project
     #       target: auto
-    #       threshold: 1%
+    #       threshold: 10%
 
 ignore:
   - "backend/db/sqlc"

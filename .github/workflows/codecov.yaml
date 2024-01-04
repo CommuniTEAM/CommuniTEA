@@ -1,43 +1,38 @@
-name: API App CI
+name: Project Code Coverage
 
 on:
-  pull_request:
+  push:
     branches:
       - 'main'
-    paths:
-      - 'backend/**'
-      - '!backend/db/**'
 
 # Cancel the workflow in progress if newer build is about to start.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
-permissions:
-  checks: write
-  pull-requests: write
-
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout 'backend' folder
-        uses: actions/checkout@v3
-        with:
-          sparse-checkout: |
-            backend
-      - name: Install Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-          cache: false
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.55.2
-          working-directory: backend
+# Uncomment when frontend unit tests are ready
+  # frontend-coverage:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: frontend
+  #   steps:
+  #     - name: Checkout 'frontend' folder
+  #       uses: actions/checkout@v3
+  #       with:
+  #         sparse-checkout: |
+  #           frontend
+  #           codecov.yml
+  #     # Insert steps for running frontend unit tests here
+  #     - name: Upload test coverage to Codecov
+  #       uses: codecov/codecov-action@v3
+  #       env:
+  #         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  #       with:
+  #         flags: frontend
 
-  unit-tests:
+  backend-coverage:
     runs-on: ubuntu-latest
     defaults:
       run:

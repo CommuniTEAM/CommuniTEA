@@ -4,7 +4,7 @@
 
   # CommuniTEA
 
-  [![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+  [![pre-commit badge](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit) [![codecov badge](https://codecov.io/gh/CommuniTEAM/CommuniTEA/graph/badge.svg?token=NHX49WER68)](https://codecov.io/gh/CommuniTEAM/CommuniTEA)
 
   **Bringing your local community together over a cuppa 🍵**
 
@@ -41,7 +41,10 @@
 
 - [CommuniTEA](#communitea)
   - [Table of Contents](#table-of-contents)
-- [Working with Git Hooks](#working-with-git-hooks)
+- [Overview](#overview)
+  - [Our Mission](#our-mission)
+- [Development](#development)
+  - [Working with Git Hooks](#working-with-git-hooks)
   - [Setting Up Pre-Commit](#setting-up-pre-commit)
   - [Pre-Commit Rulesets](#pre-commit-rulesets)
     - [Commit Message Format](#commit-message-format)
@@ -49,11 +52,24 @@
     - [Go Format](#go-format)
       - [Installing golangci-lint on Mac or Linux Systems](#installing-golangci-lint-on-mac-or-linux-systems)
       - [Installing golangci-lint on Windows Systems](#installing-golangci-lint-on-windows-systems)
+  - [Running Unit Tests](#running-unit-tests)
   - [Using Git Hooks in VSCode](#using-git-hooks-in-vscode)
 
 </details>
 
-# Working with Git Hooks
+# Overview
+
+This project is currently **in progress**. Please be patient with us as we diligently work away at crafting something special. Our team is very excited to help bring the world of tea to your neighborhood soon!
+
+## Our Mission
+
+CommuniTEA is a unique application that caters to both businesses and the community, bringing together tea enthusiasts in search of their favorite brews with local establishments ready to serve. The platform aims to simplify the process of finding new and popular teas by providing a curated list of nearby shops or tea houses that offer those sought-after tea varieties.
+
+# Development
+
+Looking to contribute to the project? Please see the information below to get started.
+
+## Working with Git Hooks
 
 Any commits to the repository must conform to the configured rulesets for:
 - Commit Messages
@@ -165,6 +181,16 @@ To save yourself unnecessary headaches, it is strongly recommended to install th
   For more information on why this is the necessary fix for bash commands, see [this thread](https://github.com/syntaqx/git-hooks/pull/3). TL;DR: It's because we have WSL installed (required for Docker) as part of system32 and WSL erroneously intercepts the bash commands.
 
 </details>
+
+## Running Unit Tests
+
+You can easily check the status of the project's unit tests at any time by running the configured manual pre-commit hooks:
+```
+pre-commit run --hook-stage manual --all-files
+```
+Use the `--all-files` arg to run every test, or leave it off to run only those relevant to the staged changes.
+
+These hooks will never run automatically during the commit process and are only available for manual invocations. Unit tests will still automatically run against PRs.
 
 ## Using Git Hooks in VSCode
 
