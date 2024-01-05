@@ -15,11 +15,16 @@ import (
 	swgui "github.com/swaggest/swgui/v5emb"
 )
 
+// httpResponse provides generic json schema for an http response's
+// accompanying json body.
 type httpResponse struct {
 	Status string `json:"status"`
 	Error  string `json:"error"`
 }
 
+// NewRouter creates a custom router for the http server in line with
+// openapi specifications. It bundles the included api endpoints into
+// the Swagger UI in the browser, available at /docs.
 func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	// Initialize openAPI 3.1 reflector
 	reflector := openapi31.NewReflector()
@@ -48,20 +53,11 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	s.Wrap(
 		middleware.Logger,
 		cors.New(cors.Options{
-			AllowedOrigins:             []string{"http://localhost:3000", "https://communitea.life"},
-			AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE"},
-			AllowedHeaders:             []string{"Content-Type"},
-			ExposedHeaders:             []string{},
-			OptionsPassthrough:         false,
-			OptionsSuccessStatus:       http.StatusNoContent,
-			Debug:                      false,
-			AllowOriginFunc:            nil,
-			AllowOriginRequestFunc:     nil,
-			AllowOriginVaryRequestFunc: nil,
-			MaxAge:                     0,
-			AllowCredentials:           true,
-			AllowPrivateNetwork:        false,
-			Logger:                     nil,
+			AllowedOrigins:      []string{"http://localhost:3000", "https://communitea.life"},
+			AllowedMethods:      []string{"GET", "POST", "PUT", "DELETE"},
+			AllowedHeaders:      []string{"Content-Type"},
+			AllowCredentials:    true,
+			AllowPrivateNetwork: true,
 		}).Handler,
 		// Describe bad request (400) response
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {

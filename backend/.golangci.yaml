@@ -66,6 +66,7 @@ linters-settings:
       - '^google.golang.org/protobuf/.+Options$'
       - '^gopkg.in/yaml.v3.Node$'
       - '^github.com/swaggest/jsonschema-go.Schema$'
+      - '^github.com/rs/cors.Options$'
       # project libs
       - '^github.com/CommuniTEAM/CommuniTEA/router.httpResponse$'
       - '^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$'

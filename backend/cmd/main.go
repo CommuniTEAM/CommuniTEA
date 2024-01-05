@@ -45,6 +45,6 @@ func main() {
 
 	err = server.ListenAndServe()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Errorf("could not start the http server: %w", err))
 	}
 }

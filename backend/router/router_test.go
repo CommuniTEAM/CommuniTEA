@@ -11,10 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type PgxPoolMock struct {
-	pgxmock.PgxPoolIface
-}
-
 func TestNewRouter(t *testing.T) {
 	mockDBPool, err := pgxmock.NewPool()
 	if err != nil {
