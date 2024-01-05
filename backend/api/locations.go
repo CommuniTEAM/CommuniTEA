@@ -9,7 +9,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
@@ -28,7 +27,7 @@ type cityInput struct {
 
 // TEA-62 will flesh it out with data validation and error handling
 
-func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
@@ -80,11 +79,11 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			inputArgs := db.CreateCityParams{
 
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
+				ID: pgtype.UUID{Bytes: newUUID, Valid: true},
 
-				Column2: pgtype.Text{String: input.Name, Valid: true},
+				Name: input.Name,
 
-				Column3: pgtype.Text{String: input.State, Valid: true},
+				State: input.State,
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
@@ -120,7 +119,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 // Returns the first city in the database with the name "string"
 
-// func GetCity(dbPool *pgxpool.Pool) pgtype.UUID {
+// func GetCity(dbPool PgxPoolIface) pgtype.UUID {
 
 // 	conn, _ := dbPool.Acquire(context.Background())
 

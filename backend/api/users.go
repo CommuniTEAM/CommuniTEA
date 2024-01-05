@@ -9,7 +9,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 	"golang.org/x/crypto/bcrypt"
@@ -53,7 +52,7 @@ type logoutOutput struct {
 
 // are valid, returns the user's data along with an authenticating jwt cookie.
 
-func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
+func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
@@ -192,7 +191,7 @@ func UserLogout() usecase.Interactor {
 
 // logs them in and returns the user's data and an authenticating jwt cookie.
 
-func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
@@ -234,21 +233,21 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 
 			inputArgs := db.CreateUserParams{
 
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
+				ID: pgtype.UUID{Bytes: newUUID, Valid: true},
 
-				Column2: pgtype.Text{String: input.Role, Valid: true},
+				Role: input.Role,
 
-				Column3: pgtype.Text{String: input.Username, Valid: true},
+				Username: input.Username,
 
-				Column4: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
+				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
 
-				Column5: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				LastName: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
 
-				Column6: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Email: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
 
-				Column7: hashPass,
+				Password: hashPass,
 
-				Column8: pgtype.UUID{Bytes: locationID.Bytes, Valid: (locationErr == nil)},
+				Location: pgtype.UUID{Bytes: locationID.Bytes, Valid: (locationErr == nil)},
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
@@ -287,11 +286,8 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 		})
 
 	response.SetTitle("Create User")
-
 	response.SetDescription("Make a new user account.")
-
 	response.SetTags("Users")
-
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response

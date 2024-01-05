@@ -10,8 +10,3 @@ sql:
         out: 'db/sqlc'
         emit_json_tags: true
         emit_empty_slices: true
-        # emit_pointers_for_null_types: true
-    database:
-      uri: ${DB_URI}
-    rules:
-      - sqlc/db-prepare

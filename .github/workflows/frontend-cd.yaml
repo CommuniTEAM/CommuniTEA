@@ -1,10 +1,15 @@
-name: Deploy Frontend
+name: Frontend CD
 
 on:
   push:
     branches: ['main']
     paths:
       - 'frontend/**'
+
+# Cancel the workflow in progress if newer build is about to start.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   build-frontend:
@@ -15,7 +20,7 @@ jobs:
     outputs:
       artifact-id: ${{ steps.artifact-upload.outputs.artifact-id }}
     steps:
-      - name: Checkout
+      - name: Checkout 'frontend' folder
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
@@ -45,9 +50,9 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     steps:
-      - name: Invoke Webhook
+      - name: Invoke webhook
         uses: johannes-huther/webhook.sh@v1
         env:
           webhook_url: ${{ secrets.WEBHOOK_URL }}
           webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-          data: '{"artifact-id": "${{ needs.build-frontend.outputs.artifact-id }}", "needs-parity": true}'
+          data: '{"artifact-id": "${{ needs.build-frontend.outputs.artifact-id }}"}'

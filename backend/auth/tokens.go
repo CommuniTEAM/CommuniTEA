@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -105,9 +106,9 @@ func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 
 // generateSigningKey creates a new cryptographically secure RSA private key.
 
-// It will panic in the event of an error so that the program does not continue
+// It will shut down the app in the event of an error so that the program
 
-// unsecured.
+// does not continue unsecured.
 
 func generateSigningKey() *rsa.PrivateKey {
 	const bits = 2048
@@ -115,7 +116,7 @@ func generateSigningKey() *rsa.PrivateKey {
 	key, err := rsa.GenerateKey(rand.Reader, bits)
 
 	if err != nil {
-		panic(fmt.Errorf("could not generate signing key: %w", err))
+		log.Fatal(fmt.Errorf("could not generate signing key: %w", err))
 	}
 
 	return key
