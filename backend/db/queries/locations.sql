@@ -9,5 +9,5 @@ select * from locations_cities;
 -- ! THIS IS A DEBUG QUERY: DELETE FOR PROD
 -- name: GetCity :one
 select "id" from locations_cities
-where ("name" = 'string')
+where "name" = $1 and "state" = $2
 limit 1;

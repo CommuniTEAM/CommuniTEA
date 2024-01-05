@@ -56,13 +56,18 @@ func (q *Queries) GetAllCities(ctx context.Context) ([]LocationsCity, error) {
 
 const getCity = `-- name: GetCity :one
 select "id" from locations_cities
-where ("name" = 'string')
+where "name" = $1 and "state" = $2
 limit 1
 `
 
+type GetCityParams struct {
+	Name  string `json:"name"`
+	State string `json:"state"`
+}
+
 // ! THIS IS A DEBUG QUERY: DELETE FOR PROD
-func (q *Queries) GetCity(ctx context.Context) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, getCity)
+func (q *Queries) GetCity(ctx context.Context, arg GetCityParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, getCity, arg.Name, arg.State)
 	var id pgtype.UUID
 	err := row.Scan(&id)
 	return id, err
