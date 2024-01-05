@@ -12,19 +12,19 @@ import (
 )
 
 const createCity = `-- name: CreateCity :one
-insert into locations_cities
+insert into locations_cities ("id", "name", "state")
 values ($1, $2, $3)
 returning id, name, state
 `
 
 type CreateCityParams struct {
-	Column1 pgtype.UUID `json:"column_1"`
-	Column2 pgtype.Text `json:"column_2"`
-	Column3 pgtype.Text `json:"column_3"`
+	ID    pgtype.UUID `json:"id"`
+	Name  string      `json:"name"`
+	State string      `json:"state"`
 }
 
 func (q *Queries) CreateCity(ctx context.Context, arg CreateCityParams) (LocationsCity, error) {
-	row := q.db.QueryRow(ctx, createCity, arg.Column1, arg.Column2, arg.Column3)
+	row := q.db.QueryRow(ctx, createCity, arg.ID, arg.Name, arg.State)
 	var i LocationsCity
 	err := row.Scan(&i.ID, &i.Name, &i.State)
 	return i, err

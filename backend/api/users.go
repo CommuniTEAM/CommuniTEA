@@ -9,7 +9,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 	"golang.org/x/crypto/bcrypt"
@@ -41,7 +40,7 @@ type logoutOutput struct {
 
 // UserLogin takes an inputted username and password and, if the credentials
 // are valid, returns the user's data along with an authenticating jwt cookie.
-func UserLogin(dbPool *pgxpool.Pool) usecase.Interactor {
+func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
@@ -141,7 +140,7 @@ func UserLogout() usecase.Interactor {
 
 // CreateUser takes in a user's information, saves it to the database, then
 // logs them in and returns the user's data and an authenticating jwt cookie.
-func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
@@ -166,14 +165,14 @@ func CreateUser(dbPool *pgxpool.Pool) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateUserParams{
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-				Column2: pgtype.Text{String: input.Role, Valid: true},
-				Column3: pgtype.Text{String: input.Username, Valid: true},
-				Column4: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
-				Column5: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
-				Column6: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
-				Column7: hashPass,
-				Column8: GetCity(dbPool),
+				ID:        pgtype.UUID{Bytes: newUUID, Valid: true},
+				Role:      input.Role,
+				Username:  input.Username,
+				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
+				LastName:  pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				Email:     pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Password:  hashPass,
+				Location:  GetCity(dbPool),
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)

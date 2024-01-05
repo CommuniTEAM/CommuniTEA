@@ -9,7 +9,6 @@ import (
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
@@ -23,7 +22,7 @@ type cityInput struct {
 // Example endpoint that is not yet fully-functional, but serves to
 // showcase authentication in action.
 // TEA-62 will flesh it out with data validation and error handling
-func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
 			// Validate the access token sent with the request, if valid then
@@ -60,9 +59,9 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateCityParams{
-				Column1: pgtype.UUID{Bytes: newUUID, Valid: true},
-				Column2: pgtype.Text{String: input.Name, Valid: true},
-				Column3: pgtype.Text{String: input.State, Valid: true},
+				ID:    pgtype.UUID{Bytes: newUUID, Valid: true},
+				Name:  input.Name,
+				State: input.State,
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
@@ -88,7 +87,7 @@ func CreateCity(dbPool *pgxpool.Pool) usecase.Interactor {
 
 // ! ONLY A TEMP FUNCTION -- DELETE FOR PROD
 // Returns the first city in the database with the name "string"
-func GetCity(dbPool *pgxpool.Pool) pgtype.UUID {
+func GetCity(dbPool PgxPoolIface) pgtype.UUID {
 	conn, _ := dbPool.Acquire(context.Background())
 
 	defer conn.Release()
