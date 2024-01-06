@@ -16,15 +16,21 @@ import (
 )
 
 // httpResponse provides generic json schema for an http response's
+
 // accompanying json body.
+
 type httpResponse struct {
 	Status string `json:"status"`
-	Error  string `json:"error"`
+
+	Error string `json:"error"`
 }
 
 // NewRouter creates a custom router for the http server in line with
+
 // openapi specifications. It bundles the included api endpoints into
+
 // the Swagger UI in the browser, available at /docs.
+
 func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	// Initialize openAPI 3.1 reflector
 	reflector := openapi31.NewReflector()
@@ -59,6 +65,7 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 			AllowCredentials:    true,
 			AllowPrivateNetwork: true,
 		}).Handler,
+
 		// Describe bad request (400) response
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
@@ -89,24 +96,33 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	})
 
 	// Add API endpoints to router
+
 	// greeter (example endpoint to be removed for prod)
+
 	s.Get("/hello/{name}", api.Greet())
 
 	// auth
+
 	s.Post("/login", api.UserLogin(dbPool))
+
 	s.Delete("/logout", api.UserLogout(), requireAuth)
 
 	// users
+
 	s.Post("/users", api.CreateUser(dbPool))
 
 	// locations
+
 	s.Post("/locations/cities", api.CreateCity(dbPool), requireAuth)
 
 	// wikiteadia
+
 	s.Get("/teas/{published}", api.GetAllTeas(dbPool))
+
 	s.Post("/teas", api.CreateTea(dbPool))
 
 	// Swagger UI endpoint at /docs.
+
 	s.Docs("/docs", swgui.New)
 
 	return s

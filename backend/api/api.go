@@ -8,6 +8,8 @@ import (
 
 type PgxPoolIface interface {
 	Acquire(ctx context.Context) (*pgxpool.Conn, error)
+
 	Close()
+
 	Config() *pgxpool.Config
 }
