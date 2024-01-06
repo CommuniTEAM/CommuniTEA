@@ -30,6 +30,16 @@ func (q *Queries) CreateCity(ctx context.Context, arg CreateCityParams) (Locatio
 	return i, err
 }
 
+const deleteCity = `-- name: DeleteCity :exec
+delete from locations_cities
+where "id" = $1
+`
+
+func (q *Queries) DeleteCity(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteCity, id)
+	return err
+}
+
 const getAllCities = `-- name: GetAllCities :many
 select id, name, state from locations_cities
 `
@@ -54,21 +64,109 @@ func (q *Queries) GetAllCities(ctx context.Context) ([]LocationsCity, error) {
 	return items, nil
 }
 
-const getCity = `-- name: GetCity :one
-select "id" from locations_cities
-where "name" = $1 and "state" = $2
-limit 1
+const getAllCitiesInState = `-- name: GetAllCitiesInState :many
+select id, name, state from locations_cities
+where "state" = $1
 `
 
-type GetCityParams struct {
+func (q *Queries) GetAllCitiesInState(ctx context.Context, state string) ([]LocationsCity, error) {
+	rows, err := q.db.Query(ctx, getAllCitiesInState, state)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []LocationsCity{}
+	for rows.Next() {
+		var i LocationsCity
+		if err := rows.Scan(&i.ID, &i.Name, &i.State); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAllStates = `-- name: GetAllStates :many
+select name, abbreviation from locations_states
+`
+
+func (q *Queries) GetAllStates(ctx context.Context) ([]LocationsState, error) {
+	rows, err := q.db.Query(ctx, getAllStates)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []LocationsState{}
+	for rows.Next() {
+		var i LocationsState
+		if err := rows.Scan(&i.Name, &i.Abbreviation); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCity = `-- name: GetCity :one
+select
+    "name",
+    "state"
+from locations_cities
+where "id" = $1
+`
+
+type GetCityRow struct {
 	Name  string `json:"name"`
 	State string `json:"state"`
 }
 
-// ! THIS IS A DEBUG QUERY: DELETE FOR PROD
-func (q *Queries) GetCity(ctx context.Context, arg GetCityParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, getCity, arg.Name, arg.State)
+func (q *Queries) GetCity(ctx context.Context, id pgtype.UUID) (GetCityRow, error) {
+	row := q.db.QueryRow(ctx, getCity, id)
+	var i GetCityRow
+	err := row.Scan(&i.Name, &i.State)
+	return i, err
+}
+
+const getCityID = `-- name: GetCityID :one
+select "id"
+from locations_cities
+where "name" = $1
+    and "state" = $2
+`
+
+type GetCityIDParams struct {
+	Name  string `json:"name"`
+	State string `json:"state"`
+}
+
+func (q *Queries) GetCityID(ctx context.Context, arg GetCityIDParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, getCityID, arg.Name, arg.State)
 	var id pgtype.UUID
 	err := row.Scan(&id)
 	return id, err
+}
+
+const updateCityName = `-- name: UpdateCityName :one
+update locations_cities
+set "name" = $1
+where "id" = $2
+returning id, name, state
+`
+
+type UpdateCityNameParams struct {
+	Name string      `json:"name"`
+	ID   pgtype.UUID `json:"id"`
+}
+
+func (q *Queries) UpdateCityName(ctx context.Context, arg UpdateCityNameParams) (LocationsCity, error) {
+	row := q.db.QueryRow(ctx, updateCityName, arg.Name, arg.ID)
+	var i LocationsCity
+	err := row.Scan(&i.ID, &i.Name, &i.State)
+	return i, err
 }
