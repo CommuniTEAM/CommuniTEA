@@ -57,20 +57,34 @@ func main() {
 	// Configure CORS
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:             []string{"http://localhost:3000"}, // Set the allowed origins here
-		AllowedMethods:             []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:             []string{"Content-Type"},
-		ExposedHeaders:             []string{},
-		OptionsPassthrough:         false,
-		OptionsSuccessStatus:       0,
-		Debug:                      false,
-		AllowOriginFunc:            nil,
-		AllowOriginRequestFunc:     nil,
+
+		AllowedOrigins: []string{"http://localhost:3000"}, // Set the allowed origins here
+
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+
+		AllowedHeaders: []string{"Content-Type"},
+
+		ExposedHeaders: []string{},
+
+		OptionsPassthrough: false,
+
+		OptionsSuccessStatus: 0,
+
+		Debug: false,
+
+		AllowOriginFunc: nil,
+
+		AllowOriginRequestFunc: nil,
+
 		AllowOriginVaryRequestFunc: nil,
-		MaxAge:                     0,
-		AllowCredentials:           false,
-		AllowPrivateNetwork:        false,
-		Logger:                     nil,
+
+		MaxAge: 0,
+
+		AllowCredentials: false,
+
+		AllowPrivateNetwork: false,
+
+		Logger: nil,
 	})
 
 	// Configure and start the server

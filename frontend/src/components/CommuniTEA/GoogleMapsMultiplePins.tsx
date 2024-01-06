@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import './styles/CommuniTeaPage.css';
+
 interface Location {
   lat: number
   lng: number
@@ -76,18 +78,7 @@ function GoogleMapsMultiplePins({
     };
   }, [apiKey, locations]);
 
-  return (
-    <div
-      ref={mapRef}
-      style={{
-        height: '90em',
-        width: '50%',
-        marginTop: 30,
-        marginLeft: 10,
-        marginRight: '2vw',
-      }}
-    />
-  );
+  return <div className="multiplePinsMap" ref={mapRef} />;
 }
 
 export default GoogleMapsMultiplePins;

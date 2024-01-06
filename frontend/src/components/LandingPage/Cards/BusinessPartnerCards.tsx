@@ -12,6 +12,8 @@ import QueenMaryTea from '../../../assets/QueenMaryTea.png';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import '../../CommuniTEA/styles/CommuniTeaPage.css';
+
 export default function BusinessPartnerCards(): JSX.Element {
   // This is test data. Replace when API is ready with rotation of featured businesses.
   const businessesData = [
@@ -131,7 +133,7 @@ export default function BusinessPartnerCards(): JSX.Element {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
@@ -146,7 +148,7 @@ export default function BusinessPartnerCards(): JSX.Element {
   };
 
   return (
-    <div style={{ padding: '0 40px' }}>
+    <div className="sliderContainer">
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Slider {...settings}>
         {businessesData.map((business) => (

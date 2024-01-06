@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Typography, IconButton } from '@mui/material';
 import GitHubIcon from '../../assets/GitHubIcon.png';
 
+import './styles/FooterStyles.css';
+
 export default function Footer(): JSX.Element {
   const footerMenuItems = [
     'About Us',
@@ -28,38 +30,15 @@ export default function Footer(): JSX.Element {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        backgroundColor: '#333',
-        height: 64,
-        paddingLeft: '1vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          flexGrow: 1,
-          maxWidth: '25%',
-        }}
-      >
+    <div className="footerContainer">
+      <div className="firstThird">
         <Typography
-          style={{ color: '#fff', fontFamily: 'Montserrat', fontSize: '.75vw' }}
+          style={{ color: '#fff', fontFamily: 'Montserrat', fontSize: '1em' }}
         >
           © 2023 CommuniTeam. All Rights Reserved.
         </Typography>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexGrow: 2,
-          justifyContent: 'center',
-          alignItems: 'center',
-          maxWidth: '50%',
-        }}
-      >
+      <div className="secondThird">
         {footerMenuItems.map((item, index) => (
           <React.Fragment key={item}>
             {menuItemPaths[item] !== undefined ? (
@@ -71,7 +50,7 @@ export default function Footer(): JSX.Element {
                   style={{
                     fontFamily: 'Montserrat',
                     textTransform: 'none',
-                    fontSize: '.75vw',
+                    fontSize: '1em',
                   }}
                 >
                   {item}
@@ -83,7 +62,7 @@ export default function Footer(): JSX.Element {
                   color: '#fff',
                   fontFamily: 'Montserrat',
                   textTransform: 'none',
-                  fontSize: '.75vw',
+                  fontSize: '1em',
                 }}
               >
                 {item}
@@ -103,16 +82,7 @@ export default function Footer(): JSX.Element {
           </React.Fragment>
         ))}
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          flexGrow: 1,
-          maxWidth: '25%',
-        }}
-      >
+      <div className="thirdThird">
         <IconButton
           component="a"
           href="https://github.com/CommuniTEAM/CommuniTEA"
@@ -122,7 +92,7 @@ export default function Footer(): JSX.Element {
           <img
             src={GitHubIcon}
             alt="GitHub"
-            style={{ width: '1.5vw', color: 'white' }}
+            style={{ width: '1em', color: 'white' }}
           />
         </IconButton>
       </div>

@@ -6,24 +6,14 @@ import {
 } from '@mui/material';
 import EventCards from './Cards/EventCard';
 
+import './styles/CommuniTeaPage.css';
+
 export default function Filters(): JSX.Element {
   // TODO: Add functionality to the checkboxes
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '50%',
-        marginLeft: '2vw',
-        paddingRight: 10,
-      }}
-    >
-      <div
-        style={{
-          paddingLeft: '1vw',
-          width: '30%',
-        }}
-      >
+    <div className="filtersContainer">
+      <div className="filtersChild">
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormLabel component="legend" sx={{ fontSize: '1vw' }}>
             Date
@@ -99,14 +89,7 @@ export default function Filters(): JSX.Element {
           </FormGroup>
         </FormControl>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '70%',
-          alignItems: 'center',
-        }}
-      >
+      <div className="businessCards">
         <EventCards />
       </div>
     </div>
