@@ -5,6 +5,8 @@ import LocationSearch from './LocationSearch';
 import LocalBusinesses from './LocalBusinesses';
 import GoogleMapsMultiplePins from './GoogleMapsMultiplePins';
 
+import './styles/CommuniTeaPage.css';
+
 export default function CommuniTeaPage(): JSX.Element {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -19,15 +21,17 @@ export default function CommuniTeaPage(): JSX.Element {
   ];
 
   return (
-    <div>
+    <>
       <NavBar />
-      <LocationSearch />
-      <div style={{ display: 'flex' }}>
-        <Filters />
-        <GoogleMapsMultiplePins apiKey={apiKey} locations={locations} />
+      <div className="heroContainer">
+        <LocationSearch />
+        <div className="communiteaContainer">
+          <Filters />
+          <GoogleMapsMultiplePins apiKey={apiKey} locations={locations} />
+        </div>
       </div>
       <LocalBusinesses />
       <Footer />
-    </div>
+    </>
   );
 }

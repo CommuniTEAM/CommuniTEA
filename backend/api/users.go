@@ -162,7 +162,6 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
 				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)

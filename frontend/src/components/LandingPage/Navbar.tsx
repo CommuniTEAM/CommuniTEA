@@ -174,6 +174,9 @@ function NavBar(): JSX.Element {
                         if (text === 'CommuniTEA') {
                           handleCommuniTeaNavigation();
                         }
+                        if (text === 'About Us') {
+                          handleAboutUsNavigation();
+                        }
                       }}
                     >
                       <ListItemText primary={text} />

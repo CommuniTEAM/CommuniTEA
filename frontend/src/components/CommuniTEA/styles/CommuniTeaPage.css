@@ -1,0 +1,115 @@
+/* CommuniTeaPage.tsx */
+.heroContainer {
+    padding: 50px 0 100px 0;
+}
+
+.communiteaContainer {
+    display: flex;
+}
+
+/* Filters.tsx */
+.filtersContainer {
+    display: flex;
+    width: 50%;
+    margin: 0 10px 0 10px;
+    padding-right: 10px;
+}
+
+.filtersChild {
+    width: 30%;
+}
+
+/* Business Cards */
+.businessCards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+}
+
+/* MultiplePinsMap.tsx */
+.multiplePinsMap {
+    height: 90em;
+    width: 50%;
+    margin: 30px 10px 0 10px;
+}
+
+.ctaHeroContainer {
+    display: flex;
+    background-color: rgba(85, 107, 47, 0.6);
+}
+
+.ctaHeroTitle {
+    font-size: 3em;
+    font-family: 'Roboto Slab';
+    font-weight: 700;
+    line-height: 100px;
+}
+
+.ctaHeroText {
+    font-family: Roboto;
+    font-size: 1.5em;
+    font-weight: 300;
+}
+
+.firstHalf {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 50%;
+    justify-content: center;
+    text-align: center;
+    line-height: 35px;
+    margin: 0 10px 0 10px;
+}
+
+.secondHalf {
+    flex-grow: 1;
+    max-width: 60%;
+    padding: 100px 10px;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .heroContainer {
+        margin-right: 10px;
+    }
+
+    .communiteaContainer {
+        flex-direction: column;
+    }
+
+    .multiplePinsMap {
+        width: 100%;
+        height: 30em;
+    }
+
+    .filtersContainer {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .businessCards {
+        width: 100%;
+    }
+
+    .ctaHeroContainer {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .firstHalf {
+        max-width: 100%;
+        padding: 50px 10px;
+    }
+
+    .secondHalf {
+        max-width: 100%;
+        padding: 50px;
+    }
+
+    .sliderContainer {
+        width: 100%;
+    }
+}
