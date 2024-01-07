@@ -114,22 +114,14 @@ func (q *Queries) GetAllStates(ctx context.Context) ([]LocationsState, error) {
 }
 
 const getCity = `-- name: GetCity :one
-select
-    "name",
-    "state"
-from locations_cities
+select id, name, state from locations_cities
 where "id" = $1
 `
 
-type GetCityRow struct {
-	Name  string `json:"name"`
-	State string `json:"state"`
-}
-
-func (q *Queries) GetCity(ctx context.Context, id pgtype.UUID) (GetCityRow, error) {
+func (q *Queries) GetCity(ctx context.Context, id pgtype.UUID) (LocationsCity, error) {
 	row := q.db.QueryRow(ctx, getCity, id)
-	var i GetCityRow
-	err := row.Scan(&i.Name, &i.State)
+	var i LocationsCity
+	err := row.Scan(&i.ID, &i.Name, &i.State)
 	return i, err
 }
 

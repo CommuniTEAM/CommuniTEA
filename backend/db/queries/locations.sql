@@ -14,10 +14,7 @@ select * from locations_cities
 where "state" = $1;
 
 -- name: GetCity :one
-select
-    "name",
-    "state"
-from locations_cities
+select * from locations_cities
 where "id" = $1;
 
 -- name: GetCityID :one
