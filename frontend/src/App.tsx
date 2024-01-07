@@ -11,7 +11,7 @@ function App(): ReactElement {
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<NotFound />} status={404} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/communitea" element={<CommuniTeaPage />} />
         <Route path="/event/:eventId" element={<EventDetailPage />} />
