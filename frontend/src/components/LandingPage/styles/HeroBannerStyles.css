@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Ensures padding does not add to the total width */
 }
 
 .landingHeroBannerContainer {
@@ -48,9 +47,6 @@
 
 /* Media Query for screens at or below 768px */
 @media (max-width: 768px) {
-    .heroBannerContainer {
-        /* Adjust styles for smaller screens */
-    }
 
     .heroBannerOverlay {
         position: absolute;
@@ -67,11 +63,8 @@
 
     .heroBannerTextContainer {
         top: 50%;
-        /* Centering the text block vertically */
         left: 50%;
-        /* Centering the text block horizontally */
         width: 90%;
-        /* Adjust width to fit smaller screens */
         padding: 10px;
     }
 

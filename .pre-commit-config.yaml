@@ -26,6 +26,8 @@ repos:
     hooks:
       - id: golangci-lint-repo-mod
         args: [--fix]
+      - id: go-test-repo-mod
+        stages: [manual]
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.54.0
     hooks:

@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
@@ -17,6 +17,8 @@ type getTeasInput struct {
 }
 
 type teaInput struct {
+	AccessToken string `cookie:"bearer-token" json:"-"`
+
 	ID pgtype.UUID
 
 	Name string `json:"name" minLength:"1"`
@@ -32,9 +34,15 @@ type teaInput struct {
 	Published bool
 }
 
-func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
+func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
-		// dbCtx := context.Background()
+		userData := auth.ValidateJWT(input.AccessToken)
+
+		// If the token was invalid or nonexistent then userData will be nil
+
+		if userData == nil {
+			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+		}
 
 		conn, err := dbPool.Acquire(ctx)
 
@@ -45,8 +53,6 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 		}
 
 		defer conn.Release()
-
-		// defer conn.Close(dbCtx)
 
 		queries := db.New(conn)
 
@@ -111,7 +117,7 @@ func CreateTea(dbPool *pgxpool.Pool) usecase.Interactor {
 	return response
 }
 
-func GetAllTeas(dbPool *pgxpool.Pool) usecase.Interactor {
+func GetAllTeas(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input getTeasInput, output *[]db.Tea) error {
 		// dbCtx := context.Background()
 

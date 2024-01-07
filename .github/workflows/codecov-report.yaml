@@ -1,0 +1,63 @@
+name: Project Code Coverage
+
+on:
+  push:
+    branches:
+      - 'main'
+
+# Cancel the workflow in progress if newer build is about to start.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+# Uncomment when frontend unit tests are ready
+  # frontend-coverage:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: frontend
+  #   steps:
+  #     - name: Checkout 'frontend' folder
+  #       uses: actions/checkout@v3
+  #       with:
+  #         sparse-checkout: |
+  #           frontend
+  #           codecov.yml
+  #     # Insert steps for running frontend unit tests here
+  #     - name: Upload test coverage to Codecov
+  #       uses: codecov/codecov-action@v3
+  #       env:
+  #         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  #       with:
+  #         flags: frontend
+
+  backend-coverage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout 'backend' folder
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            backend
+            codecov.yml
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: false
+      - name: Install dependencies
+        run: go mod tidy
+      - name: Build app
+        run: go build -v cmd
+      - name: Run unit tests w/ coverage report
+        run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+      - name: Upload test coverage to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          flags: backend
