@@ -112,6 +112,8 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 	return response
 }
 
+// GetCity takes a location's uuid as a query parameter and returns its
+// details in the response body.
 func GetCity(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *db.LocationsCity) error {
@@ -128,7 +130,7 @@ func GetCity(dbPool PgxPoolIface) usecase.Interactor {
 			*output, err = queries.GetCity(ctx, input.ID)
 			if err != nil {
 				if strings.Contains(err.Error(), "no rows") {
-					return status.Wrap(fmt.Errorf("invalid city id"), status.InvalidArgument)
+					return status.Wrap(fmt.Errorf("no city with that id"), status.NotFound)
 				}
 				log.Println(fmt.Errorf("could not get city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -137,10 +139,10 @@ func GetCity(dbPool PgxPoolIface) usecase.Interactor {
 			return nil
 		})
 
-	response.SetTitle("Get City")
+	response.SetTitle("Get Location")
 	response.SetDescription("Get the details of a city.")
 	response.SetTags("Locations")
-	response.SetExpectedErrors(status.InvalidArgument)
+	response.SetExpectedErrors(status.InvalidArgument, status.NotFound)
 
 	return response
 }
@@ -202,9 +204,80 @@ func GetAllCities(dbPool PgxPoolIface) usecase.Interactor {
 			return nil
 		})
 
-	response.SetTitle("Get All Cities")
+	response.SetTitle("Get All Locations")
 	response.SetDescription("Get a list of every city in the database.")
 	response.SetTags("Locations")
+
+	return response
+}
+
+// UpdateCity takes a location's uuid as a query parameter and a new city name
+// in the request body, then returns the updated location details in the
+// response body. Only accessible to admins.
+func UpdateCity(dbPool PgxPoolIface) usecase.Interactor {
+	type cityName struct {
+		uuidInput
+		Name string `json:"name" nullable:"false"`
+	}
+
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input cityName, output *db.LocationsCity) error {
+			userData := auth.ValidateJWT(input.AccessToken)
+
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData["role"] != "admin" {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := dbPool.Acquire(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			// Get original city details
+			city, err := queries.GetCity(ctx, input.ID)
+			if err != nil {
+				if strings.Contains(err.Error(), "no rows") {
+					return status.Wrap(fmt.Errorf("no city with that id"), status.NotFound)
+				}
+				log.Println(fmt.Errorf("could not get city: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			// Check that the new city name won't conflict
+			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.Name, State: city.State})
+			if err == nil {
+				// If err is nil then a city with the new name already exists
+				return status.Wrap(fmt.Errorf("could not update: a city with that name already exists"), status.AlreadyExists)
+			}
+
+			*output, err = queries.UpdateCityName(ctx, db.UpdateCityNameParams{ID: input.ID, Name: input.Name})
+			if err != nil {
+				log.Println("could not update city name: %w", err)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Update Location")
+	response.SetDescription("Change the name of an existing location.")
+	response.SetTags("Locations")
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
+		status.AlreadyExists,
+		status.NotFound,
+	)
 
 	return response
 }
