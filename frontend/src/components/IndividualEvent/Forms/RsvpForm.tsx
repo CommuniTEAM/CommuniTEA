@@ -2,6 +2,8 @@ import { Button, TextField, Typography } from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
+import '../styles/RsvpFormStyles.css';
+
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is Required'),
   last_name: Yup.string().required('Last Name is Required'),
@@ -12,10 +14,15 @@ const validationSchema = Yup.object().shape({
 
 export default function RsvpForm(): JSX.Element {
   return (
-    <div>
+    <div className="formFieldsContainer">
       <Typography
         variant="h4"
-        sx={{ color: 'white', fontFamily: 'Montserrat', textAlign: 'center' }}
+        sx={{
+          color: 'white',
+          fontFamily: 'Montserrat',
+          textAlign: 'center',
+          marginBottom: '20px',
+        }}
       >
         RSVP FOR THIS EVENT!
       </Typography>
@@ -38,7 +45,7 @@ export default function RsvpForm(): JSX.Element {
           isSubmitting, errors, touched, handleChange, handleBlur,
         }) => (
           <Form>
-            <div style={{ margin: '0 8%', borderRadius: '50px' }}>
+            <div className="inputFieldsContainer">
               <TextField
                 type="text"
                 name="first_name"
@@ -53,6 +60,7 @@ export default function RsvpForm(): JSX.Element {
                 onBlur={handleBlur}
                 sx={{
                   backgroundColor: 'white',
+                  borderRadius: '10px',
                 }}
               />
 
@@ -70,6 +78,7 @@ export default function RsvpForm(): JSX.Element {
                 onBlur={handleBlur}
                 sx={{
                   backgroundColor: 'white',
+                  borderRadius: '10px',
                 }}
               />
 
@@ -87,6 +96,7 @@ export default function RsvpForm(): JSX.Element {
                 onBlur={handleBlur}
                 sx={{
                   backgroundColor: 'white',
+                  borderRadius: '10px',
                 }}
               />
 
@@ -104,6 +114,7 @@ export default function RsvpForm(): JSX.Element {
                 onBlur={handleBlur}
                 sx={{
                   backgroundColor: 'white',
+                  borderRadius: '10px',
                 }}
               />
 
@@ -121,7 +132,8 @@ export default function RsvpForm(): JSX.Element {
                 onBlur={handleBlur}
                 sx={{
                   backgroundColor: 'white',
-                  marginBottom: '1vh',
+                  marginBottom: '30px',
+                  borderRadius: '10px',
                 }}
               />
 
@@ -136,6 +148,7 @@ export default function RsvpForm(): JSX.Element {
                   color: 'black',
                   fontFamily: 'Montserrat',
                   marginBottom: '5%',
+                  padding: '20px 0',
                 }}
               >
                 JOIN

@@ -1,0 +1,215 @@
+.heroBannerContainer {
+    height: 800px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.individualEventContainer {
+    margin: 0 50px 50px 50px;
+}
+
+.iconSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.eventIcons {
+    display: flex;
+    width: 10%;
+    justify-content: space-between;
+}
+
+.likeContainer {
+    display: flex;
+    align-items: center;
+}
+
+.likeContainer > p {
+    font-family: Montserrat;
+    font-size: 1.25em;
+}
+
+.likeContainer > img {
+    width: 25px;
+    margin-right: 20px;
+}
+
+.shareContainer {
+    display: flex;
+    align-items: center;
+}
+
+.shareContainer > img {
+    width: 25px;
+    margin-right: 20px;
+}
+
+.shareContainer > p {
+    font-family: Montserrat;
+    font-size: 1.25em;
+}
+
+.mainSection {
+    display: flex;
+}
+
+.mainSection-firstHalf {
+    flex-grow: 2;
+    margin-right: 50px;
+}
+
+.dateAndTimeContainer {
+    display: flex;
+    margin: 10px 0 0 0;
+    justify-content: space-between;
+}
+
+.headline {
+    padding: 20px 0 0 0;
+}
+
+.hostDetails {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+.hostDetails-firstHalf {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.hostDetails-secondHalf {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30%;
+}
+
+.locationHeaderContainer {
+    margin-top: 50px;
+}
+
+.locationDetailsContainer {
+    display: flex;
+    margin: 20px 0;
+}
+
+.locationDetailsContainer > img {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.locationDetailsContainer > div {
+    margin-left: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 10px 0;
+}
+
+li {
+    padding: 0 20px;
+}
+
+.mainSection-SecondHalf {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+}
+
+.formContainer {
+    background-color: #333;
+    border-radius: 20px;
+    padding: 50px 10px;
+}
+
+.eventHost {
+    color: #333;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .individualEventContainer {
+        margin: 0 20px;
+    }
+
+    .heroBannerContainer {
+        width: 100%;
+    }
+
+    .iconSection {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .eventTag {
+        width: 100%;
+        text-align: center;
+    }
+
+    .eventIcons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mainSection {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mainSection-firstHalf {
+        width: 100%;
+        margin: 0;
+    }
+
+    .mainSection-firstHalf > h2 {
+        margin: 20px 0;
+    }
+
+    .dateAndTimeContainer {
+        flex-direction: column;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .date {
+        margin: 10px 0;
+    }
+
+    .headline > p {
+        margin: 10px 0;
+    }
+
+    .hostDetails {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hostDetails-firstHalf {
+        margin: 10px 0 20px 0;
+    }
+
+    .hostDetails-secondHalf {
+        width: 100%;
+        margin: 0;
+    }
+
+    .locationHeaderContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .upcomingEventsContainer {
+        margin-bottom: 50px;
+    }
+}
