@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -15,6 +16,13 @@ const internalErrMsg = "could not process request, please try again"
 // authentication should embed this struct.
 type genericInput struct {
 	AccessToken string `cookie:"bearer-token" json:"-"`
+}
+
+// uuidInput defines input schema for endpoints that take a uuid query
+// parameter. Also supports protected endpoints.
+type uuidInput struct {
+	genericInput
+	ID uuid.UUID `nullable:"false" path:"id"`
 }
 
 type PgxPoolIface interface {

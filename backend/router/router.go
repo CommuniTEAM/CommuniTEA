@@ -102,6 +102,7 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 
 	// locations
 	s.Post("/locations/cities", api.CreateCity(dbPool), requireAuth)
+	s.Get("/locations/cities/{id}", api.GetCity(dbPool))
 	s.Get("/locations/cities/state/{state}", api.GetAllCitiesInState(dbPool))
 
 	// wikiteadia
