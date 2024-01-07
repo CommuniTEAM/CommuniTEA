@@ -47,7 +47,7 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
 				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			defer conn.Release()
@@ -64,29 +64,17 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
 			}
 
-			userUUID, err := uuid.FromBytes(userData.ID.Bytes[:])
-			if err != nil {
-				log.Println(fmt.Errorf("could not convert user uuid to uuid type: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
-			}
-
-			output.ID = userUUID
-
-			locationUUID, err := uuid.FromBytes(userData.Location.Bytes[:])
-			if err != nil {
-				log.Println(fmt.Errorf("could not convert location uuid to uuid type: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
-			}
-
-			output.Location = locationUUID
+			output.ID = userData.ID
+			output.Location = userData.Location
 			output.Role = userData.Role
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
+
 			output, err = auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -123,7 +111,7 @@ func UserLogout() usecase.Interactor {
 			)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			output.Cookie = token.Token
@@ -148,7 +136,7 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			conn, err := dbPool.Acquire(ctx)
 			if err != nil {
 				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			defer conn.Release()
@@ -158,13 +146,13 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			locationID, err := queries.GetCityID(ctx, db.GetCityIDParams{
@@ -176,33 +164,33 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateUserParams{
-				ID:        pgtype.UUID{Bytes: newUUID, Valid: true},
+				ID:        newUUID,
 				Role:      input.Role,
 				Username:  input.Username,
 				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
 				LastName:  pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
 				Email:     pgtype.Text{String: input.Email, Valid: (input.Email != "")},
 				Password:  hashPass,
-				Location:  pgtype.UUID{Bytes: locationID.Bytes, Valid: true},
+				Location:  locationID,
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create user: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
-			output.ID = userData.ID.Bytes
+			output.ID = userData.ID
 			output.Role = userData.Role
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
-			output.Location = userData.Location.Bytes
+			output.Location = userData.Location
 
 			output, err = auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600

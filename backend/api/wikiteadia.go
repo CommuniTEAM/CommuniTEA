@@ -19,7 +19,7 @@ type getTeasInput struct {
 type teaInput struct {
 	AccessToken string `cookie:"bearer-token" json:"-"`
 
-	ID pgtype.UUID
+	ID uuid.UUID
 
 	Name string `json:"name" minLength:"1"`
 
@@ -82,7 +82,7 @@ func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 
 		teaParams := db.CreateTeaParams{
 
-			ID: pgtype.UUID{Bytes: newUUID, Valid: true},
+			ID: newUUID,
 
 			Name: input.Name,
 

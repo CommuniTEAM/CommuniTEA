@@ -8,7 +8,7 @@ package db
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 const createCity = `-- name: CreateCity :one
@@ -18,9 +18,9 @@ returning id, name, state
 `
 
 type CreateCityParams struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	State string      `json:"state"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	State string    `json:"state"`
 }
 
 func (q *Queries) CreateCity(ctx context.Context, arg CreateCityParams) (LocationsCity, error) {
@@ -35,7 +35,7 @@ delete from locations_cities
 where "id" = $1
 `
 
-func (q *Queries) DeleteCity(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteCity(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteCity, id)
 	return err
 }
@@ -118,7 +118,7 @@ select id, name, state from locations_cities
 where "id" = $1
 `
 
-func (q *Queries) GetCity(ctx context.Context, id pgtype.UUID) (LocationsCity, error) {
+func (q *Queries) GetCity(ctx context.Context, id uuid.UUID) (LocationsCity, error) {
 	row := q.db.QueryRow(ctx, getCity, id)
 	var i LocationsCity
 	err := row.Scan(&i.ID, &i.Name, &i.State)
@@ -137,9 +137,9 @@ type GetCityIDParams struct {
 	State string `json:"state"`
 }
 
-func (q *Queries) GetCityID(ctx context.Context, arg GetCityIDParams) (pgtype.UUID, error) {
+func (q *Queries) GetCityID(ctx context.Context, arg GetCityIDParams) (uuid.UUID, error) {
 	row := q.db.QueryRow(ctx, getCityID, arg.Name, arg.State)
-	var id pgtype.UUID
+	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
 }
@@ -152,8 +152,8 @@ returning id, name, state
 `
 
 type UpdateCityNameParams struct {
-	Name string      `json:"name"`
-	ID   pgtype.UUID `json:"id"`
+	Name string    `json:"name"`
+	ID   uuid.UUID `json:"id"`
 }
 
 func (q *Queries) UpdateCityName(ctx context.Context, arg UpdateCityNameParams) (LocationsCity, error) {

@@ -11,9 +11,10 @@ import (
 const internalErrMsg = "could not process request, please try again"
 
 // genericInput defines input schema for endpoints that do not require
-// a json body or query parameters. It supports protected endpoints.
+// a json body or query parameters. Any input schema that requires
+// authentication should embed this struct.
 type genericInput struct {
-	Cookie string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
+	AccessToken string `cookie:"bearer-token" json:"-"`
 }
 
 type PgxPoolIface interface {

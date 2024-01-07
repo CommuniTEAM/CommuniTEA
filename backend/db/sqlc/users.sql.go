@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -27,14 +28,14 @@ returning id, role, username, first_name, last_name, email, password, location
 `
 
 type CreateUserParams struct {
-	ID        pgtype.UUID `json:"id"`
+	ID        uuid.UUID   `json:"id"`
 	Role      string      `json:"role"`
 	Username  string      `json:"username"`
 	FirstName pgtype.Text `json:"first_name"`
 	LastName  pgtype.Text `json:"last_name"`
 	Email     pgtype.Text `json:"email"`
 	Password  []byte      `json:"password"`
-	Location  pgtype.UUID `json:"location"`
+	Location  uuid.UUID   `json:"location"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -76,12 +77,12 @@ where "username" = $1
 `
 
 type LoginRow struct {
-	ID        pgtype.UUID `json:"id"`
+	ID        uuid.UUID   `json:"id"`
 	Role      string      `json:"role"`
 	Username  string      `json:"username"`
 	FirstName pgtype.Text `json:"first_name"`
 	LastName  pgtype.Text `json:"last_name"`
-	Location  pgtype.UUID `json:"location"`
+	Location  uuid.UUID   `json:"location"`
 	Password  []byte      `json:"password"`
 }
 

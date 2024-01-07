@@ -67,7 +67,6 @@ linters-settings:
       - '^gopkg.in/yaml.v3.Node$'
       - '^github.com/swaggest/jsonschema-go.Schema$'
       - '^github.com/rs/cors.Options$'
-      - '^github.com/jackc/pgx/v5/pgtype.UUID$'
       # project libs
       - '^github.com/CommuniTEAM/CommuniTEA/router.httpResponse$'
       - '^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$'

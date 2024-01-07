@@ -10,15 +10,14 @@ import (
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/swaggest/usecase"
 	"github.com/swaggest/usecase/status"
 )
 
 type cityInput struct {
-	AccessToken string `cookie:"bearer-token" json:"-"`
-	Name        string `json:"name"           nullable:"false"`
-	State       string `json:"state"          nullable:"false"`
+	genericInput
+	Name  string `json:"name"  nullable:"false"`
+	State string `json:"state" nullable:"false"`
 }
 
 type stateInput struct {
@@ -83,7 +82,7 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 			}
 
 			inputArgs := db.CreateCityParams{
-				ID:    pgtype.UUID{Bytes: newUUID, Valid: true},
+				ID:    newUUID,
 				Name:  input.Name,
 				State: input.State,
 			}

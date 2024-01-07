@@ -6,7 +6,6 @@ import (
 	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/go-chi/chi/middleware"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/rs/cors"
 	"github.com/swaggest/jsonschema-go"
 	oapi "github.com/swaggest/openapi-go"
@@ -48,7 +47,6 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	uuidDef.WithFormat("uuid")
 	uuidDef.WithExamples("248df4b7-aa70-47b8-a036-33ac447e668d")
 	s.OpenAPIReflector().JSONSchemaReflector().AddTypeMapping(uuid.UUID{}, uuidDef)
-	s.OpenAPIReflector().JSONSchemaReflector().AddTypeMapping(pgtype.UUID{}, uuidDef)
 
 	// Set up middleware wraps
 	s.Wrap(
