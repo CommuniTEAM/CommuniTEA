@@ -17,8 +17,16 @@ import (
 
 type cityInput struct {
 	AccessToken string `cookie:"bearer-token" json:"-"`
-	Name        string `json:"name"           required:"true"`
-	State       string `json:"state"          required:"true"`
+	Name        string `json:"name"           nullable:"false"`
+	State       string `json:"state"          nullable:"false"`
+}
+
+type stateInput struct {
+	State string `maxLength:"2" minLength:"2" path:"state"`
+}
+
+type citiesOutput struct {
+	Cities []db.LocationsCity `json:"cities"`
 }
 
 // CreateCity adds a city name and its state code to the database.
@@ -101,6 +109,37 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 		status.PermissionDenied,
 		status.AlreadyExists,
 	)
+
+	return response
+}
+
+func GetAllCitiesInState(dbPool PgxPoolIface) usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input stateInput, output *citiesOutput) error {
+			conn, err := dbPool.Acquire(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			input.State = strings.ToUpper(input.State)
+			output.Cities, err = queries.GetAllCitiesInState(ctx, input.State)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get all cities in state: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Get All Cities in a State")
+	response.SetDescription("Get all the cities in a given state.")
+	response.SetTags("Locations")
+	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
 }
