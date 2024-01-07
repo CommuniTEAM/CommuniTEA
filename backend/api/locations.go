@@ -113,6 +113,8 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 	return response
 }
 
+// GetAllCitiesInState takes a state code as a query parameter and returns
+// a list of all cities within the given state.
 func GetAllCitiesInState(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
@@ -137,9 +139,40 @@ func GetAllCitiesInState(dbPool PgxPoolIface) usecase.Interactor {
 		})
 
 	response.SetTitle("Get All Cities in a State")
-	response.SetDescription("Get all the cities in a given state.")
+	response.SetDescription("Get a list of all cities in a given state.")
 	response.SetTags("Locations")
 	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
+// GetAllCities takes no input parameters and returns a list of every city
+// in the database.
+func GetAllCities(dbPool PgxPoolIface) usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input genericInput, output *citiesOutput) error {
+			conn, err := dbPool.Acquire(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			output.Cities, err = queries.GetAllCities(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get all cities: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Get All Cities")
+	response.SetDescription("Get a list of every city in the database.")
+	response.SetTags("Locations")
 
 	return response
 }
