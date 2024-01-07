@@ -6,12 +6,16 @@
     /* Ensures padding does not add to the total width */
 }
 
-.heroBannerContainer {
+.landingHeroBannerContainer {
     position: relative;
     width: 100%;
-    overflow-x: hidden;
+    height: 80vh;
     text-align: center;
     color: white;
+    background-image: url('../../../assets/HeroBannerImage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .heroBannerImage {
