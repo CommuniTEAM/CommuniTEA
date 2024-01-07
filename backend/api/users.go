@@ -193,61 +193,39 @@ func UserLogout() usecase.Interactor {
 
 func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 	response := usecase.NewInteractor(
-
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			conn, err := dbPool.Acquire(ctx)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-
 				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
-
 			defer conn.Release()
-
 			queries := db.New(conn)
-
 			newUUID, err := uuid.NewRandom()
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
-
 				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
-
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
-
 				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
 			}
-
 			locationInput := db.GetCityParams{Name: input.LocationCity, State: input.LocationState}
-
 			locationID, locationErr := queries.GetCity(ctx, locationInput)
-
 			if locationErr != nil {
 				return fmt.Errorf("failed to get locationUUID, invalid city or state: %w", locationErr)
 			}
 
 			inputArgs := db.CreateUserParams{
-
-				ID: pgtype.UUID{Bytes: newUUID, Valid: true},
-
-				Role: input.Role,
-
-				Username: input.Username,
-
+				ID:        pgtype.UUID{Bytes: newUUID, Valid: true},
+				Role:      input.Role,
+				Username:  input.Username,
 				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
-
-				LastName: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
-
-				Email: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
-
-				Password: hashPass,
-
-				Location: pgtype.UUID{Bytes: locationID.Bytes, Valid: (locationErr == nil)},
+				LastName:  pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				Email:     pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Password:  hashPass,
+				Location:  pgtype.UUID{Bytes: locationID.Bytes, Valid: (locationErr == nil)},
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
@@ -286,8 +264,11 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 		})
 
 	response.SetTitle("Create User")
+
 	response.SetDescription("Make a new user account.")
+
 	response.SetTags("Users")
+
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response

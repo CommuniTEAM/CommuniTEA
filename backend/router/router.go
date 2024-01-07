@@ -34,14 +34,11 @@ type httpResponse struct {
 func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	// Initialize openAPI 3.1 reflector
 	reflector := openapi31.NewReflector()
-
 	// Declare security scheme
 	securityName := "authCookie"
 	reflector.SpecEns().SetHTTPBearerTokenSecurity(securityName, "cookie", "User Authentication")
-
 	// Initialize web service
 	s := web.NewService(reflector)
-
 	// Initialize API documentation schema
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
 	s.OpenAPISchema().SetDescription("Bringing your community together over a cuppa")
@@ -82,12 +79,10 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
 		// Add security requirement to operation
 		oc.AddSecurity(securityName)
-
 		// Describe unauthenticated response
 		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 			cu.HTTPStatus = http.StatusUnauthorized
 		})
-
 		// Describe unauthorized (forbidden) response
 		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 			cu.HTTPStatus = http.StatusForbidden
