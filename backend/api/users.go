@@ -15,6 +15,8 @@ import (
 )
 
 type newUserInput struct {
+	ID pgtype.UUID
+
 	Role string `enum:"user, business" json:"role" nullable:"false"`
 
 	Username string `json:"username" nullable:"false"`
@@ -286,8 +288,11 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 		})
 
 	response.SetTitle("Create User")
+
 	response.SetDescription("Make a new user account.")
+
 	response.SetTags("Users")
+
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response

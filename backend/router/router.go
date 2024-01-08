@@ -33,65 +33,94 @@ type httpResponse struct {
 
 func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 	// Initialize openAPI 3.1 reflector
+
 	reflector := openapi31.NewReflector()
 
 	// Declare security scheme
+
 	securityName := "authCookie"
+
 	reflector.SpecEns().SetHTTPBearerTokenSecurity(securityName, "cookie", "User Authentication")
 
 	// Initialize web service
+
 	s := web.NewService(reflector)
 
 	// Initialize API documentation schema
+
 	s.OpenAPISchema().SetTitle("CommuniTEA API")
+
 	s.OpenAPISchema().SetDescription("Bringing your community together over a cuppa")
+
 	s.OpenAPISchema().SetVersion("v0.0.1")
 
 	// Create custom schema mapping for 3rd party type uuid
+
 	uuidDef := jsonschema.Schema{}
+
 	uuidDef.AddType(jsonschema.String)
+
 	uuidDef.WithFormat("uuid")
+
 	uuidDef.WithExamples("248df4b7-aa70-47b8-a036-33ac447e668d")
+
 	s.OpenAPIReflector().JSONSchemaReflector().AddTypeMapping(uuid.UUID{}, uuidDef)
+
 	s.OpenAPIReflector().JSONSchemaReflector().InlineDefinition(uuid.UUID{})
 
 	// Set up middleware wraps
+
 	s.Wrap(
+
 		middleware.Logger,
+
 		cors.New(cors.Options{
-			AllowedOrigins:      []string{"http://localhost:3000", "https://communitea.life"},
-			AllowedMethods:      []string{"GET", "POST", "PUT", "DELETE"},
-			AllowedHeaders:      []string{"Content-Type"},
-			AllowCredentials:    true,
+
+			AllowedOrigins: []string{"http://localhost:3000", "https://communitea.life"},
+
+			AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+
+			AllowedHeaders: []string{"Content-Type"},
+
+			AllowCredentials: true,
+
 			AllowPrivateNetwork: true,
 		}).Handler,
 
 		// Describe bad request (400) response
+
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
 			})
+
 			return nil
 		}),
 	)
 
 	// Forgive appended slashes on URLs
+
 	s.Use(middleware.StripSlashes)
 
 	// Set up auth requirement option for routes
+
 	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
 		// Add security requirement to operation
+
 		oc.AddSecurity(securityName)
 
 		// Describe unauthenticated response
+
 		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 			cu.HTTPStatus = http.StatusUnauthorized
 		})
 
 		// Describe unauthorized (forbidden) response
+
 		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 			cu.HTTPStatus = http.StatusForbidden
 		})
+
 		return nil
 	})
 
