@@ -298,6 +298,9 @@ func (a *API) DeleteCity() usecase.Interactor {
 
 			err = queries.DeleteCity(ctx, input.ID)
 			if err != nil {
+				if strings.Contains(err.Error(), "fkey") {
+					return status.Wrap(fmt.Errorf("cannot delete a location that is in use by other data"), status.Aborted)
+				}
 				log.Println(fmt.Errorf("could not delete city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
@@ -312,6 +315,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 		status.InvalidArgument,
 		status.Unauthenticated,
 		status.PermissionDenied,
+		status.Aborted,
 	)
 
 	return response

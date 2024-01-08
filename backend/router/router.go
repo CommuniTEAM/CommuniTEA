@@ -105,10 +105,13 @@ func NewRouter(endpoints *api.API) http.Handler {
 			AllowPrivateNetwork: true,
 		}).Handler,
 
-		// Describe bad request (400) response
+		// Describe additional response schema
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
+			})
+			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+				cu.HTTPStatus = http.StatusConflict
 			})
 			return nil
 		}),
