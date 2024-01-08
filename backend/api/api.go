@@ -30,15 +30,24 @@ type uuidInput struct {
 	ID uuid.UUID `nullable:"false" path:"id"`
 }
 
+// genericOutput defines output schema for endpoints that do not return
+// any data in a json body, such as DELETE methods.
+type genericOutput struct {
+	Message string `json:"message"`
+}
+
 type PgxPoolIface interface {
 	Acquire(ctx context.Context) (*pgxpool.Conn, error)
 	Close()
 	Config() *pgxpool.Config
 }
 
-// internalErrMsg defines the response message for a 500 http response
-// code. Used by endpoints in status.Wrap()
-const internalErrMsg = "could not process request, please try again"
+const (
+	// internalErrMsg defines the response message for a 500 http response
+	// code. Used by endpoints in status.Wrap()
+	internalErrMsg string = "could not process request, please try again"
+	adminRole      string = "admin"
+)
 
 // dbConn is a helper function that establishes a database connection from
 // the API's database pool or, if that fails, returns a pre-formatted error

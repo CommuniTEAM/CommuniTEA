@@ -43,7 +43,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			// Verify that the user has the 'admin' role
-			if userData["role"] != "admin" {
+			if userData["role"] != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -220,7 +220,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != "admin" {
+			if userData["role"] != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -267,6 +267,51 @@ func (a *API) UpdateCity() usecase.Interactor {
 		status.PermissionDenied,
 		status.AlreadyExists,
 		status.NotFound,
+	)
+
+	return response
+}
+
+// DeleteCity takes a city uuid input through query parameters and returns
+// a success message if the city does not exist after running the deletion
+// query (404 is never returned). Only accessible to admins.
+func (a *API) DeleteCity() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input uuidInput, output *genericOutput) error {
+			userData := auth.ValidateJWT(input.AccessToken)
+
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData["role"] != adminRole {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			err = queries.DeleteCity(ctx, input.ID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not delete city: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+			output.Message = "success: location deleted"
+			return nil
+		})
+
+	response.SetTitle("Delete Location")
+	response.SetDescription("Remove a location.")
+	response.SetTags("Locations")
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
 	)
 
 	return response

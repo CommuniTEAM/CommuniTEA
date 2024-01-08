@@ -55,6 +55,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/locations/cities/{id}", endpoints.GetCity())
 	s.Get("/locations/cities/state/{state}", endpoints.GetAllCitiesInState())
 	s.Put("/locations/cities/{id}", endpoints.UpdateCity(), requireAuth)
+	s.Delete("/locations/cities/{id}", endpoints.DeleteCity(), requireAuth)
 
 	// wikiteadia
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
