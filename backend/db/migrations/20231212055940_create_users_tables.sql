@@ -6,7 +6,7 @@ create table if not exists "user_roles" (
 create table if not exists "users" (
     "id" uuid primary key,
     "role" varchar(25) not null references user_roles (name),
-    "username" varchar(50) unique not null,
+    "username" citext unique not null,
     "first_name" varchar(50),
     "last_name" varchar(50),
     "email" varchar(200) unique,

@@ -9,7 +9,6 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.0.18
 	github.com/pashagolub/pgxmock/v3 v3.3.0
 	github.com/rs/cors v1.10.1
-	github.com/stretchr/testify v1.8.4
 	github.com/swaggest/jsonschema-go v0.3.64
 	github.com/swaggest/openapi-go v0.2.44
 	github.com/swaggest/rest v0.2.61
@@ -19,7 +18,6 @@ require (
 )
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
 	github.com/go-chi/chi/v5 v5.0.11 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
@@ -31,7 +29,6 @@ require (
 	github.com/lestrrat-go/httprc v1.0.4 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
 	github.com/lestrrat-go/option v1.0.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v3 v3.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
@@ -42,5 +39,4 @@ require (
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
