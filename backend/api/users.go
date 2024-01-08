@@ -41,15 +41,13 @@ type logoutOutput struct {
 
 // UserLogin takes an inputted username and password and, if the credentials
 // are valid, returns the user's data along with an authenticating jwt cookie.
-func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) UserLogin() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
@@ -95,7 +93,7 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 // auth cookie with an expiry time one hour in the past, rendering it invalid.
 // If the passed-in cookie is already invalid or there is no cookie, an empty
 // 200 response is returned as the user is already not logged in.
-func UserLogout() usecase.Interactor {
+func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input logoutInput, output *logoutOutput) error {
 			userData := auth.ValidateJWT(input.Cookie)
@@ -130,15 +128,13 @@ func UserLogout() usecase.Interactor {
 
 // CreateUser takes in a user's information, saves it to the database, then
 // logs them in and returns the user's data and an authenticating jwt cookie.
-func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) CreateUser() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)

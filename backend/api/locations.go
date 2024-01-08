@@ -30,7 +30,7 @@ type citiesOutput struct {
 
 // CreateCity adds a city name and its state code to the database.
 // Only accessible to admins.
-func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) CreateCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
 			// Validate the access token sent with the request, if valid then
@@ -58,12 +58,10 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 				return status.Wrap(fmt.Errorf("invalid state code"), status.InvalidArgument)
 			}
 
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
@@ -114,15 +112,13 @@ func CreateCity(dbPool PgxPoolIface) usecase.Interactor {
 
 // GetCity takes a location's uuid as a query parameter and returns its
 // details in the response body.
-func GetCity(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) GetCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *db.LocationsCity) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
@@ -149,15 +145,13 @@ func GetCity(dbPool PgxPoolIface) usecase.Interactor {
 
 // GetAllCitiesInState takes a state code as a query parameter and returns
 // a list of all cities within the given state.
-func GetAllCitiesInState(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) GetAllCitiesInState() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
@@ -182,15 +176,13 @@ func GetAllCitiesInState(dbPool PgxPoolIface) usecase.Interactor {
 
 // GetAllCities takes no input parameters and returns a list of every city
 // in the database.
-func GetAllCities(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) GetAllCities() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input genericInput, output *citiesOutput) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
@@ -214,7 +206,7 @@ func GetAllCities(dbPool PgxPoolIface) usecase.Interactor {
 // UpdateCity takes a location's uuid as a query parameter and a new city name
 // in the request body, then returns the updated location details in the
 // response body. Only accessible to admins.
-func UpdateCity(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) UpdateCity() usecase.Interactor {
 	type cityName struct {
 		uuidInput
 		Name string `json:"name" nullable:"false"`
@@ -232,12 +224,10 @@ func UpdateCity(dbPool PgxPoolIface) usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
