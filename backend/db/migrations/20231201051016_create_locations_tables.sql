@@ -6,7 +6,7 @@ create table if not exists "locations_states" (
 
 create table if not exists "locations_cities" (
     "id" uuid primary key,
-    "name" varchar(50) not null,
+    "name" citext not null,
     "state" varchar(2) not null references locations_states (abbreviation)
 );
 
