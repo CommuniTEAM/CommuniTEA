@@ -15,6 +15,8 @@ import (
 	swgui "github.com/swaggest/swgui/v5emb"
 )
 
+const securityName = "authCookie"
+
 // httpResponse provides generic json schema for an http response's
 
 // accompanying json body.
@@ -25,20 +27,80 @@ type httpResponse struct {
 	Error string `json:"error"`
 }
 
+func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
+	// Set up auth requirement option for routes
+
+	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
+		// Add security requirement to operation
+
+		oc.AddSecurity(securityName)
+
+		// Describe unauthenticated response
+
+		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+			cu.HTTPStatus = http.StatusUnauthorized
+		})
+
+		// Describe unauthorized (forbidden) response
+
+		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+			cu.HTTPStatus = http.StatusForbidden
+		})
+
+		return nil
+	})
+
+	// auth
+
+	s.Post("/login", endpoints.UserLogin())
+
+	s.Delete("/logout", endpoints.UserLogout(), requireAuth)
+
+	// users
+
+	s.Post("/users", endpoints.CreateUser())
+
+	// locations
+
+	s.Post("/locations/cities", endpoints.CreateCity(), requireAuth)
+
+	s.Get("/locations/cities", endpoints.GetAllCities())
+
+	s.Get("/locations/cities/{id}", endpoints.GetCity())
+
+	s.Get("/locations/states", endpoints.GetAllStates())
+
+	s.Get("/locations/states/{state}/cities", endpoints.GetAllCitiesInState())
+
+	s.Put("/locations/cities/{id}", endpoints.UpdateCity(), requireAuth)
+
+	s.Delete("/locations/cities/{id}", endpoints.DeleteCity(), requireAuth)
+
+	// wikiteadia
+
+	s.Get("/teas/{published}", endpoints.GetAllTeas())
+
+	s.Post("/teas", endpoints.CreateTea())
+
+	// Swagger UI endpoint at /docs.
+
+	s.Docs("/docs", swgui.New)
+
+	return s
+}
+
 // NewRouter creates a custom router for the http server in line with
 
 // openapi specifications. It bundles the included api endpoints into
 
 // the Swagger UI in the browser, available at /docs.
 
-func NewRouter(dbPool api.PgxPoolIface) http.Handler {
+func NewRouter(endpoints *api.API) http.Handler {
 	// Initialize openAPI 3.1 reflector
 
 	reflector := openapi31.NewReflector()
 
 	// Declare security scheme
-
-	securityName := "authCookie"
 
 	reflector.SpecEns().SetHTTPBearerTokenSecurity(securityName, "cookie", "User Authentication")
 
@@ -66,8 +128,6 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 
 	s.OpenAPIReflector().JSONSchemaReflector().AddTypeMapping(uuid.UUID{}, uuidDef)
 
-	s.OpenAPIReflector().JSONSchemaReflector().InlineDefinition(uuid.UUID{})
-
 	// Set up middleware wraps
 
 	s.Wrap(
@@ -87,11 +147,15 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 			AllowPrivateNetwork: true,
 		}).Handler,
 
-		// Describe bad request (400) response
+		// Describe additional response schema
 
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
+			})
+
+			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
+				cu.HTTPStatus = http.StatusConflict
 			})
 
 			return nil
@@ -102,57 +166,9 @@ func NewRouter(dbPool api.PgxPoolIface) http.Handler {
 
 	s.Use(middleware.StripSlashes)
 
-	// Set up auth requirement option for routes
-
-	requireAuth := nethttp.AnnotateOpenAPIOperation(func(oc oapi.OperationContext) error {
-		// Add security requirement to operation
-
-		oc.AddSecurity(securityName)
-
-		// Describe unauthenticated response
-
-		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
-			cu.HTTPStatus = http.StatusUnauthorized
-		})
-
-		// Describe unauthorized (forbidden) response
-
-		oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
-			cu.HTTPStatus = http.StatusForbidden
-		})
-
-		return nil
-	})
-
 	// Add API endpoints to router
 
-	// greeter (example endpoint to be removed for prod)
-
-	s.Get("/hello/{name}", api.Greet())
-
-	// auth
-
-	s.Post("/login", api.UserLogin(dbPool))
-
-	s.Delete("/logout", api.UserLogout(), requireAuth)
-
-	// users
-
-	s.Post("/users", api.CreateUser(dbPool))
-
-	// locations
-
-	s.Post("/locations/cities", api.CreateCity(dbPool), requireAuth)
-
-	// wikiteadia
-
-	s.Get("/teas/{published}", api.GetAllTeas(dbPool))
-
-	s.Post("/teas", api.CreateTea(dbPool))
-
-	// Swagger UI endpoint at /docs.
-
-	s.Docs("/docs", swgui.New)
+	addEndpoints(s, endpoints)
 
 	return s
 }

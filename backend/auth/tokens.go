@@ -14,8 +14,12 @@ import (
 
 var signingKey = generateSigningKey() //nolint: gochecknoglobals // key needs to be randomly generated once at app start
 
-type TokenData struct {
+type TokenCookie struct {
 	Token string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
+}
+
+type TokenData struct {
+	TokenCookie
 
 	TokenType string `json:"token_type"`
 

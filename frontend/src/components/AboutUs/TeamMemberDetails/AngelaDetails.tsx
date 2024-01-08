@@ -3,26 +3,18 @@ import AngelaCropped from '../../../assets/AngelaCropped.jpg';
 import Github from '../../../assets/GitHubBlack.png';
 import LinkedIn from '../../../assets/LinkedIn.png';
 
-export default function AngelaDetails(): JSX.Element {
-  const responsiveFontSize = 'calc(0.5vw + 0.5em)';
+import '../styles/TeamMemberDetailsStyles.css';
 
+export default function AngelaDetails(): JSX.Element {
   return (
-    <div style={{ display: 'flex' }}>
+    <div className="aboutUsBodyContainer">
       {/* Image */}
-      <div style={{ flexGrow: 1, maxWidth: '100vw', width: '50%' }}>
-        <img src={AngelaCropped} alt="Angela" style={{ maxWidth: '100%' }} />
+      <div className="aboutUsfirstHalf">
+        <img src={AngelaCropped} alt="Cory" />
       </div>
 
       {/* Full Name */}
-      <div
-        style={{
-          flexGrow: 1,
-          paddingTop: '1vh',
-          paddingLeft: '2vw',
-          paddingRight: '2vw',
-          width: '50%',
-        }}
-      >
+      <div className="aboutUsSecondHalf">
         <div>
           <Typography variant="h2" sx={{ fontFamily: 'Montserrat' }}>
             Angela Fisher
@@ -33,50 +25,42 @@ export default function AngelaDetails(): JSX.Element {
         <Divider sx={{ bgcolor: 'black' }} />
 
         {/* Title / Position */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            paddingBottom: 25,
-          }}
-        >
+        <div className="titlePositionContainer">
           <div>
             <Typography
               variant="h5"
               sx={{ fontFamily: 'Montserrat', fontStyle: 'italic' }}
             >
-              Back-end Engineer
+              DevOps & Back-end Engineer
             </Typography>
           </div>
 
           {/* Social Links */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <a
-                href="https://www.linkedin.com/in/angelajfisher/"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <img src={LinkedIn} alt="LinkedIn" />
-              </a>
-              <a
-                href="https://github.com/angelajfisher"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <img src={Github} alt="Github" />
-              </a>
-            </div>
+          <div style={{ display: 'flex' }}>
+            <a
+              href="https://www.linkedin.com/in/angelajfisher/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <img src={LinkedIn} alt="LinkedIn" />
+            </a>
+            <a
+              href="https://github.com/angelajfisher"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <img src={Github} alt="Github" />
+            </a>
           </div>
         </div>
 
         {/* Team Member Description */}
-        <div>
+        <div className="aboutUsDescription">
           <Typography
             variant="body1"
-            sx={{ fontFamily: 'Montserrat', fontSize: responsiveFontSize }}
+            sx={{ fontFamily: 'Montserrat', fontSize: '1.25em' }}
           >
-            Add Details Here
+            Add description here.
           </Typography>
         </div>
       </div>

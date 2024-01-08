@@ -17,9 +17,9 @@ type getTeasInput struct {
 }
 
 type teaInput struct {
-	AccessToken string `cookie:"bearer-token" json:"-"`
+	defaultInput
 
-	ID pgtype.UUID
+	ID uuid.UUID
 
 	Name string `json:"name" minLength:"1"`
 
@@ -34,7 +34,7 @@ type teaInput struct {
 	Published bool
 }
 
-func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) CreateTea() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
 		userData := auth.ValidateJWT(input.AccessToken)
 
@@ -44,12 +44,10 @@ func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 		}
 
-		conn, err := dbPool.Acquire(ctx)
-
-		// conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
+		conn, err := a.dbConn(ctx)
 
 		if err != nil {
-			return fmt.Errorf("failed to connect to DB: %w", err)
+			return err
 		}
 
 		defer conn.Release()
@@ -82,7 +80,7 @@ func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 
 		teaParams := db.CreateTeaParams{
 
-			ID: pgtype.UUID{Bytes: newUUID, Valid: true},
+			ID: newUUID,
 
 			Name: input.Name,
 
@@ -117,19 +115,13 @@ func CreateTea(dbPool PgxPoolIface) usecase.Interactor {
 	return response
 }
 
-func GetAllTeas(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) GetAllTeas() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input getTeasInput, output *[]db.Tea) error {
-		// dbCtx := context.Background()
-
-		// conn, err := pgx.Connect(dbCtx, (os.Getenv("DB_URI")))
-
-		conn, err := dbPool.Acquire(ctx)
+		conn, err := a.dbConn(ctx)
 
 		if err != nil {
-			return fmt.Errorf("failed to connect to DB: %w", err)
+			return err
 		}
-
-		// defer conn.Close(dbCtx)
 
 		defer conn.Release()
 

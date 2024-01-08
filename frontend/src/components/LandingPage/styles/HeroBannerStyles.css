@@ -3,15 +3,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Ensures padding does not add to the total width */
 }
 
-.heroBannerContainer {
+.landingHeroBannerContainer {
     position: relative;
     width: 100%;
-    overflow-x: hidden;
+    height: 80vh;
     text-align: center;
     color: white;
+    background-image: url('../../../assets/HeroBannerImage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .heroBannerImage {
@@ -44,9 +47,6 @@
 
 /* Media Query for screens at or below 768px */
 @media (max-width: 768px) {
-    .heroBannerContainer {
-        /* Adjust styles for smaller screens */
-    }
 
     .heroBannerOverlay {
         position: absolute;
@@ -63,11 +63,8 @@
 
     .heroBannerTextContainer {
         top: 50%;
-        /* Centering the text block vertically */
         left: 50%;
-        /* Centering the text block horizontally */
         width: 90%;
-        /* Adjust width to fit smaller screens */
         padding: 10px;
     }
 

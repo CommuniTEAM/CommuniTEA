@@ -12,6 +12,8 @@ import OtherEvents from './OtherEvents';
 import Footer from '../LandingPage/Footer';
 import RsvpForm from './Forms/RsvpForm';
 
+import './styles/IndividualEventStyles.css';
+
 interface EventData {
   id?: number
   image?: string
@@ -88,85 +90,52 @@ export default function EventDetailPage(): JSX.Element {
     return <div>Event not found</div>;
   }
 
+  const parallaxStyle = {
+    backgroundImage: `url(${eventData.image})`,
+  };
+
   return (
     <div>
       <NavBar />
-      <div
-        style={{
-          marginLeft: '5vw',
-          marginRight: '5vw',
-        }}
-      >
-        <div style={{ textAlign: 'center', marginTop: '2vh' }}>
-          <img
-            src={eventData.image}
-            alt={eventData.name}
-            style={{ borderRadius: '50px', width: '100%', height: '80vh' }}
-          />
-        </div>
-        <div style={{ display: 'flex', marginTop: '2vh' }}>
-          <div style={{ width: '90%' }}>
+      <div className="heroBannerContainer" style={parallaxStyle} />
+      <div className="individualEventContainer">
+        <div className="iconSection">
+          <div className="eventTag">
             <Typography
               sx={{
                 fontFamily: 'Montserrat',
                 color: '#29C6CF',
-                fontSize: '.80vw',
+                fontSize: '1.25em',
               }}
             >
               {eventData.tag}
             </Typography>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              width: '10%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'Montserrat',
-                fontSize: '.80vw',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <img
-                src={LikeIcon}
-                alt="Like Icon"
-                style={{ width: '1vw', marginRight: '.5vw' }}
-              />
-              Like
+
+          <div className="eventIcons">
+            <div className="likeContainer">
+              <img src={LikeIcon} alt="Like Icon" />
+              <p>Like</p>
             </div>
-            <div
-              style={{
-                fontFamily: 'Montserrat',
-                fontSize: '.80vw',
-              }}
-            >
-              <img
-                src={shareIcon}
-                alt="Share Icon"
-                style={{ width: '1vw', marginRight: '.5vw' }}
-              />
-              Share
+            <div className="shareContainer">
+              <img src={shareIcon} alt="Share Icon" />
+              <p>Share</p>
             </div>
           </div>
         </div>
 
         <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
-        <div style={{ display: 'flex' }}>
-          <div style={{ width: '70%' }}>
+        <div className="mainSection">
+          <div className="mainSection-firstHalf">
             <Typography
               variant="h2"
               sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
             >
               {eventData.name}
             </Typography>
-            <div style={{ display: 'flex', marginTop: '1vh' }}>
-              <div style={{ width: '80%' }}>
+            <div className="dateAndTimeContainer">
+              <div className="date">
                 <Typography
                   variant="h5"
                   sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
@@ -174,7 +143,7 @@ export default function EventDetailPage(): JSX.Element {
                   {eventData.date}
                 </Typography>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div className="time">
                 <Typography
                   variant="h5"
                   sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
@@ -186,7 +155,7 @@ export default function EventDetailPage(): JSX.Element {
                 </Typography>
               </div>
             </div>
-            <div style={{ paddingTop: '2vh' }}>
+            <div className="headline">
               <Typography
                 variant="body2"
                 sx={{ fontFamily: 'Montserrat', fontSize: '1em' }}
@@ -198,7 +167,6 @@ export default function EventDetailPage(): JSX.Element {
                 sx={{
                   fontFamily: 'Montserrat',
                   fontStyle: 'italic',
-                  marginTop: '1vh',
                   fontSize: '1em',
                 }}
               >
@@ -210,20 +178,13 @@ export default function EventDetailPage(): JSX.Element {
               elevation={0}
               sx={{
                 backgroundColor: '#333',
-                height: '5em',
                 marginTop: '2vh',
+                padding: '30px 10px',
+                borderRadius: '10px',
               }}
             >
-              <div style={{ display: 'flex', height: '100%' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '70%',
-                    justifyContent: 'center',
-                    marginLeft: '2vw',
-                  }}
-                >
+              <div className="hostDetails">
+                <div className="hostDetails-firstHalf">
                   <div>
                     <Typography
                       variant="h4"
@@ -249,15 +210,7 @@ export default function EventDetailPage(): JSX.Element {
                     </Typography>
                   </div>
                 </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    width: '30%',
-                    marginRight: '2vw',
-                  }}
-                >
+                <div className="hostDetails-secondHalf">
                   <Button
                     variant="contained"
                     sx={{
@@ -275,20 +228,16 @@ export default function EventDetailPage(): JSX.Element {
 
             <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
 
-            <div style={{ marginTop: '2vh' }}>
+            <div className="locationHeaderContainer">
               <Typography
                 variant="h3"
                 sx={{ fontFamily: 'Montserrat', fontSize: '3em' }}
               >
                 Location
               </Typography>
-              <div style={{ display: 'flex', marginTop: '1vh' }}>
-                <img
-                  src={MapPinIcon}
-                  alt="Location"
-                  style={{ width: '1.5em', height: '1.5em' }}
-                />
-                <div style={{ marginLeft: '3vh' }}>
+              <div className="locationDetailsContainer">
+                <img src={MapPinIcon} alt="Location" />
+                <div>
                   <Typography
                     variant="body2"
                     sx={{ fontFamily: 'Montserrat', fontWeight: 'bold' }}
@@ -301,7 +250,7 @@ export default function EventDetailPage(): JSX.Element {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="mapsContainer">
               <iframe
                 src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${eventData.location}`}
                 style={{ width: '100%', height: '50vh', border: 0 }}
@@ -309,19 +258,22 @@ export default function EventDetailPage(): JSX.Element {
               />
             </div>
 
-            <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+            <Divider sx={{ marginTop: '50px', marginBottom: '50px' }} />
 
-            <div>
+            <div className="aboutEventContainer">
               <Typography variant="h3" sx={{ fontFamily: 'Montserrat' }}>
                 About this Event
               </Typography>
-              <div style={{ marginTop: '1vh' }}>
+              <div style={{ marginTop: '20px' }}>
                 <Typography variant="body2" sx={{ fontFamily: 'Montserrat' }}>
                   {eventData.description}
                 </Typography>
               </div>
-              <div style={{ marginTop: '1vh' }}>
-                <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
+              <div style={{ marginTop: '20px' }}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontFamily: 'Montserrat', marginBottom: '20px' }}
+                >
                   Event Highlights:
                 </Typography>
               </div>
@@ -421,7 +373,7 @@ export default function EventDetailPage(): JSX.Element {
               </ul>
             </div>
 
-            <div>
+            <div className="whyAttend">
               <Typography variant="h4" sx={{ fontFamily: 'Montserrat' }}>
                 Why Attend?
               </Typography>
@@ -432,33 +384,22 @@ export default function EventDetailPage(): JSX.Element {
               </div>
             </div>
 
-            <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+            <Divider sx={{ marginTop: '50px', marginBottom: '50px' }} />
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '30%',
-              marginLeft: '2vw',
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: '#333',
-              }}
-            >
+          <div className="mainSection-secondHalf">
+            <div className="formContainer">
               <RsvpForm />
             </div>
-            <div style={{ flexGrow: 1 }}>
-              <Divider sx={{ marginTop: '2vh', marginBottom: '2vh' }} />
+            <div className="upcomingEventsContainer">
+              <Divider sx={{ marginTop: '50px', marginBottom: '50px' }} />
               <Typography
                 variant="h4"
                 sx={{ fontFamily: 'Montserrat', textAlign: 'center' }}
               >
                 Upcoming events hosted by
                 {' '}
-                {eventData.host}
+                <span className="eventHost">{eventData.host}</span>
               </Typography>
             </div>
           </div>

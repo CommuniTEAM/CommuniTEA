@@ -15,8 +15,6 @@ import (
 )
 
 type newUserInput struct {
-	ID pgtype.UUID
-
 	Role string `enum:"user, business" json:"role" nullable:"false"`
 
 	Username string `json:"username" nullable:"false"`
@@ -40,30 +38,24 @@ type loginInput struct {
 	Password string `json:"password"`
 }
 
-type logoutInput struct {
-	Cookie string `cookie:"bearer-token" json:"-"`
-}
-
 type logoutOutput struct {
-	Message string `json:"message"`
+	genericOutput
 
-	Cookie string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
+	auth.TokenCookie
 }
 
 // UserLogin takes an inputted username and password and, if the credentials
 
 // are valid, returns the user's data along with an authenticating jwt cookie.
 
-func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) UserLogin() usecase.Interactor {
 	response := usecase.NewInteractor(
 
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return err
 			}
 
 			defer conn.Release()
@@ -82,25 +74,9 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
 			}
 
-			userUUID, err := uuid.FromBytes(userData.ID.Bytes[:])
+			output.ID = userData.ID
 
-			if err != nil {
-				log.Println(fmt.Errorf("could not convert user uuid to uuid type: %w", err))
-
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
-			}
-
-			output.ID = userUUID
-
-			locationUUID, err := uuid.FromBytes(userData.Location.Bytes[:])
-
-			if err != nil {
-				log.Println(fmt.Errorf("could not convert location uuid to uuid type: %w", err))
-
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
-			}
-
-			output.Location = locationUUID
+			output.Location = userData.Location
 
 			output.Role = userData.Role
 
@@ -115,7 +91,7 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -144,16 +120,16 @@ func UserLogin(dbPool PgxPoolIface) usecase.Interactor {
 
 // 200 response is returned as the user is already not logged in.
 
-func UserLogout() usecase.Interactor {
+func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
 
-		func(ctx context.Context, input logoutInput, output *logoutOutput) error {
-			userData := auth.ValidateJWT(input.Cookie)
+		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
+			userData := auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
-				output.Message = "success"
+				output.Message = "success: user logged out"
 
-				output.Cookie = ""
+				output.Token = ""
 
 				return nil
 			}
@@ -168,12 +144,12 @@ func UserLogout() usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
-			output.Cookie = token.Token
+			output.Token = token.Token
 
-			output.Message = "success"
+			output.Message = "success: user logged out"
 
 			return nil
 		})
@@ -193,16 +169,14 @@ func UserLogout() usecase.Interactor {
 
 // logs them in and returns the user's data and an authenticating jwt cookie.
 
-func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
+func (a *API) CreateUser() usecase.Interactor {
 	response := usecase.NewInteractor(
 
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
-			conn, err := dbPool.Acquire(ctx)
+			conn, err := a.dbConn(ctx)
 
 			if err != nil {
-				log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return err
 			}
 
 			defer conn.Release()
@@ -214,7 +188,7 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
@@ -222,20 +196,23 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
-			locationInput := db.GetCityParams{Name: input.LocationCity, State: input.LocationState}
+			locationID, err := queries.GetCityID(ctx, db.GetCityIDParams{
 
-			locationID, locationErr := queries.GetCity(ctx, locationInput)
+				Name: input.LocationCity,
 
-			if locationErr != nil {
-				return fmt.Errorf("failed to get locationUUID, invalid city or state: %w", locationErr)
+				State: input.LocationState,
+			})
+
+			if err != nil {
+				return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
 			}
 
 			inputArgs := db.CreateUserParams{
 
-				ID: pgtype.UUID{Bytes: newUUID, Valid: true},
+				ID: newUUID,
 
 				Role: input.Role,
 
@@ -249,7 +226,7 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 
 				Password: hashPass,
 
-				Location: pgtype.UUID{Bytes: locationID.Bytes, Valid: (locationErr == nil)},
+				Location: locationID,
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
@@ -257,10 +234,10 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create user: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
-			output.ID = userData.ID.Bytes
+			output.ID = userData.ID
 
 			output.Role = userData.Role
 
@@ -270,14 +247,14 @@ func CreateUser(dbPool PgxPoolIface) usecase.Interactor {
 
 			output.LastName = userData.LastName.String
 
-			output.Location = userData.Location.Bytes
+			output.Location = userData.Location
 
 			output, err = auth.GenerateNewJWT(output, false)
 
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 
-				return status.Wrap(fmt.Errorf("could not process request, please try again"), status.Internal)
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600

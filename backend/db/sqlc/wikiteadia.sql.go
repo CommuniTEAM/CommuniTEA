@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -26,7 +27,7 @@ returning id, name, img_url, description, brew_time, brew_temp, published
 `
 
 type CreateTeaParams struct {
-	ID          pgtype.UUID   `json:"id"`
+	ID          uuid.UUID     `json:"id"`
 	Name        string        `json:"name"`
 	ImgUrl      pgtype.Text   `json:"img_url"`
 	Description string        `json:"description"`
@@ -65,9 +66,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaAromaticTagsParams struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	TeaID uuid.UUID `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaAromaticTags(ctx context.Context, arg CreateTeaAromaticTagsParams) (TeaAromaticTag, error) {
@@ -96,9 +97,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaFlavorProfileTagsParams struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	TeaID uuid.UUID `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaFlavorProfileTags(ctx context.Context, arg CreateTeaFlavorProfileTagsParams) (TeaFlavorProfileTag, error) {
@@ -127,9 +128,9 @@ returning id, name, tea_id
 `
 
 type CreateTeaOriginTagsParams struct {
-	ID    pgtype.UUID `json:"id"`
+	ID    uuid.UUID   `json:"id"`
 	Name  pgtype.Text `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	TeaID uuid.UUID   `json:"tea_id"`
 }
 
 func (q *Queries) CreateTeaOriginTags(ctx context.Context, arg CreateTeaOriginTagsParams) (TeaOriginTag, error) {
@@ -156,7 +157,7 @@ delete from teas
 where id = $1
 `
 
-func (q *Queries) DeleteTea(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteTea(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteTea, id)
 	return err
 }
@@ -166,7 +167,7 @@ delete from tea_aromatic_tags
 where id = $1
 `
 
-func (q *Queries) DeleteTeaAromaticTag(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteTeaAromaticTag(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteTeaAromaticTag, id)
 	return err
 }
@@ -186,7 +187,7 @@ delete from tea_flavor_profile_tags
 where id = $1
 `
 
-func (q *Queries) DeleteTeaFlavorProfileTag(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteTeaFlavorProfileTag(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteTeaFlavorProfileTag, id)
 	return err
 }
@@ -206,7 +207,7 @@ delete from tea_origin_tags
 where id = $1
 `
 
-func (q *Queries) DeleteTeaOriginTag(ctx context.Context, id pgtype.UUID) error {
+func (q *Queries) DeleteTeaOriginTag(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteTeaOriginTag, id)
 	return err
 }
@@ -299,7 +300,7 @@ from teas
 where id = $1 limit 1
 `
 
-func (q *Queries) GetTea(ctx context.Context, id pgtype.UUID) (Tea, error) {
+func (q *Queries) GetTea(ctx context.Context, id uuid.UUID) (Tea, error) {
 	row := q.db.QueryRow(ctx, getTea, id)
 	var i Tea
 	err := row.Scan(
@@ -332,7 +333,7 @@ from tea_aromatic_tags
 where id = $1
 `
 
-func (q *Queries) GetTeaAromaticTag(ctx context.Context, id pgtype.UUID) (TeaAromaticTag, error) {
+func (q *Queries) GetTeaAromaticTag(ctx context.Context, id uuid.UUID) (TeaAromaticTag, error) {
 	row := q.db.QueryRow(ctx, getTeaAromaticTag, id)
 	var i TeaAromaticTag
 	err := row.Scan(&i.ID, &i.Name, &i.TeaID)
@@ -346,7 +347,7 @@ inner join teas on tags.tea_id = teas.id
 where tags.tea_id = $1
 `
 
-func (q *Queries) GetTeaAromaticTags(ctx context.Context, teaID pgtype.UUID) ([]string, error) {
+func (q *Queries) GetTeaAromaticTags(ctx context.Context, teaID uuid.UUID) ([]string, error) {
 	rows, err := q.db.Query(ctx, getTeaAromaticTags, teaID)
 	if err != nil {
 		return nil, err
@@ -384,7 +385,7 @@ from tea_flavor_profile_tags
 where id = $1
 `
 
-func (q *Queries) GetTeaFlavorProfileTag(ctx context.Context, id pgtype.UUID) (TeaFlavorProfileTag, error) {
+func (q *Queries) GetTeaFlavorProfileTag(ctx context.Context, id uuid.UUID) (TeaFlavorProfileTag, error) {
 	row := q.db.QueryRow(ctx, getTeaFlavorProfileTag, id)
 	var i TeaFlavorProfileTag
 	err := row.Scan(&i.ID, &i.Name, &i.TeaID)
@@ -398,7 +399,7 @@ inner join teas on tags.tea_id = teas.id
 where tags.tea_id = $1
 `
 
-func (q *Queries) GetTeaFlavorProfileTags(ctx context.Context, teaID pgtype.UUID) ([]string, error) {
+func (q *Queries) GetTeaFlavorProfileTags(ctx context.Context, teaID uuid.UUID) ([]string, error) {
 	rows, err := q.db.Query(ctx, getTeaFlavorProfileTags, teaID)
 	if err != nil {
 		return nil, err
@@ -436,7 +437,7 @@ from tea_origin_tags
 where id = $1
 `
 
-func (q *Queries) GetTeaOriginTag(ctx context.Context, id pgtype.UUID) (TeaOriginTag, error) {
+func (q *Queries) GetTeaOriginTag(ctx context.Context, id uuid.UUID) (TeaOriginTag, error) {
 	row := q.db.QueryRow(ctx, getTeaOriginTag, id)
 	var i TeaOriginTag
 	err := row.Scan(&i.ID, &i.Name, &i.TeaID)
@@ -450,7 +451,7 @@ inner join teas on tags.tea_id = teas.id
 where tags.tea_id = $1
 `
 
-func (q *Queries) GetTeaOriginTags(ctx context.Context, teaID pgtype.UUID) ([]pgtype.Text, error) {
+func (q *Queries) GetTeaOriginTags(ctx context.Context, teaID uuid.UUID) ([]pgtype.Text, error) {
 	rows, err := q.db.Query(ctx, getTeaOriginTags, teaID)
 	if err != nil {
 		return nil, err
@@ -518,7 +519,7 @@ returning id, name, img_url, description, brew_time, brew_temp, published
 `
 
 type UpdateTeaParams struct {
-	ID          pgtype.UUID   `json:"id"`
+	ID          uuid.UUID     `json:"id"`
 	Name        string        `json:"name"`
 	ImgUrl      pgtype.Text   `json:"img_url"`
 	Description string        `json:"description"`
@@ -547,8 +548,8 @@ where id = $1
 `
 
 type UpdateTeaAromaticTagParams struct {
-	ID   pgtype.UUID `json:"id"`
-	Name string      `json:"name"`
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
 
 func (q *Queries) UpdateTeaAromaticTag(ctx context.Context, arg UpdateTeaAromaticTagParams) error {
@@ -563,8 +564,8 @@ where id = $1
 `
 
 type UpdateTeaFlavorProfileTagParams struct {
-	ID   pgtype.UUID `json:"id"`
-	Name string      `json:"name"`
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
 
 func (q *Queries) UpdateTeaFlavorProfileTag(ctx context.Context, arg UpdateTeaFlavorProfileTagParams) error {
@@ -579,7 +580,7 @@ where id = $1
 `
 
 type UpdateTeaOriginTagParams struct {
-	ID   pgtype.UUID `json:"id"`
+	ID   uuid.UUID   `json:"id"`
 	Name pgtype.Text `json:"name"`
 }
 

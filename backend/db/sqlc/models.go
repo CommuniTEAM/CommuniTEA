@@ -5,47 +5,48 @@
 package db
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Business struct {
-	ID              pgtype.UUID `json:"id"`
-	Name            string      `json:"name"`
-	StreetAddress   string      `json:"street_address"`
-	City            pgtype.UUID `json:"city"`
-	State           string      `json:"state"`
-	Zipcode         string      `json:"zipcode"`
-	BusinessOwnerID pgtype.UUID `json:"business_owner_id"`
+	ID              uuid.UUID `json:"id"`
+	Name            string    `json:"name"`
+	StreetAddress   string    `json:"street_address"`
+	City            uuid.UUID `json:"city"`
+	State           string    `json:"state"`
+	Zipcode         string    `json:"zipcode"`
+	BusinessOwnerID uuid.UUID `json:"business_owner_id"`
 }
 
 type BusinessFollower struct {
-	ID         pgtype.UUID `json:"id"`
-	UserID     pgtype.UUID `json:"user_id"`
-	BusinessID pgtype.UUID `json:"business_id"`
+	ID         uuid.UUID `json:"id"`
+	UserID     uuid.UUID `json:"user_id"`
+	BusinessID uuid.UUID `json:"business_id"`
 }
 
 type BusinessOfferedTea struct {
-	ID         pgtype.UUID `json:"id"`
-	BusinessID pgtype.UUID `json:"business_id"`
-	TeaID      pgtype.UUID `json:"tea_id"`
+	ID         uuid.UUID `json:"id"`
+	BusinessID uuid.UUID `json:"business_id"`
+	TeaID      uuid.UUID `json:"tea_id"`
 }
 
 type BusinessReview struct {
-	ID       pgtype.UUID `json:"id"`
-	Business pgtype.UUID `json:"business"`
-	Author   pgtype.UUID `json:"author"`
+	ID       uuid.UUID   `json:"id"`
+	Business uuid.UUID   `json:"business"`
+	Author   uuid.UUID   `json:"author"`
 	Rating   int16       `json:"rating"`
 	Comment  pgtype.Text `json:"comment"`
 	Date     pgtype.Date `json:"date"`
 }
 
 type Event struct {
-	ID              pgtype.UUID `json:"id"`
+	ID              uuid.UUID   `json:"id"`
 	Name            string      `json:"name"`
-	Host            pgtype.UUID `json:"host"`
+	Host            uuid.UUID   `json:"host"`
 	LocationName    pgtype.Text `json:"location_name"`
 	StreetAddress   string      `json:"street_address"`
-	City            pgtype.UUID `json:"city"`
+	City            uuid.UUID   `json:"city"`
 	State           string      `json:"state"`
 	Zipcode         string      `json:"zipcode"`
 	Date            pgtype.Date `json:"date"`
@@ -62,16 +63,16 @@ type EventCategory struct {
 }
 
 type EventCategoryTag struct {
-	ID       pgtype.UUID `json:"id"`
-	EventID  pgtype.UUID `json:"event_id"`
-	Category string      `json:"category"`
+	ID       uuid.UUID `json:"id"`
+	EventID  uuid.UUID `json:"event_id"`
+	Category string    `json:"category"`
 }
 
 type EventCohost struct {
-	ID          pgtype.UUID `json:"id"`
-	EventID     pgtype.UUID `json:"event_id"`
-	UserID      pgtype.UUID `json:"user_id"`
-	Permissions string      `json:"permissions"`
+	ID          uuid.UUID `json:"id"`
+	EventID     uuid.UUID `json:"event_id"`
+	UserID      uuid.UUID `json:"user_id"`
+	Permissions string    `json:"permissions"`
 }
 
 type EventCohostPermission struct {
@@ -79,21 +80,21 @@ type EventCohostPermission struct {
 }
 
 type EventRsvp struct {
-	ID    pgtype.UUID `json:"id"`
-	Event pgtype.UUID `json:"event"`
-	User  pgtype.UUID `json:"user"`
+	ID    uuid.UUID `json:"id"`
+	Event uuid.UUID `json:"event"`
+	User  uuid.UUID `json:"user"`
 }
 
 type EventWatcher struct {
-	ID      pgtype.UUID `json:"id"`
-	EventID pgtype.UUID `json:"event_id"`
-	UserID  pgtype.UUID `json:"user_id"`
+	ID      uuid.UUID `json:"id"`
+	EventID uuid.UUID `json:"event_id"`
+	UserID  uuid.UUID `json:"user_id"`
 }
 
 type LocationsCity struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	State string      `json:"state"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	State string    `json:"state"`
 }
 
 type LocationsState struct {
@@ -102,7 +103,7 @@ type LocationsState struct {
 }
 
 type Tea struct {
-	ID          pgtype.UUID   `json:"id"`
+	ID          uuid.UUID     `json:"id"`
 	Name        string        `json:"name"`
 	ImgUrl      pgtype.Text   `json:"img_url"`
 	Description string        `json:"description"`
@@ -116,9 +117,9 @@ type TeaAromatic struct {
 }
 
 type TeaAromaticTag struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	TeaID uuid.UUID `json:"tea_id"`
 }
 
 type TeaFlavorProfile struct {
@@ -126,9 +127,9 @@ type TeaFlavorProfile struct {
 }
 
 type TeaFlavorProfileTag struct {
-	ID    pgtype.UUID `json:"id"`
-	Name  string      `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	TeaID uuid.UUID `json:"tea_id"`
 }
 
 type TeaOrigin struct {
@@ -136,26 +137,26 @@ type TeaOrigin struct {
 }
 
 type TeaOriginTag struct {
-	ID    pgtype.UUID `json:"id"`
+	ID    uuid.UUID   `json:"id"`
 	Name  pgtype.Text `json:"name"`
-	TeaID pgtype.UUID `json:"tea_id"`
+	TeaID uuid.UUID   `json:"tea_id"`
 }
 
 type User struct {
-	ID        pgtype.UUID `json:"id"`
+	ID        uuid.UUID   `json:"id"`
 	Role      string      `json:"role"`
 	Username  string      `json:"username"`
 	FirstName pgtype.Text `json:"first_name"`
 	LastName  pgtype.Text `json:"last_name"`
 	Email     pgtype.Text `json:"email"`
 	Password  []byte      `json:"password"`
-	Location  pgtype.UUID `json:"location"`
+	Location  uuid.UUID   `json:"location"`
 }
 
 type UserFavoriteTea struct {
-	ID     pgtype.UUID `json:"id"`
-	UserID pgtype.UUID `json:"user_id"`
-	TeaID  pgtype.UUID `json:"tea_id"`
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+	TeaID  uuid.UUID `json:"tea_id"`
 }
 
 type UserRole struct {

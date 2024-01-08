@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/CommuniTEAM/CommuniTEA/router"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -25,9 +26,13 @@ func main() {
 		log.Fatal(fmt.Errorf("could not create new db pool: %w", err))
 	}
 
+	// Initialize endpoints
+
+	endpoints := &api.API{DBPool: dbPool}
+
 	// Initialize router
 
-	s := router.NewRouter(dbPool)
+	s := router.NewRouter(endpoints)
 
 	// Configure and start the server
 
