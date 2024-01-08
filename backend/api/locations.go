@@ -316,3 +316,36 @@ func (a *API) DeleteCity() usecase.Interactor {
 
 	return response
 }
+
+// GetAllStates takes no input parameters and returns a list of every state
+// in the database.
+func (a *API) GetAllStates() usecase.Interactor {
+	type statesOutput struct {
+		States []db.LocationsState `json:"states"`
+	}
+
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input defaultInput, output *statesOutput) error {
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			output.States, err = queries.GetAllStates(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get all states: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Get All States")
+	response.SetDescription("Get a list of every US state in the database.")
+	response.SetTags("Locations")
+
+	return response
+}
