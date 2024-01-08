@@ -17,12 +17,12 @@ type getTeasInput struct {
 }
 
 type teaInput struct {
-	AccessToken string `cookie:"bearer-token" json:"-"`
+	defaultInput
 	ID          uuid.UUID
-	Name        string  `json:"name" minLength:"1"`
-	ImgURL      string  `default:"" json:"img_url ,omitempty"`
-	Description string  `json:"description" minLength:"1"`
-	BrewTime    string  `default:"" json:"brew_time ,omitempty"`
+	Name        string  `json:"name"                 minLength:"1"`
+	ImgURL      string  `default:""                  json:"img_url ,omitempty"`
+	Description string  `json:"description"          minLength:"1"`
+	BrewTime    string  `default:""                  json:"brew_time ,omitempty"`
 	BrewTemp    float64 `json:"brew_temp ,omitempty"`
 	Published   bool
 }

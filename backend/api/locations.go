@@ -15,7 +15,7 @@ import (
 )
 
 type cityInput struct {
-	genericInput
+	defaultInput
 	Name  string `json:"name"  nullable:"false"`
 	State string `json:"state" nullable:"false"`
 }
@@ -178,7 +178,7 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 // in the database.
 func (a *API) GetAllCities() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input genericInput, output *citiesOutput) error {
+		func(ctx context.Context, input defaultInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err

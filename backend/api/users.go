@@ -32,7 +32,7 @@ type loginInput struct {
 
 type logoutOutput struct {
 	genericOutput
-	Cookie string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"-"`
+	auth.TokenCookie
 }
 
 // UserLogin takes an inputted username and password and, if the credentials
@@ -91,11 +91,11 @@ func (a *API) UserLogin() usecase.Interactor {
 // 200 response is returned as the user is already not logged in.
 func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input genericInput, output *logoutOutput) error {
+		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
 			userData := auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
 				output.Message = "success: user logged out"
-				output.Cookie = ""
+				output.Token = ""
 				return nil
 			}
 
@@ -108,7 +108,7 @@ func (a *API) UserLogout() usecase.Interactor {
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
-			output.Cookie = token.Token
+			output.Token = token.Token
 			output.Message = "success: user logged out"
 
 			return nil

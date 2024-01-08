@@ -16,17 +16,17 @@ type API struct {
 	DBPool PgxPoolIface
 }
 
-// genericInput defines input schema for endpoints that do not require
+// defaultInput defines input schema for endpoints that do not require
 // a json body or query parameters. Any input schema that requires
 // authentication should embed this struct.
-type genericInput struct {
+type defaultInput struct {
 	AccessToken string `cookie:"bearer-token" json:"-"`
 }
 
 // uuidInput defines input schema for endpoints that take a uuid query
 // parameter. Also supports protected endpoints.
 type uuidInput struct {
-	genericInput
+	defaultInput
 	ID uuid.UUID `nullable:"false" path:"id"`
 }
 
