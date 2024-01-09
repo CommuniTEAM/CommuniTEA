@@ -75,4 +75,52 @@ func (suite *LocationsTestSuite) TestGetCity() {
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
+
+	// Check 400 response
+	cityID = "4c33e0bc-3d43-4e77-aed0-b7af" // not a valid uuid
+
+	req, err = http.NewRequest(http.MethodGet, suite.server.URL+"/locations/cities/"+cityID, nil)
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+}
+
+func (suite *LocationsTestSuite) TestGetCitiesInState() {
+	t := suite.T()
+
+	testState := "WA"
+
+	// Check 200 response & body
+	req, err := http.NewRequest(http.MethodGet, suite.server.URL+"/locations/states/"+testState+"/cities", nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody, err := os.ReadFile("_testdata/locations/get_all_cities.json")
+	require.NoError(t, err)
+
+	assertjson.Equal(t, expectedBody, body)
+
+	// Check 400 response
+	badInputs := []string{"WAA", "W"}
+
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodGet, suite.server.URL+"/locations/states/"+input+"/cities", nil)
+		require.NoError(t, err)
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
 }
