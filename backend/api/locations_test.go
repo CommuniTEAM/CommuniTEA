@@ -3,11 +3,13 @@ package api_test
 import (
 	"io"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/swaggest/assertjson"
 )
 
 type LocationsTestSuite struct {
@@ -32,5 +34,9 @@ func (suite *LocationsTestSuite) TestGetAllStates() {
 	body, err := io.ReadAll(resp.Body)
 	require.NoError(t, err)
 	require.NoError(t, resp.Body.Close())
-	t.Logf("%v", string(body))
+
+	expectedBody, err := os.ReadFile("_testdata/locations/get_all_states.json")
+	require.NoError(t, err)
+
+	assertjson.Equal(t, expectedBody, body)
 }
