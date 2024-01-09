@@ -198,3 +198,44 @@ func (a *API) CreateUser() usecase.Interactor {
 
 	return response
 }
+
+func (a *API) CreateTempAdmin(ctx context.Context) auth.TokenCookie {
+	hashPass, err := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
+	if err != nil {
+		log.Fatalf("could not hash inputted password: %v", err)
+	}
+
+	conn, err := a.dbConn(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	id := uuid.MustParse("006de673-e8b1-47d3-b3b7-3d266b6452c3")
+
+	location := uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689")
+
+	admin, err := queries.CreateUser(ctx, db.CreateUserParams{ //nolint: exhaustruct // temp admin has no need for names or emails
+		ID:       id,
+		Role:     adminRole,
+		Username: "admin",
+		Password: hashPass,
+		Location: location,
+	})
+	if err != nil {
+		log.Panicf("could not create temp admin: %v", err)
+	}
+
+	token, err := auth.GenerateNewJWT(&auth.TokenData{
+		ID:       admin.ID,
+		Role:     admin.Role,
+		Username: admin.Username,
+		Location: admin.Location}, false)
+	if err != nil {
+		log.Panicf("could not generate new jwt: %v", err)
+	}
+
+	return token.TokenCookie
+}

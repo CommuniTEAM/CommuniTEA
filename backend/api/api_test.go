@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/CommuniTEAM/CommuniTEA/router"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/suite"
@@ -31,6 +32,7 @@ type TestSuite struct {
 	pgContainer *PostgresContainer
 	server      *httptest.Server
 	ctx         context.Context
+	authToken   auth.TokenCookie // admin user jwt cookie
 }
 
 // SetupSuite instantiates a test suite by setting up a new test
@@ -51,6 +53,7 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	api := &api.API{DBPool: dbPool}
+	suite.authToken = api.CreateTempAdmin(suite.ctx)
 	suite.server = httptest.NewServer(router.NewRouter(api))
 }
 
