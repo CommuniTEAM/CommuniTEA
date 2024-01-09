@@ -21,7 +21,7 @@ type cityInput struct {
 }
 
 type stateInput struct {
-	State string `maxLength:"2" minLength:"2" path:"state"`
+	State string `maxLength:"2" minLength:"2" path:"state" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
 }
 
 type citiesOutput struct {

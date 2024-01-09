@@ -112,7 +112,7 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 	assertjson.Equal(t, expectedBody, body)
 
 	// Check 400 response
-	badInputs := []string{"WAA", "W"}
+	badInputs := []string{"WAA", "W", "12", "VR"}
 
 	for _, input := range badInputs {
 		req, err = http.NewRequest(http.MethodGet, suite.server.URL+"/locations/states/"+input+"/cities", nil)
