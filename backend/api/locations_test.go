@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 	"os"
@@ -127,7 +128,7 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 	require.NoError(t, err)
 	require.NoError(t, resp.Body.Close())
 
-	expectedBody, err := os.ReadFile("_testdata/locations/get_all_cities.json")
+	expectedBody, err := os.ReadFile("_testdata/locations/get_cities_in_state.json")
 	require.NoError(t, err)
 
 	assertjson.Equal(t, expectedBody, body)
@@ -144,4 +145,36 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 
 		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 	}
+}
+
+func (suite *LocationsTestSuite) TestCreateCity() {
+	t := suite.T()
+
+	// Check 200 response & body
+	reqBody := []byte(`{
+		"name": "Chicago",
+		"state": "IL"
+	}`)
+	req, err := http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authToken.Token})
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody := []byte(`{
+		"id": "<ignore-diff>",
+		"name": "Chicago",
+		"state": "IL"
+	}`)
+	require.NoError(t, err)
+
+	assertjson.Equal(t, expectedBody, respBody)
 }
