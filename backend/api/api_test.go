@@ -32,7 +32,7 @@ type TestSuite struct {
 	pgContainer *PostgresContainer
 	server      *httptest.Server
 	ctx         context.Context
-	authToken   auth.TokenCookie // admin user jwt cookie
+	authTokens  []auth.TokenCookie // user[0], business[1], admin[2] jwt cookies
 }
 
 // SetupSuite instantiates a test suite by setting up a new test
@@ -53,7 +53,10 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	api := &api.API{DBPool: dbPool}
-	suite.authToken = api.CreateTempAdmin(suite.ctx)
+	// suite.authTokens = []auth.TokenCookie{
+	// 	auth.GenerateNewJWT(&auth.TokenData{}).TokenCookie,
+
+	// }
 	suite.server = httptest.NewServer(router.NewRouter(api))
 }
 

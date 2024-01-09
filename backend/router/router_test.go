@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/CommuniTEAM/CommuniTEA/router"
 	"github.com/pashagolub/pgxmock/v3"
 )
@@ -13,10 +14,15 @@ import (
 func TestNewRouter(t *testing.T) {
 	mockDBPool, err := pgxmock.NewPool()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	endpoints := &api.API{DBPool: mockDBPool}
+	authenicator, err := auth.NewAuthenticator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	endpoints := &api.API{DBPool: mockDBPool, Auth: authenicator}
 	r := router.NewRouter(endpoints)
 
 	req, err := http.NewRequest(http.MethodGet, "/docs", nil)

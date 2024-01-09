@@ -15,14 +15,14 @@ import (
 )
 
 type newUserInput struct {
-	Role          string `enum:"user, business" json:"role"      nullable:"false"`
-	Username      string `json:"username"       nullable:"false"`
+	Role          string `enum:"user,business" json:"role"      nullable:"false"`
+	Username      string `json:"username"      nullable:"false"`
 	FirstName     string `json:"first_name"`
 	LastName      string `json:"last_name"`
 	Email         string `json:"email"`
-	Password      string `json:"password"       nullable:"false"`
-	LocationCity  string `json:"city"           nullable:"false"`
-	LocationState string `json:"state"          nullable:"false"`
+	Password      string `json:"password"      nullable:"false"`
+	LocationCity  string `json:"city"          nullable:"false"`
+	LocationState string `json:"state"         nullable:"false"`
 }
 
 type loginInput struct {
@@ -65,7 +65,7 @@ func (a *API) UserLogin() usecase.Interactor {
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
 
-			output, err = auth.GenerateNewJWT(output, false)
+			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -92,14 +92,14 @@ func (a *API) UserLogin() usecase.Interactor {
 func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
 				output.Message = successMsg
 				output.Token = ""
 				return nil
 			}
 
-			token, err := auth.GenerateNewJWT(
+			token, err := a.Auth.GenerateNewJWT(
 				&auth.TokenData{},
 				true,
 			)
@@ -179,7 +179,7 @@ func (a *API) CreateUser() usecase.Interactor {
 			output.LastName = userData.LastName.String
 			output.Location = userData.Location
 
-			output, err = auth.GenerateNewJWT(output, false)
+			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -228,7 +228,7 @@ func (a *API) CreateTempAdmin(ctx context.Context) auth.TokenCookie {
 		log.Panicf("could not create temp admin: %v", err)
 	}
 
-	token, err := auth.GenerateNewJWT(&auth.TokenData{
+	token, err := a.Auth.GenerateNewJWT(&auth.TokenData{
 		ID:       admin.ID,
 		Role:     admin.Role,
 		Username: admin.Username,

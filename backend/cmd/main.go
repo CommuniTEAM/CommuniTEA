@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/CommuniTEAM/CommuniTEA/router"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -23,8 +24,14 @@ func main() {
 		log.Fatal(fmt.Errorf("could not create new db pool: %w", err))
 	}
 
+	// Initialize user authentication system
+	authenticator, err := auth.NewAuthenticator()
+	if err != nil {
+		log.Fatal(fmt.Errorf("could not initialize authenticator: %w", err))
+	}
+
 	// Initialize endpoints
-	endpoints := &api.API{DBPool: dbPool}
+	endpoints := &api.API{DBPool: dbPool, Auth: authenticator}
 
 	// Initialize router
 	s := router.NewRouter(endpoints)

@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/swaggest/usecase"
@@ -35,7 +34,7 @@ func (a *API) CreateCity() usecase.Interactor {
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
 			// Validate the access token sent with the request, if valid then
 			// the user's data will be stored in userData for easy access.
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			// If the token was invalid or nonexistent then userData will be nil
 			if userData == nil {
@@ -214,7 +213,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input cityName, output *db.LocationsCity) error {
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
@@ -278,7 +277,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 func (a *API) DeleteCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *genericOutput) error {
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)

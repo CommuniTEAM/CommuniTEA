@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/swaggest/usecase/status"
 )
 
 // API is the foundation for the api endpoint functions that
-// supplies access to the database.
+// supplies access to the database and authentication.
 type API struct {
 	DBPool PgxPoolIface
+	Auth   *auth.Authenticator
 }
 
 // defaultInput defines input schema for endpoints that do not require
