@@ -41,6 +41,27 @@ func (suite *LocationsTestSuite) TestGetAllStates() {
 	assertjson.Equal(t, expectedBody, body)
 }
 
+func (suite *LocationsTestSuite) TestGetAllCities() {
+	t := suite.T()
+
+	req, err := http.NewRequest(http.MethodGet, suite.server.URL+"/locations/cities", nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody, err := os.ReadFile("_testdata/locations/get_all_cities.json")
+	require.NoError(t, err)
+
+	assertjson.Equal(t, expectedBody, body)
+}
+
 func (suite *LocationsTestSuite) TestGetCity() {
 	t := suite.T()
 
