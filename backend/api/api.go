@@ -47,6 +47,7 @@ const (
 	// code. Used by endpoints in status.Wrap()
 	internalErrMsg string = "could not process request, please try again"
 	adminRole      string = "admin"
+	successMsg     string = "success"
 )
 
 // dbConn is a helper function that establishes a database connection from

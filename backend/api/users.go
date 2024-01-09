@@ -94,7 +94,7 @@ func (a *API) UserLogout() usecase.Interactor {
 		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
 			userData := auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
-				output.Message = "success: user logged out"
+				output.Message = successMsg
 				output.Token = ""
 				return nil
 			}
@@ -109,7 +109,7 @@ func (a *API) UserLogout() usecase.Interactor {
 			}
 
 			output.Token = token.Token
-			output.Message = "success: user logged out"
+			output.Message = successMsg
 
 			return nil
 		})

@@ -304,7 +304,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 				log.Println(fmt.Errorf("could not delete city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
-			output.Message = "success: location deleted"
+			output.Message = successMsg
 			return nil
 		})
 
