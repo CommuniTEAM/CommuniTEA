@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/CommuniTEAM/CommuniTEA/router"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go"
@@ -32,7 +34,8 @@ type TestSuite struct {
 	pgContainer *PostgresContainer
 	server      *httptest.Server
 	ctx         context.Context
-	authTokens  []auth.TokenCookie // user[0], business[1], admin[2] jwt cookies
+	authTokens  userTokens // jwts for every kind of user role
+	errBody     []byte     // response body for error codes
 }
 
 // SetupSuite instantiates a test suite by setting up a new test
@@ -52,12 +55,59 @@ func (suite *TestSuite) SetupSuite() {
 		log.Fatalf("could not create new db pool: %v", err)
 	}
 
-	api := &api.API{DBPool: dbPool}
-	// suite.authTokens = []auth.TokenCookie{
-	// 	auth.GenerateNewJWT(&auth.TokenData{}).TokenCookie,
+	authenticator, err := auth.NewAuthenticator()
+	if err != nil {
+		log.Fatalf("could not initialize authenticator: %v", err)
+	}
 
-	// }
+	api := &api.API{DBPool: dbPool, Auth: authenticator}
 	suite.server = httptest.NewServer(router.NewRouter(api))
+
+	suite.errBody, err = os.ReadFile("_testdata/error_response.json")
+	if err != nil {
+		log.Fatalf("could not read _testdata/error_response.json")
+	}
+
+	// Generate jwts for different user roles
+	// data aligns with _testdata/db_userdata_migration.sql
+	userData := auth.TokenData{
+		ExpiresIn: 3600,
+		ID:        uuid.MustParse("372bcfb3-6b1d-4925-9f3d-c5ec683a4294"),
+		Role:      "user",
+		Username:  "user",
+		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+	}
+	userToken, err := api.Auth.GenerateNewJWT(&userData, false)
+	if err != nil {
+		log.Fatalf("could not generate user token: %v", err)
+	}
+	suite.authTokens.user = userToken.TokenCookie
+
+	businessData := auth.TokenData{
+		ExpiresIn: 3600,
+		ID:        uuid.MustParse("140e4411-a7f7-4c50-a2d4-f3d3fc9fc550"),
+		Role:      "business",
+		Username:  "business",
+		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+	}
+	businessToken, err := api.Auth.GenerateNewJWT(&businessData, false)
+	if err != nil {
+		log.Fatalf("could not generate business token: %v", err)
+	}
+	suite.authTokens.business = businessToken.TokenCookie
+
+	adminData := auth.TokenData{
+		ExpiresIn: 3600,
+		ID:        uuid.MustParse("e6473137-f4ef-46cc-a5e5-96ccb9d41043"),
+		Role:      "admin",
+		Username:  "admin",
+		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+	}
+	adminToken, err := api.Auth.GenerateNewJWT(&adminData, false)
+	if err != nil {
+		log.Fatalf("could not generate admin token: %v", err)
+	}
+	suite.authTokens.admin = adminToken.TokenCookie
 }
 
 // TearDownSuite terminates the test database container used by the suite and closes the httptest server.
@@ -78,6 +128,7 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 			filepath.Join("..", "db", "migrations", "20231201090112_populate_location_states.sql"),
 			filepath.Join("..", "db", "migrations", "20231212061145_populate_user_roles.sql"),
 			filepath.Join("..", "db", "migrations", "20240106002631_add_inital_locations.sql"),
+			filepath.Join("_testdata", "db_userdata_migration.sql"),
 		),
 		postgres.WithDatabase("test-db"),
 		postgres.WithUsername("postgres"),
@@ -99,4 +150,10 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 		PostgresContainer: pgContainer,
 		ConnectionString:  connStr,
 	}, nil
+}
+
+type userTokens struct {
+	user     auth.TokenCookie
+	business auth.TokenCookie
+	admin    auth.TokenCookie
 }
