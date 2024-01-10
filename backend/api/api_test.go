@@ -20,11 +20,6 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-type PostgresContainer struct {
-	*postgres.PostgresContainer
-	ConnectionString string
-}
-
 // TestSuite is a helper struct that enables multiple
 // tests to be run against one test database. To create a
 // test suite for a series of endpoints, build a new struct
@@ -74,7 +69,7 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	// Generate jwts for different user roles
-	// data aligns with _testdata/db_userdata_migration.sql
+	// data aligns with _testdata/db_testdata_migration.sql
 	userData := auth.TokenData{
 		ExpiresIn: 3600,
 		ID:        uuid.MustParse("372bcfb3-6b1d-4925-9f3d-c5ec683a4294"),
@@ -155,6 +150,11 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 		PostgresContainer: pgContainer,
 		ConnectionString:  connStr,
 	}, nil
+}
+
+type PostgresContainer struct {
+	*postgres.PostgresContainer
+	ConnectionString string
 }
 
 type userTokens struct {

@@ -86,9 +86,6 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
 			if err != nil {
-				if strings.Contains(err.Error(), "fkey") {
-					return status.Wrap(fmt.Errorf("invalid state code"), status.InvalidArgument)
-				}
 				log.Println(fmt.Errorf("failed to create city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
