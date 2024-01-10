@@ -4,6 +4,7 @@ coverage:
     patch:
       default:
         target: 90%
+        flag_coverage_not_uploaded_behavior: exclude
 
 comment:
   layout: "condensed_header, flags, condensed_files"
