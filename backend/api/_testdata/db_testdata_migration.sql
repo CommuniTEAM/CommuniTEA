@@ -63,3 +63,13 @@ insert into "locations_cities" (
     'New York',
     'NY'
 );
+
+insert into "locations_cities" (
+    "id",
+    "name",
+    "state"
+) values (
+    '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
+    'Kansas City',
+    'KS'
+);

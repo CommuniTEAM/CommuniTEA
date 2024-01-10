@@ -363,3 +363,92 @@ func (suite *LocationsTestSuite) TestUpdateCity() {
 		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 	}
 }
+
+func (suite *LocationsTestSuite) TestDeleteCity() {
+	t := suite.T()
+
+	// ID of the manually added Kansas City entry
+	cityID := "07eca16a-8ee1-4c1a-831e-cb984a851bf3"
+
+	// * Test 401 response & body
+	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/locations/cities/"+cityID, nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Test 403 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/locations/cities/"+cityID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Test 400 response
+	badInput := "lkashdflkj"
+
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/locations/cities/"+badInput, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	// * Test 200 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/locations/cities/"+cityID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.successBody, respBody)
+
+	// * Test 409 response & body
+	// ID of city with foreign key conflict: Seattle
+	cityID = "4c33e0bc-3d43-4e77-aed0-b7aff09bb689"
+
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/locations/cities/"+cityID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusConflict, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+}

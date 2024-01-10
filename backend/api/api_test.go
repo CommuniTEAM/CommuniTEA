@@ -36,6 +36,7 @@ type TestSuite struct {
 	ctx         context.Context
 	authTokens  userTokens // jwts for every kind of user role
 	errBody     []byte     // response body for error codes
+	successBody []byte     // response body for success messages
 }
 
 // SetupSuite instantiates a test suite by setting up a new test
@@ -66,6 +67,10 @@ func (suite *TestSuite) SetupSuite() {
 	suite.errBody, err = os.ReadFile("_testdata/error_response.json")
 	if err != nil {
 		log.Fatalf("could not read _testdata/error_response.json")
+	}
+	suite.successBody, err = os.ReadFile("_testdata/success_response.json")
+	if err != nil {
+		log.Fatalf("could not read _testdata/success_response.json")
 	}
 
 	// Generate jwts for different user roles
