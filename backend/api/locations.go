@@ -208,7 +208,7 @@ func (a *API) GetAllCities() usecase.Interactor {
 func (a *API) UpdateCity() usecase.Interactor {
 	type cityName struct {
 		uuidInput
-		Name string `json:"name" nullable:"false"`
+		Name string `json:"name" minLength:"1" nullable:"false" required:"true"`
 	}
 
 	response := usecase.NewInteractor(

@@ -1,3 +1,6 @@
+--! Add any data needed for integration tests to this file
+
+-- test suite user data
 insert into "users" (
     "id",
     "location",
@@ -38,4 +41,25 @@ insert into "users" (
     'hashed password',
     'admin',
     'admin'
-)
+);
+
+-- locations testdata
+insert into "locations_cities" (
+    "id",
+    "name",
+    "state"
+) values (
+    'b6df94c1-4d68-4a1e-b702-60f5cabcebcc',
+    'Tacoma',
+    'WA'
+);
+
+insert into "locations_cities" (
+    "id",
+    "name",
+    "state"
+) values (
+    '6937755c-7e87-4226-9692-36d3019be32a',
+    'New York',
+    'NY'
+);

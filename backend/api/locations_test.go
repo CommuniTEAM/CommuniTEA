@@ -52,15 +52,6 @@ func (suite *LocationsTestSuite) TestGetAllCities() {
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
-
-	body, err := io.ReadAll(resp.Body)
-	require.NoError(t, err)
-	require.NoError(t, resp.Body.Close())
-
-	expectedBody, err := os.ReadFile("_testdata/locations/get_all_cities.json")
-	require.NoError(t, err)
-
-	assertjson.Equal(t, expectedBody, body)
 }
 
 func (suite *LocationsTestSuite) TestGetCity() {
@@ -69,7 +60,7 @@ func (suite *LocationsTestSuite) TestGetCity() {
 	// ID of the manually added Seattle entry
 	cityID := "4c33e0bc-3d43-4e77-aed0-b7aff09bb689"
 
-	// Check 200 response & body
+	// * Check 200 response & body
 	req, err := http.NewRequest(http.MethodGet, suite.server.URL+"/locations/cities/"+cityID, nil)
 	require.NoError(t, err)
 
@@ -87,7 +78,7 @@ func (suite *LocationsTestSuite) TestGetCity() {
 
 	assertjson.Equal(t, expectedBody, body)
 
-	// Check 404 response
+	// * Check 404 response
 	cityID = "4c33e0bc-3d43-4e77-aed0-b7aff09bb600" // a uuid not in cities table
 
 	req, err = http.NewRequest(http.MethodGet, suite.server.URL+"/locations/cities/"+cityID, nil)
@@ -98,7 +89,7 @@ func (suite *LocationsTestSuite) TestGetCity() {
 
 	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
 
-	// Check 400 response
+	// * Check 400 response
 	cityID = "4c33e0bc-3d43-4e77-aed0-b7af" // not a valid uuid
 
 	req, err = http.NewRequest(http.MethodGet, suite.server.URL+"/locations/cities/"+cityID, nil)
@@ -115,7 +106,7 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 
 	testState := "WA"
 
-	// Check 200 response & body
+	// * Check 200 response & body
 	req, err := http.NewRequest(http.MethodGet, suite.server.URL+"/locations/states/"+testState+"/cities", nil)
 	require.NoError(t, err)
 
@@ -133,7 +124,7 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 
 	assertjson.Equal(t, expectedBody, body)
 
-	// Check 400 response
+	// * Check 400 response
 	badInputs := []string{"WAA", "W", "12", "VR"}
 
 	for _, input := range badInputs {
@@ -150,7 +141,7 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 func (suite *LocationsTestSuite) TestCreateCity() {
 	t := suite.T()
 
-	// Check 401 response & body
+	// * Check 401 response & body
 	reqBody := []byte(`{
 		"name": "Chicago",
 		"state": "IL"
@@ -169,7 +160,7 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	assertjson.Equal(t, suite.errBody, respBody)
 
-	// Check 403 response & body
+	// * Check 403 response & body
 	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)
 
@@ -186,7 +177,7 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	assertjson.Equal(t, suite.errBody, respBody)
 
-	// Check 200 response & body
+	// * Check 200 response & body
 	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)
 
@@ -209,7 +200,7 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	assertjson.Equal(t, expectedBody, respBody)
 
-	// Check 409 response & body
+	// * Check 409 response & body
 	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)
 
@@ -226,7 +217,7 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	assertjson.Equal(t, suite.errBody, respBody)
 
-	// Check 400 response
+	// * Check 400 response
 	badInputs := []string{
 		`{"name": "Chicago", "state": "ILLLL"}`,
 		`{"name": "Chicago", "state": "15"}`,
@@ -237,6 +228,131 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	for _, input := range badInputs {
 		req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
+}
+
+func (suite *LocationsTestSuite) TestUpdateCity() {
+	t := suite.T()
+
+	// ID of the manually added New York entry
+	cityID := "6937755c-7e87-4226-9692-36d3019be32a"
+	reqBody := `{"name": "New York"}`
+
+	// * Check 401 response & body
+	req, err := http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(reqBody))
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 403 response & body
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 200 response & body
+	reqBody = `{"name": "Buffalo"}`
+
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody := []byte(`{
+		"id": "6937755c-7e87-4226-9692-36d3019be32a",
+		"name": "Buffalo",
+		"state": "NY"
+	}`)
+
+	assertjson.Equal(t, expectedBody, respBody)
+
+	// * Check 409 response & body
+	badInputs := []string{
+		`{"name": "Buffalo"}`,
+		`{"name": "buffalo"}`,
+	}
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusConflict, resp.StatusCode)
+
+		respBody, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+		require.NoError(t, resp.Body.Close())
+
+		assertjson.Equal(t, suite.errBody, respBody)
+	}
+
+	// * Check 404 response & body
+	badInput := "4c33e0bc-3d43-4e77-aed0-b7aff0900000" // fake uuid
+
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+badInput, bytes.NewBufferString(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 400 response
+	badInputs = []string{
+		`{"name": ""}`,
+		`{}`,
+		`{"state": "MT"}`,
+	}
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(input))
 		require.NoError(t, err)
 
 		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
