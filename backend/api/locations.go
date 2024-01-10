@@ -15,8 +15,8 @@ import (
 
 type cityInput struct {
 	defaultInput
-	Name  string `json:"name"  nullable:"false"`
-	State string `json:"state" nullable:"false"`
+	Name  string `json:"name"  minLength:"1" nullable:"false" required:"true"`
+	State string `json:"state" maxLength:"2" minLength:"2"    nullable:"false" required:"true"`
 }
 
 type stateInput struct {
@@ -48,7 +48,7 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			// Verify that input matches required pattern
 			input.State = strings.ToUpper(input.State)
-			match, err := regexp.MatchString("^[A-Z]{2}$", input.State)
+			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.State)
 			if err != nil {
 				log.Println(fmt.Errorf("could not match regex: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)

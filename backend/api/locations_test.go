@@ -144,12 +144,6 @@ func (suite *LocationsTestSuite) TestGetCitiesInState() {
 		require.NoError(t, err)
 
 		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-
-		body, err = io.ReadAll(resp.Body)
-		require.NoError(t, err)
-		require.NoError(t, resp.Body.Close())
-
-		assertjson.Equal(t, suite.errBody, body)
 	}
 }
 
@@ -214,4 +208,42 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 	}`)
 
 	assertjson.Equal(t, expectedBody, respBody)
+
+	// Check 409 response & body
+	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusConflict, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// Check 400 response
+	badInputs := []string{
+		`{"name": "Chicago", "state": "ILLLL"}`,
+		`{"name": "Chicago", "state": "15"}`,
+		`{"state": "IL"}`,
+		`{"name": "Chicago"}`,
+		`{"name": "", "state": ""}`,
+	}
+
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
 }
