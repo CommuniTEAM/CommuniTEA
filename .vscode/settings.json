@@ -1,21 +1,24 @@
 {
-  "prettier.configPath": "frontend/.prettierrc.cjs",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[go]": {
