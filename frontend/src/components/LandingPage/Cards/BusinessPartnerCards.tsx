@@ -149,7 +149,6 @@ export default function BusinessPartnerCards(): JSX.Element {
 
   return (
     <div className="sliderContainer">
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Slider {...settings}>
         {businessesData.map((business) => (
           <Card
