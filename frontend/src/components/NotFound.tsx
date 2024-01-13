@@ -1,4 +1,4 @@
-export default function NotFound(): JSX.Element {
+export default function NotFound(): boolean {
   return (
     <div>
       <h1>404 Not Found</h1>

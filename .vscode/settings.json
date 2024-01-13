@@ -2,8 +2,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
-    "quickfix.biome": true,
-    "source.organizeImports.biome": true
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome",
