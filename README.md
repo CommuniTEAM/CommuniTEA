@@ -8,29 +8,27 @@
 
   **Bringing your local community together over a cuppa 🍵**
 
-  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/axios/axios-plain-wordmark.svg" width="50" height="50" alt="Axios Logo" title="Axios">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/axios/axios-plain-wordmark.svg" width="50" height="50" alt="Axios Logo" title="Axios">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo" title="Docker">
+  <img src="https://raw.githubusercontent.com/biomejs/biome/main/website/src/assets/svg/logomark.svg" width="50" height="50" alt="Biome Logo" title="Biome">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/eslint/eslint-original-wordmark.svg" width="50" height="50" alt="ESLint Logo" title="ESLint">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/docker/docker-original-wordmark.svg" width="50" height="50" alt="Docker Logo" title="Docker">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/figma/figma-original.svg" width="50" height="50" alt="Figma Logo" title="Figma">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/figma/figma-original.svg" width="50" height="50" alt="Figma Logo" title="Figma">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/go/go-original-wordmark.svg" width="50" height="50" alt="Go Logo" title="Go">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/go/go-original-wordmark.svg" width="50" height="50" alt="Go Logo" title="Go">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo" title="MaterialUI">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/materialui/materialui-original.svg" width="50" height="50" alt="MaterialUI Logo" title="MaterialUI">
   &nbsp;
-  <!-- <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/oauth/oauth-original.svg" width="50" height="50" alt="OAuth Logo" title="OAuth">
-  &nbsp; -->
-  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/openapi/openapi-original-wordmark.svg" width="50" height="50" alt="OpenAPI Logo" title="OpenAPI">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/openapi/openapi-original-wordmark.svg" width="50" height="50" alt="OpenAPI Logo" title="OpenAPI">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo" title="PostgreSQL">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/postgresql/postgresql-original-wordmark.svg" width="50" height="50" alt="PostgreSQL Logo" title="PostgreSQL">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/react/react-original-wordmark.svg" width="50" height="50" alt="React Logo" title="React">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/react/react-original-wordmark.svg" width="50" height="50" alt="React Logo" title="React">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/55609aa5bd817ff167afce0d965585c92040787a/icons/typescript/typescript-original.svg" width="50" height="50" alt="TypeScript Logo" title="TypeScript">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/typescript/typescript-original.svg" width="50" height="50" alt="TypeScript Logo" title="TypeScript">
   &nbsp;
-  <img src="https://github.com/devicons/devicon/blob/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/vitejs/vitejs-original.svg" width="50" height="50" alt="Vite Logo" title="Vite">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/24f2a9e2a16401e681583ae7a494fad71df03fce/icons/vitejs/vitejs-original.svg" width="50" height="50" alt="Vite Logo" title="Vite">
 
 </div>
 
@@ -48,18 +46,18 @@
   - [Setting Up Pre-Commit](#setting-up-pre-commit)
   - [Pre-Commit Rulesets](#pre-commit-rulesets)
     - [Commit Message Format](#commit-message-format)
-    - [ESLint TypeScript Format](#eslint-typescript-format)
+    - [Biome (TypeScript) Format](#biome-typescript-format)
     - [Go Format](#go-format)
       - [Installing golangci-lint on Mac or Linux Systems](#installing-golangci-lint-on-mac-or-linux-systems)
       - [Installing golangci-lint on Windows Systems](#installing-golangci-lint-on-windows-systems)
   - [Running Unit Tests](#running-unit-tests)
-  - [Using Git Hooks in VSCode](#using-git-hooks-in-vscode)
+  - [Using Git Hooks in VS Code](#using-git-hooks-in-vs-code)
 
 </details>
 
 # Overview
 
-This project is currently **in progress**. Please be patient with us as we diligently work away at crafting something special. Our team is very excited to help bring the world of tea to your neighborhood soon!
+⚠️ This project is currently **in progress**. Please be patient with us as we diligently work away at crafting something special. Our team is very excited to help bring the world of tea to your neighborhood soon!
 
 ## Our Mission
 
@@ -73,8 +71,8 @@ Looking to contribute to the project? Please see the information below to get st
 
 Any commits to the repository must conform to the configured rulesets for:
 - Commit Messages
-- ESLint TypeScript
-- Golangci-lint
+- Biome (Frontend)
+- Golangci-lint (Backend)
 
 To enforce these conventions, [pre-commit](https://pre-commit.com/), a Git hook manager, is a required development dependency for the project. You will need to install it on your local machine.
 
@@ -112,19 +110,21 @@ These are the allowed emojis and their use-cases:
 
 Special thanks to strdr4605 for [their walkthrough](https://strdr4605.com/commitlint-custom-commit-message-with-emojis) of this configuration!
 
-### ESLint TypeScript Format
+### Biome (TypeScript) Format
 
-The ESLint configuration for this repository uses the [guide by Airbnb](https://github.com/airbnb/javascript). The installed pre-commit hook will attempt to fix any linting errors found in the staged changes. If it does, the check will fail and you will need to re-stage and commit.
+This project utilizes [Biome](https://biomejs.dev/) as an alternative to ESLint and Prettier with an extended ruleset based on the [guide by Airbnb](https://github.com/airbnb/javascript). The installed pre-commit hook will attempt to format your code and fix any linting errors found in the staged changes. If it does, the check will fail and you will need to re-stage and commit.
 
-Please be sure to have the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) installed and format your code often. The included workspace settings for VSCode set Prettier as the default formatter for TypeScript and JavaScript. To format the current file quickly, do a manual save (Windows/Linux: `Ctrl+S`  Mac: `⌘S`).
+Please be sure to have the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) installed for the best development experience. This repository's included workspace settings for VS Code set Biome as the default formatter for TypeScript and JavaScript, which requires the extension to be installed locally. Upon first installation, the extension will prompt you to install the Biome binary. Be sure to do this, as it is required for the extension to work.
+
+Once the extension is installed and set up, you can fix and format the current file quickly with a manual save (Windows/Linux: `Ctrl+S`  Mac: `⌘S`).
 
 ### Go Format
 
 This repository uses a robust [golangci-lint](https://golangci-lint.run/) configuration built up of over 75 linters, as recommended in the ["Golden Config" by maratori](https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322). To successfully run the pre-commit hook, a local installation of golanci-lint is required. Follow the [official documentation](https://golangci-lint.run/usage/install/) to get started, or continue reading for installation instructions.
 
-To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VSCode in order to be fully set up for linting Go locally. The repository is configured to support real-time linting feedback from the extension so that linting flags appear as errors. The extension requires a local installation of Go, as well as some additional dependencies, and will prompt you to install any missing requirements for local linting. Simply click the warning as seen in the screenshot below to begin the setup.
+To save yourself unnecessary headaches, it is strongly recommended to install the [official Go extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) for VS Code in order to be fully set up for linting Go locally. The repository is configured to support real-time linting feedback from the extension so that linting flags appear as errors. The extension requires a local installation of Go, as well as some additional dependencies, and will prompt you to install any missing requirements for local linting. Simply click the warning as seen in the screenshot below to begin the setup.
 
-<img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VSCode missing depedency warning" height=100 width=450>
+<img src="https://github.com/CommuniTEAM/CommuniTEA/assets/31549337/753ecd20-86e2-47b4-b4e3-cbbf3168424d" alt="VS Code missing depedency warning" height=100 width=450>
 
 <details>
   <summary>
@@ -192,8 +192,8 @@ Use the `--all-files` arg to run every test, or leave it off to run only those r
 
 These hooks will never run automatically during the commit process and are only available for manual invocations. Unit tests will still automatically run against PRs.
 
-## Using Git Hooks in VSCode
+## Using Git Hooks in VS Code
 
-When commiting changes through VSCode's source control tab, pre-commit will still run automatically in your default terminal as if you committed from the command line. If a hook fails, however, VSCode will notify you via an error. To display the details of the pre-commit failure, click on "Show Command Output" as per the screenshot below to display the results in the command line.
+When commiting changes through VS Code's source control tab, pre-commit will still run automatically in your default terminal as if you committed from the command line. If a hook fails, however, VS Code will notify you via an error. To display the details of the pre-commit failure, click on "Show Command Output" as per the screenshot below to display the results in the command line.
 
 <img src="https://gitlab.com/tea-masters/communiTEA/uploads/20cb944e753e1823f0702918050a4540/Screenshot_2023-10-17_124748.png" alt="example error" height=150 width=425>
