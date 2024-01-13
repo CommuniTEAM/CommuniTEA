@@ -1,24 +1,67 @@
 name: React App CI
 
 on:
-  pull_request:
-    branches:
-      - 'main'
-    paths:
-      - 'frontend/**'
-      - '!frontend/node_modules'
+  push
+  # pull_request:
+  #   branches:
+  #     - 'main'
+  #   paths:
+  #     - 'frontend/**'
+  #     - '!frontend/node_modules'
 
 # Cancel the workflow in progress if newer build is about to start.
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-# Uncomment when ready to add unit tests
-# permissions:
-#   pull-requests: write
+
+permissions:
+  checks: write
+# Uncomment for unit tests
+  # pull-requests: write
 
 jobs:
-  build-frontend:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 'frontend' folder
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+            biome.json
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+      - name: Run Biome
+        run: biome ci .
+
+  typecheck:
+    # needs: lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout 'frontend' folder
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tsc
+        run: npx tsc
+
+  vite-build:
+    needs: typecheck
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,7 +81,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build app
-        run: npm run build
+        run: vite build
 
 # Uncomment & fill in when ready to add unit tests
   # frontend-unit-tests:
