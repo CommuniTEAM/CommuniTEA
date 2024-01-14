@@ -1,10 +1,10 @@
-name: Frontend CD
+name: Backend CD
 
 on:
   push:
     branches: ['main']
     paths:
-      - 'frontend/**'
+      - 'backend/**'
 
 # Cancel the workflow in progress if newer build is about to start.
 concurrency:
@@ -12,47 +12,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-frontend:
+  build-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend
     outputs:
       artifact-id: ${{ steps.artifact-upload.outputs.artifact-id }}
     steps:
-      - name: Checkout 'frontend' folder
+      - name: Checkout 'backend' folder
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            frontend
-      - name: Set up Node
-        uses: actions/setup-node@v4
+            backend
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          go-version: '1.21'
+          cache: false
       - name: Install dependencies
-        run: npm install
+        run: go mod tidy
+      - name: Create directory for build output
+        run: mkdir tmp
       - name: Build app
-        run: npm run build
-        env:
-          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+        run: GOOS=linux GOARCH=amd64 go build -v -o ./tmp ./cmd
       - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         id: artifact-upload
         with:
-          name: frontend-artifact
-          path: './frontend/dist'
+          name: app-artifact
+          path: './tmp'
           if-no-files-found: error
           retention-days: 1
 
   ping-server:
-    needs: build-frontend
+    needs: build-backend
     runs-on: ubuntu-latest
     steps:
       - name: Invoke webhook
         uses: johannes-huther/webhook.sh@v1
         env:
-          webhook_url: ${{ secrets.FRONTEND_WEBHOOK_URL }}
+          webhook_url: ${{ secrets.BACKEND_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-          data: '{"artifact-id": "${{ needs.build-frontend.outputs.artifact-id }}"}'
+          data: '{"artifact-id": "${{ needs.build-backend.outputs.artifact-id }}"}'
