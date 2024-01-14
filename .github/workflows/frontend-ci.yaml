@@ -73,7 +73,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build app
-        run: vite build
+        run: npx vite build
 
 # Uncomment & fill in when ready to add unit tests
   # frontend-unit-tests:
