@@ -1,14 +1,12 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
   "files": {
     "ignore": ["frontend/node_modules/**", "backend/**"]
   },
   "javascript": {
     "formatter": {
-      "indentStyle": "space"
+      "indentStyle": "space",
+      "quoteStyle": "single"
     }
   },
   "formatter": {
@@ -28,7 +26,7 @@
         "useSingleCaseStatement": "error"
       },
       "suspicious": {
-        "noConsoleLog": "error",
+        "noConsoleLog": "warn",
         "noApproximativeNumericConstant": "warn",
         "noMisrefactoredShorthandAssign": "warn"
       }

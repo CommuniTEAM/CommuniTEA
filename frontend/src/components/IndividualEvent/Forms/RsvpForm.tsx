@@ -36,7 +36,7 @@ export default function RsvpForm(): JSX.Element {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          // console.log(values);
+          console.log(values);
           setSubmitting(false);
         }}
       >

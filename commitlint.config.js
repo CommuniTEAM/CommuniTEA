@@ -12,13 +12,13 @@ module.exports = {
       headerPattern: new RegExp(
         `^${matchAnyEmojiWithSpaceAfter.source}${matchTicketNumberWithSpaceAfter.source}${subjectThatDoesntStartWithBracket.source}$`,
       ),
-      headerCorrespondence: ["emoji", "ticket", "subject"],
+      headerCorrespondence: ['emoji', 'ticket', 'subject'],
     },
   },
   plugins: [
     {
       rules: {
-        "header-match-team-pattern": (parsed) => {
+        'header-match-team-pattern': (parsed) => {
           const { emoji, ticket, subject } = parsed;
           if (emoji === null && ticket === null && subject === null) {
             return [
@@ -26,36 +26,36 @@ module.exports = {
               "header must be in format '✅ [TEA-123]: Description of work'",
             ];
           }
-          return [true, ""];
+          return [true, ''];
         },
-        "explained-emoji-enum": (parsed, _when, emojisObject) => {
+        'explained-emoji-enum': (parsed, _when, emojisObject) => {
           const { emoji } = parsed;
           if (emoji && !Object.keys(emojisObject).includes(emoji)) {
             return [
               false,
               `emoji must be one of: ${Object.keys(emojisObject)
                 .map((emojiType) => `${emojiType} - ${emojisObject[emojiType]}`)
-                .join("\n")}`,
+                .join('\n')}`,
             ];
           }
-          return [true, ""];
+          return [true, ''];
         },
       },
     },
   ],
   rules: {
-    "header-match-team-pattern": [2, "always"],
-    "explained-emoji-enum": [
+    'header-match-team-pattern': [2, 'always'],
+    'explained-emoji-enum': [
       2,
-      "always",
+      'always',
       {
-        "✨": "New feature",
-        "🐞": "Bug fix",
-        "✅": "Add or update tests",
-        "🚧": "Work in progress",
-        "🔨": "Refactor",
-        "📝": "Documentation update",
-        "🤝": "Merged branches",
+        '✨': 'New feature',
+        '🐞': 'Bug fix',
+        '✅': 'Add or update tests',
+        '🚧': 'Work in progress',
+        '🔨': 'Refactor',
+        '📝': 'Documentation update',
+        '🤝': 'Merged branches',
       },
     ],
   },
