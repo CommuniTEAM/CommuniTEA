@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -12,7 +11,9 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
-var signingKey = generateSigningKey() //nolint: gochecknoglobals // key needs to be randomly generated once at app start
+type Authenticator struct {
+	signingKey *rsa.PrivateKey
+}
 
 type TokenCookie struct {
 	Token string `cookie:"bearer-token,httponly,secure,samesite=strict,path=/,max-age:3600" json:"access_token"`
@@ -32,22 +33,20 @@ type TokenData struct {
 
 // ValidateJWT takes a signed JWT, verifies it against the key, then parses
 // the enclosed data and returns it. Returns nil if the token is invalid.
-func ValidateJWT(token string) map[string]interface{} {
-	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, signingKey))
+func (key *Authenticator) ValidateJWT(token string) map[string]interface{} {
+	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, key.signingKey))
 	if err != nil {
 		return nil
 	}
-
 	return verifiedToken.PrivateClaims()
 }
 
 // GenerateNewJWT takes a struct of a validated user's information and appends
 // a signed JWT with their information enclosed to the struct. The JWT is valid
 // for one hour.
-func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
+func (key *Authenticator) GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 	// Instantiate JWT builder
 	jwtBuilder := jwt.NewBuilder()
-
 	jwtBuilder.Issuer("communitea.life")
 
 	if !expired {
@@ -71,26 +70,24 @@ func GenerateNewJWT(tokenData *TokenData, expired bool) (*TokenData, error) {
 	}
 
 	// Sign the JWT with the .env signing key and a secure algorithm
-	signedToken, err := jwt.Sign(token, jwt.WithKey(jwa.RS256, signingKey))
+	signedToken, err := jwt.Sign(token, jwt.WithKey(jwa.RS256, key.signingKey))
 	if err != nil {
 		return nil, fmt.Errorf("could not sign token: %w", err)
 	}
 
 	tokenData.Token = string(signedToken)
-
 	return tokenData, nil
 }
 
-// generateSigningKey creates a new cryptographically secure RSA private key.
-// It will shut down the app in the event of an error so that the program
-// does not continue unsecured.
-func generateSigningKey() *rsa.PrivateKey {
+// NewAuthenticator instantiates a new authenticator with a randomly generated,
+// cryptographically secure RSA private key.
+func NewAuthenticator() (*Authenticator, error) {
 	const bits = 2048
 
 	key, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
-		log.Fatal(fmt.Errorf("could not generate signing key: %w", err))
+		return nil, fmt.Errorf("could not generate signing key: %w", err)
 	}
 
-	return key
+	return &Authenticator{signingKey: key}, nil
 }
