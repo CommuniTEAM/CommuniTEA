@@ -16,6 +16,20 @@ SET row_security = off;
 -- *not* creating schema, since initdb creates it
 
 
+--
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -163,7 +177,7 @@ CREATE TABLE public.events (
 
 CREATE TABLE public.locations_cities (
     id uuid NOT NULL,
-    name character varying(50) NOT NULL,
+    name public.citext NOT NULL,
     state character varying(2) NOT NULL
 );
 
@@ -289,7 +303,7 @@ CREATE TABLE public.user_roles (
 CREATE TABLE public.users (
     id uuid NOT NULL,
     role character varying(25) NOT NULL,
-    username character varying(50) NOT NULL,
+    username public.citext NOT NULL,
     first_name character varying(50),
     last_name character varying(50),
     email character varying(200),
@@ -780,10 +794,12 @@ ALTER TABLE ONLY public.users
 --
 
 INSERT INTO public.schema_migrations (version) VALUES
+    ('20231201040843'),
     ('20231201051016'),
     ('20231201090112'),
     ('20231205231215'),
     ('20231212055940'),
     ('20231212061145'),
     ('20231214012512'),
-    ('20231214035807');
+    ('20231214035807'),
+    ('20240106002631');

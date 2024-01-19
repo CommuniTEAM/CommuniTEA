@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -29,7 +28,7 @@ type teaInput struct {
 
 func (a *API) CreateTea() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
-		userData := auth.ValidateJWT(input.AccessToken)
+		userData := a.Auth.ValidateJWT(input.AccessToken)
 
 		// If the token was invalid or nonexistent then userData will be nil
 		if userData == nil {
