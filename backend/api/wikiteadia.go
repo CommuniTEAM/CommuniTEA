@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -120,7 +121,9 @@ func (a *API) GetAllTeas() usecase.Interactor {
 		conn, err := a.dbConn(ctx)
 
 		if err != nil {
-			return err
+			log.Println(fmt.Errorf("failed to connect to dbpool: %w", err))
+
+			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 		}
 
 		defer conn.Release()

@@ -59,6 +59,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	// users
 
 	s.Post("/users", endpoints.CreateUser())
+	s.Get("/users/{username}", endpoints.GetUser())
 
 	// locations
 
@@ -80,7 +81,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 
-	s.Post("/teas", endpoints.CreateTea())
+	s.Post("/teas", endpoints.CreateTea(), requireAuth)
 
 	// Swagger UI endpoint at /docs.
 

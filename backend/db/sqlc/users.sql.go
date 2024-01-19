@@ -63,6 +63,43 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getUser = `-- name: GetUser :one
+select "id",
+    "role",
+    "username",
+    "first_name",
+    "last_name",
+    "email",
+    "location"
+from users
+where username = $1 limit 1
+`
+
+type GetUserRow struct {
+	ID        uuid.UUID   `json:"id"`
+	Role      string      `json:"role"`
+	Username  string      `json:"username"`
+	FirstName pgtype.Text `json:"first_name"`
+	LastName  pgtype.Text `json:"last_name"`
+	Email     pgtype.Text `json:"email"`
+	Location  uuid.UUID   `json:"location"`
+}
+
+func (q *Queries) GetUser(ctx context.Context, username string) (GetUserRow, error) {
+	row := q.db.QueryRow(ctx, getUser, username)
+	var i GetUserRow
+	err := row.Scan(
+		&i.ID,
+		&i.Role,
+		&i.Username,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Location,
+	)
+	return i, err
+}
+
 const login = `-- name: Login :one
 select
     "id",

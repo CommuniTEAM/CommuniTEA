@@ -32,6 +32,10 @@ type newUserInput struct {
 	LocationState string `json:"state" nullable:"false"`
 }
 
+type getUserInput struct {
+	Username string `path:"username"`
+}
+
 type loginInput struct {
 	Username string `json:"username"`
 
@@ -267,6 +271,40 @@ func (a *API) CreateUser() usecase.Interactor {
 	response.SetTitle("Create User")
 
 	response.SetDescription("Make a new user account.")
+
+	response.SetTags("Users")
+
+	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
+func (a *API) GetUser() usecase.Interactor {
+	response := usecase.NewInteractor(func(ctx context.Context, input getUserInput, output *db.GetUserRow) error {
+		conn, err := a.dbConn(ctx)
+
+		if err != nil {
+			log.Println(fmt.Errorf("failed to connect to dbpool: %w", err))
+
+			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+		}
+		defer conn.Release()
+
+		queries := db.New(conn)
+
+		*output, err = queries.GetUser(ctx, input.Username)
+
+		if err != nil {
+			log.Println(fmt.Errorf("failed to get user data from %v: %w", input.Username, err))
+
+			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+		}
+
+		return nil
+	})
+	response.SetTitle("Get User")
+
+	response.SetDescription("Find user data by username")
 
 	response.SetTags("Users")
 
