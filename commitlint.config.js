@@ -10,11 +10,7 @@ module.exports = {
   parserPreset: {
     parserOpts: {
       headerPattern: new RegExp(
-        '^' +
-          matchAnyEmojiWithSpaceAfter.source +
-          matchTicketNumberWithSpaceAfter.source +
-          subjectThatDoesntStartWithBracket.source +
-          '$',
+        `^${matchAnyEmojiWithSpaceAfter.source}${matchTicketNumberWithSpaceAfter.source}${subjectThatDoesntStartWithBracket.source}$`,
       ),
       headerCorrespondence: ['emoji', 'ticket', 'subject'],
     },

@@ -19,7 +19,6 @@ export default function TestFetch(): JSX.Element {
         setTeas(teasData);
       })
       .catch((error) => {
-        // eslint-disable-next-line no-console
         console.error(error);
       });
   }, []);

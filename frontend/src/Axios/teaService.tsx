@@ -18,7 +18,6 @@ export const fetchTeas = async (published: boolean): Promise<Tea[]> => {
     const response = await axios.get(`${BASE_URL}${published}`);
     return response.data;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error fetching teas: ', error);
     throw error;
   }
@@ -30,7 +29,6 @@ export const createTea = async (tea: any): Promise<Tea[]> => {
     const response = await axios.post(BASE_URL, tea);
     return response.data;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error creating tea: ', error);
     throw error;
   }
@@ -42,7 +40,6 @@ export const updateTea = async (tea: any): Promise<Tea[]> => {
     const response = await axios.put(`${BASE_URL}${tea.id}`, tea);
     return response.data;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error updating tea: ', error);
     throw error;
   }
@@ -54,7 +51,6 @@ export const deleteTea = async (id: number): Promise<Tea[]> => {
     const response = await axios.delete(`${BASE_URL}${id}`);
     return response.data;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error deleting tea: ', error);
     throw error;
   }

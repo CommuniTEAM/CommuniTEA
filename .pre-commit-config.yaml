@@ -3,7 +3,7 @@ default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.10.0
+    rev: v9.11.0
     hooks:
       - id: commitlint
         stages: [commit-msg]
@@ -13,8 +13,13 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: check-yaml
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v0.1.0
+    hooks:
+      - id: biome-check
+        additional_dependencies: ["@biomejs/biome@1.5.2"]
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 3.0.0a3
+    rev: 3.0.0a4
     hooks:
       - id: sqlfluff-fix
         args: [-q]
@@ -28,19 +33,3 @@ repos:
         args: [--fix]
       - id: go-test-repo-mod
         stages: [manual]
-        args: [-test.v]
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.54.0
-    hooks:
-      - id: eslint
-        additional_dependencies:
-          - eslint@8.53.0
-          - eslint-plugin-react-hooks@4.6.0
-          - eslint-plugin-react-refresh@0.4.3
-          - eslint-config-airbnb@19.0.4
-          - eslint-config-standard-with-typescript@39.1.1
-          - eslint-config-airbnb-typescript@17.1.0
-        exclude: node_modules
-        files: \.[t]sx?$ # *.ts and *.tsx
-        types: [file]
-        args: [--max-warnings=0, --fix]

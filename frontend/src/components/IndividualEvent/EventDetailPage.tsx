@@ -72,7 +72,6 @@ export default function EventDetailPage(): JSX.Element {
           }
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Failed to fetch events', error);
       } finally {
         setLoading(false);
