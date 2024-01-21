@@ -36,7 +36,6 @@ export default function RsvpForm(): JSX.Element {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          // eslint-disable-next-line no-console
           console.log(values);
           setSubmitting(false);
         }}
@@ -54,7 +53,6 @@ export default function RsvpForm(): JSX.Element {
                 variant="outlined"
                 fullWidth
                 margin="dense"
-                // eslint-disable-next-line
                 error={!!(touched.first_name && errors.first_name)}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -72,7 +70,6 @@ export default function RsvpForm(): JSX.Element {
                 variant="outlined"
                 fullWidth
                 margin="dense"
-                // eslint-disable-next-line
                 error={Boolean(touched.last_name && errors.last_name)}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -90,7 +87,6 @@ export default function RsvpForm(): JSX.Element {
                 variant="outlined"
                 fullWidth
                 margin="dense"
-                // eslint-disable-next-line
                 error={Boolean(touched.email && errors.email)}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -108,7 +104,6 @@ export default function RsvpForm(): JSX.Element {
                 variant="outlined"
                 fullWidth
                 margin="dense"
-                // eslint-disable-next-line
                 error={Boolean(touched.phone && errors.phone)}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -126,7 +121,6 @@ export default function RsvpForm(): JSX.Element {
                 variant="outlined"
                 fullWidth
                 margin="dense"
-                // eslint-disable-next-line
                 error={Boolean(touched.num_attendees && errors.num_attendees)}
                 onChange={handleChange}
                 onBlur={handleBlur}

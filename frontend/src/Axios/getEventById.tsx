@@ -253,7 +253,6 @@ const eventData = [
   },
 ];
 
-// eslint-disable-next-line
 const getEventById = async (eventId: number): Promise<Event | undefined> => new Promise((resolve, reject) => {
   setTimeout(() => {
     const foundEvent = eventData.find(

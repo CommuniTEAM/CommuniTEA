@@ -161,7 +161,6 @@ export default function OtherEventCards(): JSX.Element {
 
   return (
     <div style={{ padding: '0 40px' }}>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Slider {...settings}>
         {businessesData.map((business) => (
           <Card

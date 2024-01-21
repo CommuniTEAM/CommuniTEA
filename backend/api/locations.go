@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/swaggest/usecase"
@@ -16,12 +15,12 @@ import (
 
 type cityInput struct {
 	defaultInput
-	Name  string `json:"name"  nullable:"false"`
-	State string `json:"state" nullable:"false"`
+	Name  string `json:"name"  minLength:"1" nullable:"false" required:"true"`
+	State string `json:"state" maxLength:"2" minLength:"2"    nullable:"false" required:"true"`
 }
 
 type stateInput struct {
-	State string `maxLength:"2" minLength:"2" path:"state"`
+	State string `maxLength:"2" minLength:"2" path:"state" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
 }
 
 type citiesOutput struct {
@@ -35,7 +34,7 @@ func (a *API) CreateCity() usecase.Interactor {
 		func(ctx context.Context, input cityInput, output *db.LocationsCity) error {
 			// Validate the access token sent with the request, if valid then
 			// the user's data will be stored in userData for easy access.
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			// If the token was invalid or nonexistent then userData will be nil
 			if userData == nil {
@@ -49,7 +48,7 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			// Verify that input matches required pattern
 			input.State = strings.ToUpper(input.State)
-			match, err := regexp.MatchString("^[A-Z]{2}$", input.State)
+			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.State)
 			if err != nil {
 				log.Println(fmt.Errorf("could not match regex: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -87,9 +86,6 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
 			if err != nil {
-				if strings.Contains(err.Error(), "fkey") {
-					return status.Wrap(fmt.Errorf("invalid state code"), status.InvalidArgument)
-				}
 				log.Println(fmt.Errorf("failed to create city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
@@ -209,12 +205,12 @@ func (a *API) GetAllCities() usecase.Interactor {
 func (a *API) UpdateCity() usecase.Interactor {
 	type cityName struct {
 		uuidInput
-		Name string `json:"name" nullable:"false"`
+		Name string `json:"name" minLength:"1" nullable:"false" required:"true"`
 	}
 
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input cityName, output *db.LocationsCity) error {
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
@@ -278,7 +274,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 func (a *API) DeleteCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *genericOutput) error {
-			userData := auth.ValidateJWT(input.AccessToken)
+			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
@@ -304,7 +300,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 				log.Println(fmt.Errorf("could not delete city: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
-			output.Message = "success: location deleted"
+			output.Message = successMsg
 			return nil
 		})
 
