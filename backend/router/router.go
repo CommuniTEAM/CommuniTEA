@@ -63,8 +63,9 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
 
-	// Swagger UI endpoint at /docs.
+	// Swagger UI endpoint at /docs
 	s.Docs("/docs", swgui.New)
+	s.Handle("/", http.RedirectHandler("/docs", http.StatusSeeOther))
 
 	return s
 }

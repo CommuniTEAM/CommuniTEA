@@ -71,8 +71,12 @@ func main() {
 		ReadHeaderTimeout: serverTimeout * time.Second,
 	}
 
-	err = server.ListenAndServe()
+	if Env == "prod" {
+		err = server.ListenAndServeTLS(os.Getenv("SSL_CERT"), os.Getenv("SSL_KEY"))
+	} else {
+		err = server.ListenAndServe()
+	}
 	if err != nil {
-		log.Fatal(fmt.Errorf("could not start the http server: %w", err))
+		log.Fatal(fmt.Errorf("could not start the http(s) server: %w", err))
 	}
 }
