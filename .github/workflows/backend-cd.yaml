@@ -26,7 +26,7 @@ jobs:
           sparse-checkout: |
             backend
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '1.21'
           cache: false
@@ -35,7 +35,7 @@ jobs:
       - name: Create directory for build output
         run: mkdir tmp
       - name: Build app
-        run: GOOS=linux GOARCH=amd64 go build -v -o ./tmp ./cmd
+        run: GOOS=linux GOARCH=amd64 go build -ldflags "-X main.Env=prod" -v -o ./tmp ./cmd
       - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         id: artifact-upload
