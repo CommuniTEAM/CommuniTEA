@@ -1,0 +1,43 @@
+name: Database CD
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'backend/db/migrations/**'
+
+# Cancel the workflow in progress if newer build is about to start.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  bundle-migrations:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.artifact-upload.outputs.artifact-id }}
+    steps:
+      - name: Checkout 'db/migrations' folder
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend/db/migrations
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        id: artifact-upload
+        with:
+          name: db-artifact
+          path: './backend/db'
+          if-no-files-found: error
+          retention-days: 1
+
+  ping-server:
+    needs: bundle-migrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke webhook
+        uses: johannes-huther/webhook.sh@v1
+        env:
+          webhook_url: ${{ secrets.DATABASE_WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          data: '{"artifact-id": "${{ needs.bundle-migrations.outputs.artifact-id }}"}'
