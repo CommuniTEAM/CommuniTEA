@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_API_HOST: ${{ secrets.VITE_API_HOST }}
       - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         id: artifact-upload
