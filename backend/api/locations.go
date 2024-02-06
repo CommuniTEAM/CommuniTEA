@@ -15,12 +15,8 @@ import (
 
 type cityInput struct {
 	defaultInput
-	Name  string `json:"name"  minLength:"1" nullable:"false" required:"true"`
-	State string `json:"state" maxLength:"2" minLength:"2"    nullable:"false" required:"true"`
-}
-
-type stateInput struct {
-	State string `maxLength:"2" minLength:"2" path:"state" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	StateCode string `maxLength:"2"    minLength:"2" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	CityName  string `json:"city_name" minLength:"1" nullable:"false"                                                                                                               required:"true"`
 }
 
 type citiesOutput struct {
@@ -47,8 +43,8 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			// Verify that input matches required pattern
-			input.State = strings.ToUpper(input.State)
-			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.State)
+			input.StateCode = strings.ToUpper(input.StateCode)
+			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.StateCode)
 			if err != nil {
 				log.Println(fmt.Errorf("could not match regex: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -66,7 +62,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			queries := db.New(conn)
 
 			// Check that the city isn't already in the database
-			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.Name, State: input.State})
+			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.CityName, State: input.StateCode})
 			if err == nil {
 				// If err is nil then the location already exists
 				return status.Wrap(fmt.Errorf("location already exists"), status.AlreadyExists)
@@ -80,8 +76,8 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			inputArgs := db.CreateCityParams{
 				ID:    newUUID,
-				Name:  input.Name,
-				State: input.State,
+				Name:  input.CityName,
+				State: input.StateCode,
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
@@ -142,6 +138,9 @@ func (a *API) GetCity() usecase.Interactor {
 // GetAllCitiesInState takes a state code as a query parameter and returns
 // a list of all cities within the given state.
 func (a *API) GetAllCitiesInState() usecase.Interactor {
+	type stateInput struct {
+		StateCode string `maxLength:"2" minLength:"2" path:"state-code" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	}
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
@@ -152,8 +151,8 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 
 			queries := db.New(conn)
 
-			input.State = strings.ToUpper(input.State)
-			output.Cities, err = queries.GetAllCitiesInState(ctx, input.State)
+			input.StateCode = strings.ToUpper(input.StateCode)
+			output.Cities, err = queries.GetAllCitiesInState(ctx, input.StateCode)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get all cities in state: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)

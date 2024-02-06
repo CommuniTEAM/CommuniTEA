@@ -14,30 +14,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type newUserInput struct {
-	Role          string `enum:"user,business" json:"role"      nullable:"false"`
-	Username      string `json:"username"      nullable:"false"`
-	FirstName     string `json:"first_name"`
-	LastName      string `json:"last_name"`
-	Email         string `json:"email"`
-	Password      string `json:"password"      nullable:"false"`
-	LocationCity  string `json:"city"          nullable:"false"`
-	LocationState string `json:"state"         nullable:"false"`
-}
-
-type loginInput struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type logoutOutput struct {
-	genericOutput
-	auth.TokenCookie
-}
-
 // UserLogin takes an inputted username and password and, if the credentials
 // are valid, returns the user's data along with an authenticating jwt cookie.
 func (a *API) UserLogin() usecase.Interactor {
+	type loginInput struct {
+		Username string `json:"username" nullable:"false" required:"true"`
+		Password string `json:"password" nullable:"false" required:"true"`
+	}
+
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
 			conn, err := a.dbConn(ctx)
@@ -90,6 +74,11 @@ func (a *API) UserLogin() usecase.Interactor {
 // If the passed-in cookie is already invalid or there is no cookie, an empty
 // 200 response is returned as the user is already not logged in.
 func (a *API) UserLogout() usecase.Interactor {
+	type logoutOutput struct {
+		genericOutput
+		auth.TokenCookie
+	}
+
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
@@ -125,8 +114,27 @@ func (a *API) UserLogout() usecase.Interactor {
 // CreateUser takes in a user's information, saves it to the database, then
 // logs them in and returns the user's data and an authenticating jwt cookie.
 func (a *API) CreateUser() usecase.Interactor {
+	type newUserInput struct {
+		cityInput
+		Role         string `enum:"user,business"         json:"role"      nullable:"false"`
+		Username     string `json:"username"              nullable:"false"`
+		FirstName    string `json:"first_name"`
+		LastName     string `json:"last_name"`
+		Email        string `json:"email"`
+		Password     string `json:"password"              nullable:"false"`
+		PasswordConf string `json:"password_confirmation" nullable:"false"`
+	}
+
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
+			if input.Role != "user" && input.Role != "business" {
+				return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
+			}
+
+			if input.Password != input.PasswordConf {
+				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
+			}
+
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -134,6 +142,14 @@ func (a *API) CreateUser() usecase.Interactor {
 			defer conn.Release()
 
 			queries := db.New(conn)
+
+			locationID, err := queries.GetCityID(ctx, db.GetCityIDParams{
+				Name:  input.CityName,
+				State: input.StateCode,
+			})
+			if err != nil {
+				return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+			}
 
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
@@ -145,14 +161,6 @@ func (a *API) CreateUser() usecase.Interactor {
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
-			}
-
-			locationID, err := queries.GetCityID(ctx, db.GetCityIDParams{
-				Name:  input.LocationCity,
-				State: input.LocationState,
-			})
-			if err != nil {
-				return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
 			}
 
 			inputArgs := db.CreateUserParams{
