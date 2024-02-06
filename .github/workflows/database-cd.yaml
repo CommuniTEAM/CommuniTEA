@@ -31,7 +31,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  ping-server:
+  ping-db-server:
     needs: bundle-migrations
     runs-on: ubuntu-latest
     steps:

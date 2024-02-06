@@ -18,7 +18,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  lint:
+  lint-backend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 'backend' folder
@@ -37,7 +37,7 @@ jobs:
           version: v1.55.2
           working-directory: backend
 
-  tests:
+  test-api:
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -45,7 +45,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  ping-server:
+  ping-api-server:
     needs: build-backend
     runs-on: ubuntu-latest
     steps:
