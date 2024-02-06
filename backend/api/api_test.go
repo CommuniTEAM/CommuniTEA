@@ -127,7 +127,7 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 			filepath.Join("..", "db", "01_schema.sql"),
 			filepath.Join("..", "db", "migrations", "20231201090112_populate_location_states.sql"),
 			filepath.Join("..", "db", "migrations", "20231212061145_populate_user_roles.sql"),
-			filepath.Join("..", "db", "migrations", "20240106002631_add_inital_locations.sql"),
+			filepath.Join("..", "db", "migrations", "20240106002631_add_initial_locations.sql"),
 			filepath.Join("_testdata", "db_testdata_migration.sql"),
 		),
 		postgres.WithDatabase("test-db"),
