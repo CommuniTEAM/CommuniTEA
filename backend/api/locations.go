@@ -15,8 +15,8 @@ import (
 
 type cityInput struct {
 	defaultInput
-	StateCode string `maxLength:"2"    minLength:"2" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
-	CityName  string `json:"city_name" minLength:"1" nullable:"false"                                                                                                               required:"true"`
+	StateCode string `json:"state_code" maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	CityName  string `json:"city_name"  minLength:"1" nullable:"false" required:"true"`
 }
 
 type citiesOutput struct {
@@ -347,4 +347,23 @@ func (a *API) GetAllStates() usecase.Interactor {
 	response.SetTags("Locations")
 
 	return response
+}
+
+// getLocationDetails is a helper function that provides the full database
+// row for a location, given its ID.
+func (a *API) getLocationDetails(locationID uuid.UUID) (db.LocationsCity, error) {
+	conn, err := a.dbConn(context.Background())
+	if err != nil {
+		return db.LocationsCity{}, err
+	}
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	locationDetails, err := queries.GetCity(context.Background(), locationID)
+	if err != nil {
+		return db.LocationsCity{}, fmt.Errorf("could not get city: %w", err)
+	}
+
+	return locationDetails, nil
 }

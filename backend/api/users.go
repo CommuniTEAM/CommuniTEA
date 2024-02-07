@@ -42,8 +42,14 @@ func (a *API) UserLogin() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
 			}
 
+			locationDetails, err := a.getLocationDetails(userData.Location)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get location details: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
 			output.ID = userData.ID
-			output.Location = userData.Location
+			output.Location = locationDetails
 			output.Role = userData.Role
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
@@ -180,12 +186,18 @@ func (a *API) CreateUser() usecase.Interactor {
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
+			locationDetails, err := a.getLocationDetails(locationID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get location details: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
 			output.ID = userData.ID
 			output.Role = userData.Role
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
-			output.Location = userData.Location
+			output.Location = locationDetails
 
 			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
