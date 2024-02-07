@@ -14,6 +14,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type userInput struct {
+	defaultInput
+	ID uuid.UUID `nullable:"false" path:"id" required:"true"`
+}
+
+type userOutput struct {
+	Role      string           `json:"role"                 required:"true"`
+	Username  string           `json:"username"             required:"true"`
+	FirstName string           `json:"first_name,omitempty"`
+	LastName  string           `json:"last_name,omitempty"`
+	Email     string           `json:"email,omitempty"`
+	Location  db.LocationsCity `json:"location"             required:"true"`
+}
+
 // UserLogin takes an inputted username and password and, if the credentials
 // are valid, returns the user's data along with an authenticating jwt cookie.
 func (a *API) UserLogin() usecase.Interactor {
@@ -215,6 +229,62 @@ func (a *API) CreateUser() usecase.Interactor {
 	response.SetDescription("Make a new user account.")
 	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
+// PromoteToAdmin takes a user ID and, if the requester is a logged-in admin,
+// promotes the user with the given ID to the admin role.
+func (a *API) PromoteToAdmin() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input userInput, output *userOutput) error {
+			userData := a.Auth.ValidateJWT(input.AccessToken)
+
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData["role"] != adminRole {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			user, err := queries.GetUser(ctx, input.ID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get user: %w", err))
+				return status.Wrap(fmt.Errorf("user does not exist"), status.InvalidArgument)
+			}
+
+			promotedUser, err := queries.PromoteToAdmin(ctx, user.ID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not promote user to admin role: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.Role = promotedUser.Role
+			output.Username = promotedUser.Username
+			output.FirstName = promotedUser.FirstName.String
+			output.LastName = promotedUser.LastName.String
+			output.Email = promotedUser.Email.String
+			output.Location, err = a.getLocationDetails(promotedUser.Location)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get location details: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+	response.SetTitle("Promote to Admin")
+	response.SetDescription("Promote a user account to the \"admin\" role.")
+	response.SetTags("Users")
+	response.SetExpectedErrors(status.InvalidArgument, status.Unauthenticated, status.PermissionDenied)
 
 	return response
 }
