@@ -163,12 +163,9 @@ func (a *API) CreateUser() usecase.Interactor {
 
 			queries := db.New(conn)
 
-			locationID, err := queries.GetCityID(ctx, db.GetCityIDParams{
-				Name:  input.CityName,
-				State: input.StateCode,
-			})
+			locationID, err := a.getLocationID(input.CityName, input.StateCode)
 			if err != nil {
-				return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+				return err
 			}
 
 			newUUID, err := uuid.NewRandom()

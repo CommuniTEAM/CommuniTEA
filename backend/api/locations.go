@@ -62,7 +62,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			queries := db.New(conn)
 
 			// Check that the city isn't already in the database
-			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.CityName, State: input.StateCode})
+			_, err = a.getLocationID(input.CityName, input.StateCode)
 			if err == nil {
 				// If err is nil then the location already exists
 				return status.Wrap(fmt.Errorf("location already exists"), status.AlreadyExists)
@@ -238,7 +238,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 			}
 
 			// Check that the new city name won't conflict
-			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.Name, State: city.State})
+			_, err = a.getLocationID(input.Name, city.State)
 			if err == nil {
 				// If err is nil then a city with the new name already exists
 				return status.Wrap(fmt.Errorf("could not update: a city with that name already exists"), status.AlreadyExists)
@@ -349,8 +349,31 @@ func (a *API) GetAllStates() usecase.Interactor {
 	return response
 }
 
+// getLocationID is a helper function that returns the ID of a location, given
+// a city name and a state code as strings, if it exists. Any errors returned
+// are wrapped.
+func (a *API) getLocationID(cityName string, stateCode string) (uuid.UUID, error) {
+	conn, err := a.dbConn(context.Background())
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	locationID, err := queries.GetCityID(context.Background(), db.GetCityIDParams{
+		Name:  cityName,
+		State: stateCode,
+	})
+	if err != nil {
+		return uuid.UUID{}, status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+	}
+
+	return locationID, nil
+}
+
 // getLocationDetails is a helper function that provides the full database
-// row for a location, given its ID.
+// row for a location, given its ID. Any errors returned are wrapped.
 func (a *API) getLocationDetails(locationID uuid.UUID) (db.LocationsCity, error) {
 	conn, err := a.dbConn(context.Background())
 	if err != nil {
