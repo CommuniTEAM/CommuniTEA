@@ -20,7 +20,7 @@ permissions:
   # pull-requests: write
 
 jobs:
-  lint:
+  lint-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 'frontend' folder
@@ -36,7 +36,7 @@ jobs:
       - name: Run Biome
         run: biome ci .
 
-  typecheck:
+  tsc-typecheck:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 'frontend' folder
@@ -53,7 +53,7 @@ jobs:
           fail_on_error: true
 
   vite-build:
-    needs: typecheck
+    needs: tsc-typecheck
     runs-on: ubuntu-latest
     defaults:
       run:
