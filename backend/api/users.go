@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"regexp"
 
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -65,6 +66,7 @@ func (a *API) UserLogin() usecase.Interactor {
 			output.ID = userData.ID
 			output.Location = locationDetails
 			output.Role = userData.Role
+			output.Email = userData.Email.String
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
@@ -76,8 +78,6 @@ func (a *API) UserLogin() usecase.Interactor {
 			}
 
 			output.ExpiresIn = 3600
-			output.TokenType = "bearer"
-
 			return nil
 		})
 
@@ -136,13 +136,13 @@ func (a *API) UserLogout() usecase.Interactor {
 func (a *API) CreateUser() usecase.Interactor {
 	type newUserInput struct {
 		cityInput
-		Role         string `enum:"user,business"         json:"role"      nullable:"false"`
-		Username     string `json:"username"              nullable:"false"`
+		Role         string `enum:"user,business"         json:"role"      nullable:"false" required:"true"`
+		Username     string `json:"username"              nullable:"false" required:"true"`
 		FirstName    string `json:"first_name"`
 		LastName     string `json:"last_name"`
 		Email        string `json:"email"`
-		Password     string `json:"password"              nullable:"false"`
-		PasswordConf string `json:"password_confirmation" nullable:"false"`
+		Password     string `json:"password"              nullable:"false" required:"true"`
+		PasswordConf string `json:"password_confirmation" nullable:"false" required:"true"`
 	}
 
 	response := usecase.NewInteractor(
@@ -208,6 +208,7 @@ func (a *API) CreateUser() usecase.Interactor {
 			output.Username = userData.Username
 			output.FirstName = userData.FirstName.String
 			output.LastName = userData.LastName.String
+			output.Email = userData.Email.String
 			output.Location = locationDetails
 
 			output, err = a.Auth.GenerateNewJWT(output, false)
@@ -217,8 +218,6 @@ func (a *API) CreateUser() usecase.Interactor {
 			}
 
 			output.ExpiresIn = 3600
-			output.TokenType = "bearer"
-
 			return nil
 		})
 
@@ -226,6 +225,140 @@ func (a *API) CreateUser() usecase.Interactor {
 	response.SetDescription("Make a new user account.")
 	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
+// UpdateUser accepts a first name, last name, email, role, and location as
+// optional inputs for a logged-in user and updates the database with the new
+// variables. Returns the updated user details and a new auth token.
+//
+//nolint:gocognit
+func (a *API) UpdateUser() usecase.Interactor {
+	type userUpdateInput struct {
+		defaultInput
+		ID        uuid.UUID `path:"id"`
+		FirstName string    `json:"first_name"`
+		LastName  string    `json:"last_name"`
+		Email     string    `json:"email"`
+		Role      string    `enum:"user,business" json:"role"`
+		StateCode string    `json:"state_code"    maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+		CityName  string    `json:"city_name"     minLength:"1" nullable:"false"`
+	}
+
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input userUpdateInput, output *auth.TokenData) error {
+			userData := a.Auth.ValidateJWT(input.AccessToken)
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData.ID != input.ID {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			// Check for differences in input vs userData
+
+			role := userData.Role
+			if input.Role != role && input.Role != "" {
+				if input.Role != "user" && input.Role != "business" {
+					return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
+				}
+				role = input.Role
+			}
+
+			firstName := userData.FirstName
+			if input.FirstName != "" {
+				firstName = input.FirstName
+			}
+
+			lastName := userData.LastName
+			if input.LastName != "" {
+				lastName = input.LastName
+			}
+
+			email := userData.Email
+			if input.Email != "" {
+				match, regexpErr := regexp.MatchString("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)", input.Email)
+				if regexpErr != nil {
+					log.Println(fmt.Errorf("could not match regex: %w", regexpErr))
+					return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				}
+				if !match {
+					return status.Wrap(fmt.Errorf("invalid email address"), status.InvalidArgument)
+				}
+
+				userEmail, dbErr := queries.GetUserByEmail(ctx, pgtype.Text{String: input.Email, Valid: true})
+				if dbErr != nil {
+					log.Println(fmt.Errorf("failed to get user by email: %w", dbErr))
+					email = input.Email
+				} else if userEmail.ID != userData.ID {
+					return status.Wrap(fmt.Errorf("email already in use"), status.InvalidArgument)
+				}
+			}
+
+			location := userData.Location
+			if input.CityName != "" && input.StateCode != "" {
+				if input.CityName == location.Name && input.StateCode == location.State {
+					location = userData.Location
+				} else {
+					locationID, dbErr := a.getLocationID(input.CityName, input.StateCode)
+					if dbErr != nil {
+						return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+					}
+					location.ID = locationID
+					location.Name = input.CityName
+					location.State = input.StateCode
+				}
+			}
+
+			// Send updated data to database
+
+			inputArgs := db.UpdateUserParams{
+				ID:        userData.ID,
+				Role:      role,
+				FirstName: pgtype.Text{String: firstName, Valid: (firstName != "")},
+				LastName:  pgtype.Text{String: lastName, Valid: (lastName != "")},
+				Email:     pgtype.Text{String: email, Valid: (email != "")},
+				Location:  location.ID,
+			}
+
+			updatedUser, err := queries.UpdateUser(ctx, inputArgs)
+			if err != nil {
+				log.Println(fmt.Errorf("failed to update user: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.ID = updatedUser.ID
+			output.Role = updatedUser.Role
+			output.Username = updatedUser.Username
+			output.FirstName = updatedUser.FirstName.String
+			output.LastName = updatedUser.LastName.String
+			output.Email = updatedUser.Email.String
+			output.Location = location
+
+			output, err = a.Auth.GenerateNewJWT(output, false)
+			if err != nil {
+				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.ExpiresIn = 3600
+			return nil
+		})
+
+	response.SetTitle("Update User")
+	response.SetDescription("Change one or some variables of your user account.")
+	response.SetTags("Users")
+	response.SetExpectedErrors(status.InvalidArgument, status.Unauthenticated, status.PermissionDenied)
 
 	return response
 }
@@ -241,7 +374,7 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -253,7 +386,7 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 
 			queries := db.New(conn)
 
-			user, err := queries.GetUser(ctx, input.ID)
+			user, err := queries.GetUserByID(ctx, input.ID)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get user: %w", err))
 				return status.Wrap(fmt.Errorf("user does not exist"), status.InvalidArgument)

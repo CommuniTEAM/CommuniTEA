@@ -49,6 +49,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 
 	// users
 	s.Post("/users", endpoints.CreateUser())
+	s.Put("/users/{id}", endpoints.UpdateUser())
 	s.Put("/users/{id}/promote", endpoints.PromoteToAdmin())
 
 	// locations

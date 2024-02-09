@@ -38,7 +38,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			// Verify that the user has the 'admin' role
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -215,7 +215,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -279,7 +279,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
