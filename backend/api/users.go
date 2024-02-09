@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/CommuniTEAM/CommuniTEA/auth"
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -229,6 +230,47 @@ func (a *API) CreateUser() usecase.Interactor {
 	return response
 }
 
+func (a *API) GetUser() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input userInput, output *userOutput) error {
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			userDetails, err := queries.GetUserByID(ctx, input.ID)
+			if err != nil {
+				if strings.Contains(err.Error(), "no rows") {
+					return status.Wrap(fmt.Errorf("no user with that id"), status.NotFound)
+				}
+				log.Println(fmt.Errorf("could not get user details: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.Username = userDetails.Username
+			output.FirstName = userDetails.FirstName.String
+			output.LastName = userDetails.LastName.String
+			output.Email = userDetails.Email.String
+			output.Role = userDetails.Role
+			output.Location, err = a.getLocationDetails(userDetails.Location)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Get User")
+	response.SetDescription("Get the details of a user.")
+	response.SetTags("Users")
+	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
 // UpdateUser accepts a first name, last name, email, role, and location as
 // optional inputs for a logged-in user and updates the database with the new
 // variables. Returns the updated user details and a new auth token.
@@ -419,6 +461,8 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 	return response
 }
 
+// DeleteUser takes a user ID and deletes the associated account from the
+// database IF the request comes from the user with the same ID.
 func (a *API) DeleteUser() usecase.Interactor {
 	type deleteUserInput struct {
 		defaultInput
