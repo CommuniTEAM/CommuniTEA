@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/google/uuid"
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwt"
@@ -21,14 +22,14 @@ type TokenCookie struct {
 
 type TokenData struct {
 	TokenCookie
-	TokenType string    `json:"token_type"`
-	ExpiresIn int       `json:"expires_in"`
-	ID        uuid.UUID `json:"id"`
-	Role      string    `json:"role"`
-	Username  string    `json:"username"`
-	FirstName string    `json:"first_name,omitempty"`
-	LastName  string    `json:"last_name,omitempty"`
-	Location  uuid.UUID `json:"location"`
+	TokenType string           `json:"token_type"`
+	ExpiresIn int              `json:"expires_in"`
+	ID        uuid.UUID        `json:"id"`
+	Role      string           `json:"role"`
+	Username  string           `json:"username"`
+	FirstName string           `json:"first_name,omitempty"`
+	LastName  string           `json:"last_name,omitempty"`
+	Location  db.LocationsCity `json:"location"`
 }
 
 // ValidateJWT takes a signed JWT, verifies it against the key, then parses

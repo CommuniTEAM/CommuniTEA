@@ -63,6 +63,41 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getUser = `-- name: GetUser :one
+select
+    "id",
+    "role",
+    "username",
+    "first_name",
+    "last_name",
+    "location"
+from users
+where "id" = $1
+`
+
+type GetUserRow struct {
+	ID        uuid.UUID   `json:"id"`
+	Role      string      `json:"role"`
+	Username  string      `json:"username"`
+	FirstName pgtype.Text `json:"first_name"`
+	LastName  pgtype.Text `json:"last_name"`
+	Location  uuid.UUID   `json:"location"`
+}
+
+func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (GetUserRow, error) {
+	row := q.db.QueryRow(ctx, getUser, id)
+	var i GetUserRow
+	err := row.Scan(
+		&i.ID,
+		&i.Role,
+		&i.Username,
+		&i.FirstName,
+		&i.LastName,
+		&i.Location,
+	)
+	return i, err
+}
+
 const login = `-- name: Login :one
 select
     "id",
@@ -97,6 +132,29 @@ func (q *Queries) Login(ctx context.Context, username string) (LoginRow, error) 
 		&i.LastName,
 		&i.Location,
 		&i.Password,
+	)
+	return i, err
+}
+
+const promoteToAdmin = `-- name: PromoteToAdmin :one
+update users
+set "role" = 'admin'
+where "id" = $1
+returning id, role, username, first_name, last_name, email, password, location
+`
+
+func (q *Queries) PromoteToAdmin(ctx context.Context, id uuid.UUID) (User, error) {
+	row := q.db.QueryRow(ctx, promoteToAdmin, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Role,
+		&i.Username,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+		&i.Location,
 	)
 	return i, err
 }

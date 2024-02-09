@@ -11,6 +11,7 @@ import (
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/CommuniTEAM/CommuniTEA/auth"
+	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
 	"github.com/CommuniTEAM/CommuniTEA/router"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -75,8 +76,11 @@ func (suite *TestSuite) SetupSuite() {
 		ID:        uuid.MustParse("372bcfb3-6b1d-4925-9f3d-c5ec683a4294"),
 		Role:      "user",
 		Username:  "user",
-		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
-	}
+		Location: db.LocationsCity{
+			ID:    uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+			Name:  "Seattle",
+			State: "WA",
+		}}
 	userToken, err := api.Auth.GenerateNewJWT(&userData, false)
 	if err != nil {
 		log.Fatalf("could not generate user token: %v", err)
@@ -88,8 +92,11 @@ func (suite *TestSuite) SetupSuite() {
 		ID:        uuid.MustParse("140e4411-a7f7-4c50-a2d4-f3d3fc9fc550"),
 		Role:      "business",
 		Username:  "business",
-		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
-	}
+		Location: db.LocationsCity{
+			ID:    uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+			Name:  "Seattle",
+			State: "WA",
+		}}
 	businessToken, err := api.Auth.GenerateNewJWT(&businessData, false)
 	if err != nil {
 		log.Fatalf("could not generate business token: %v", err)
@@ -101,7 +108,11 @@ func (suite *TestSuite) SetupSuite() {
 		ID:        uuid.MustParse("e6473137-f4ef-46cc-a5e5-96ccb9d41043"),
 		Role:      "admin",
 		Username:  "admin",
-		Location:  uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+		Location: db.LocationsCity{
+			ID:    uuid.MustParse("4c33e0bc-3d43-4e77-aed0-b7aff09bb689"),
+			Name:  "Seattle",
+			State: "WA",
+		},
 	}
 	adminToken, err := api.Auth.GenerateNewJWT(&adminData, false)
 	if err != nil {

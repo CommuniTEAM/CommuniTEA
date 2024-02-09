@@ -15,12 +15,8 @@ import (
 
 type cityInput struct {
 	defaultInput
-	Name  string `json:"name"  minLength:"1" nullable:"false" required:"true"`
-	State string `json:"state" maxLength:"2" minLength:"2"    nullable:"false" required:"true"`
-}
-
-type stateInput struct {
-	State string `maxLength:"2" minLength:"2" path:"state" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	StateCode string `json:"state_code" maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	CityName  string `json:"city_name"  minLength:"1" nullable:"false" required:"true"`
 }
 
 type citiesOutput struct {
@@ -47,8 +43,8 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			// Verify that input matches required pattern
-			input.State = strings.ToUpper(input.State)
-			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.State)
+			input.StateCode = strings.ToUpper(input.StateCode)
+			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.StateCode)
 			if err != nil {
 				log.Println(fmt.Errorf("could not match regex: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -66,7 +62,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			queries := db.New(conn)
 
 			// Check that the city isn't already in the database
-			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.Name, State: input.State})
+			_, err = a.getLocationID(input.CityName, input.StateCode)
 			if err == nil {
 				// If err is nil then the location already exists
 				return status.Wrap(fmt.Errorf("location already exists"), status.AlreadyExists)
@@ -80,8 +76,8 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			inputArgs := db.CreateCityParams{
 				ID:    newUUID,
-				Name:  input.Name,
-				State: input.State,
+				Name:  input.CityName,
+				State: input.StateCode,
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
@@ -142,6 +138,9 @@ func (a *API) GetCity() usecase.Interactor {
 // GetAllCitiesInState takes a state code as a query parameter and returns
 // a list of all cities within the given state.
 func (a *API) GetAllCitiesInState() usecase.Interactor {
+	type stateInput struct {
+		StateCode string `maxLength:"2" minLength:"2" path:"state-code" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+	}
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
@@ -152,8 +151,8 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 
 			queries := db.New(conn)
 
-			input.State = strings.ToUpper(input.State)
-			output.Cities, err = queries.GetAllCitiesInState(ctx, input.State)
+			input.StateCode = strings.ToUpper(input.StateCode)
+			output.Cities, err = queries.GetAllCitiesInState(ctx, input.StateCode)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get all cities in state: %w", err))
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
@@ -239,7 +238,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 			}
 
 			// Check that the new city name won't conflict
-			_, err = queries.GetCityID(ctx, db.GetCityIDParams{Name: input.Name, State: city.State})
+			_, err = a.getLocationID(input.Name, city.State)
 			if err == nil {
 				// If err is nil then a city with the new name already exists
 				return status.Wrap(fmt.Errorf("could not update: a city with that name already exists"), status.AlreadyExists)
@@ -348,4 +347,46 @@ func (a *API) GetAllStates() usecase.Interactor {
 	response.SetTags("Locations")
 
 	return response
+}
+
+// getLocationID is a helper function that returns the ID of a location, given
+// a city name and a state code as strings, if it exists. Any errors returned
+// are wrapped.
+func (a *API) getLocationID(cityName string, stateCode string) (uuid.UUID, error) {
+	conn, err := a.dbConn(context.Background())
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	locationID, err := queries.GetCityID(context.Background(), db.GetCityIDParams{
+		Name:  cityName,
+		State: stateCode,
+	})
+	if err != nil {
+		return uuid.UUID{}, status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+	}
+
+	return locationID, nil
+}
+
+// getLocationDetails is a helper function that provides the full database
+// row for a location, given its ID. Any errors returned are wrapped.
+func (a *API) getLocationDetails(locationID uuid.UUID) (db.LocationsCity, error) {
+	conn, err := a.dbConn(context.Background())
+	if err != nil {
+		return db.LocationsCity{}, err
+	}
+	defer conn.Release()
+
+	queries := db.New(conn)
+
+	locationDetails, err := queries.GetCity(context.Background(), locationID)
+	if err != nil {
+		return db.LocationsCity{}, fmt.Errorf("could not get city: %w", err)
+	}
+
+	return locationDetails, nil
 }

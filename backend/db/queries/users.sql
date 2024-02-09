@@ -12,6 +12,23 @@ insert into users (
 values ($1, $2, $3, $4, $5, $6, $7, $8)
 returning *;
 
+-- name: GetUser :one
+select
+    "id",
+    "role",
+    "username",
+    "first_name",
+    "last_name",
+    "location"
+from users
+where "id" = $1;
+
+-- name: PromoteToAdmin :one
+update users
+set "role" = 'admin'
+where "id" = $1
+returning *;
+
 -- name: Login :one
 select
     "id",
