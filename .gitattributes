@@ -1,5 +1,5 @@
-# Set git to use lf by default
-* text=auto !eol
+# Turn off core.autocrlf for Windows users
+* -text
 
 # Instruct GitHub to acknowledge SQL as a repo language
 *.sql linguist-language=sql linguist-detectable
