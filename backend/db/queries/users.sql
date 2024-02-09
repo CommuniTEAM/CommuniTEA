@@ -53,6 +53,10 @@ set "role" = 'admin'
 where "id" = $1
 returning *;
 
+-- name: DeleteUser :exec
+delete from users
+where "id" = $1;
+
 -- name: Login :one
 select
     "id",

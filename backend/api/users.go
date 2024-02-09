@@ -20,6 +20,11 @@ type userInput struct {
 	ID uuid.UUID `nullable:"false" path:"id" required:"true"`
 }
 
+type logoutOutput struct {
+	genericOutput
+	auth.TokenCookie
+}
+
 type userOutput struct {
 	Role      string           `json:"role"                 required:"true"`
 	Username  string           `json:"username"             required:"true"`
@@ -94,11 +99,6 @@ func (a *API) UserLogin() usecase.Interactor {
 // If the passed-in cookie is already invalid or there is no cookie, an empty
 // 200 response is returned as the user is already not logged in.
 func (a *API) UserLogout() usecase.Interactor {
-	type logoutOutput struct {
-		genericOutput
-		auth.TokenCookie
-	}
-
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
@@ -415,6 +415,64 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 	response.SetDescription("Promote a user account to the \"admin\" role.")
 	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument, status.Unauthenticated, status.PermissionDenied)
+
+	return response
+}
+
+func (a *API) DeleteUser() usecase.Interactor {
+	type deleteUserInput struct {
+		defaultInput
+		ID uuid.UUID `path:"id"`
+	}
+
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input deleteUserInput, output *logoutOutput) error {
+			userData := a.Auth.ValidateJWT(input.AccessToken)
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData.ID != input.ID {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			err = queries.DeleteUser(ctx, input.ID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not delete user: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			token, err := a.Auth.GenerateNewJWT(
+				&auth.TokenData{},
+				true,
+			)
+			if err != nil {
+				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.Token = token.Token
+			output.Message = successMsg
+
+			return nil
+		})
+
+	response.SetTitle("Delete User")
+	response.SetDescription("Delete your user account.")
+	response.SetTags("Users")
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
+	)
 
 	return response
 }
