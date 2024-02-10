@@ -2,11 +2,14 @@ package api_test
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"testing"
 
+	"github.com/CommuniTEAM/CommuniTEA/auth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -68,10 +71,10 @@ func (suite *UsersTestSuite) TestGetUser() {
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }
 
-func (suite *UsersTestSuite) TestCreateUser() {
+func (suite *UsersTestSuite) TestCreateUserAndAuth() {
 	t := suite.T()
 
-	// * Check 400 response
+	// * Check 400 response for CreateUser
 	reqBody := []byte(`{
 		"username": "TestUser",
 		"state_code": "WA",
@@ -91,7 +94,7 @@ func (suite *UsersTestSuite) TestCreateUser() {
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 
-	// * Check 200 response & body
+	// * Check 200 response & body for CreateUser
 	reqBody = []byte(`{
 		"username": "TestUser",
 		"city_name": "Seattle",
@@ -135,7 +138,12 @@ func (suite *UsersTestSuite) TestCreateUser() {
 
 	assertjson.Equal(t, expectedBody, respBody)
 
-	// * Check 409 response & body
+	// Keep user data for ChangePassword
+	var userData auth.TokenData
+	err = json.Unmarshal(respBody, &userData)
+	require.NoError(t, err)
+
+	// * Check 409 response & body for CreateUser
 	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)
 
@@ -149,4 +157,78 @@ func (suite *UsersTestSuite) TestCreateUser() {
 	require.NoError(t, resp.Body.Close())
 
 	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 401 response & body for ChangePassword
+	reqBody = []byte(fmt.Sprintf(`{
+		"id": "%v",
+		"old_password": "string",
+		"new_password": "password",
+		"new_password_conf": "password"
+	}`, userData.ID.String()))
+
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userData.ID.String()+"/change-password", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 403 response & body for ChangePassword
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userData.ID.String()+"/change-password", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Check 200 response & body for ChangePassword
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userData.ID.String()+"/change-password", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: userData.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.successBody, respBody)
+
+	// * Check 401 response for ChangePassword
+	reqBody = []byte(fmt.Sprintf(`{
+		"id": "%v",
+		"old_password": "password",
+		"new_password": "coolPassword",
+		"new_password_conf": "notCoolPassword"
+	}`, userData.ID.String()))
+
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userData.ID.String()+"/change-password", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: userData.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }
