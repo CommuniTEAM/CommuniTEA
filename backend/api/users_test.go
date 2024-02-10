@@ -255,3 +255,49 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 
 	assertjson.Equal(t, expectedBody, respBody)
 }
+
+func (suite *UsersTestSuite) TestLogout() {
+	t := suite.T()
+
+	// * Check 200 response & body for logged-in user
+	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/logout", nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody := []byte(`{
+		"access_token": "<ignore-diff>",
+		"message": "success"
+	}`)
+
+	assertjson.Equal(t, expectedBody, body)
+
+	// * Check 200 response & body for logged-out user
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/logout", nil)
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody = []byte(`{
+		"access_token": "",
+		"message": "success"
+	}`)
+
+	assertjson.Equal(t, expectedBody, body)
+}
