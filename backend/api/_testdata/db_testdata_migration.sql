@@ -73,3 +73,5 @@ insert into "locations_cities" (
     'Kansas City',
     'KS'
 );
+
+-- users testdata

@@ -1,0 +1,10 @@
+{
+    "id": "372bcfb3-6b1d-4925-9f3d-c5ec683a4294",
+    "username": "user",
+    "role": "user",
+    "location": {
+        "id": "4c33e0bc-3d43-4e77-aed0-b7aff09bb689",
+        "name": "Seattle",
+        "state": "WA"
+    }
+}

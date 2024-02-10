@@ -27,6 +27,7 @@ type logoutOutput struct {
 }
 
 type userOutput struct {
+	ID        uuid.UUID        `json:"id"                   required:"true"`
 	Role      string           `json:"role"                 required:"true"`
 	Username  string           `json:"username"             required:"true"`
 	FirstName string           `json:"first_name,omitempty"`
@@ -250,6 +251,7 @@ func (a *API) GetUser() usecase.Interactor {
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
+			output.ID = userDetails.ID
 			output.Username = userDetails.Username
 			output.FirstName = userDetails.FirstName.String
 			output.LastName = userDetails.LastName.String
@@ -440,6 +442,7 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 			}
 
+			output.ID = promotedUser.ID
 			output.Role = promotedUser.Role
 			output.Username = promotedUser.Username
 			output.FirstName = promotedUser.FirstName.String
