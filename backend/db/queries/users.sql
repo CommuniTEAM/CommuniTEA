@@ -24,6 +24,18 @@ select
 from users
 where "id" = $1;
 
+-- name: GetUserByUsername :one
+select
+    "id",
+    "role",
+    "email",
+    "username",
+    "first_name",
+    "last_name",
+    "location"
+from users
+where "username" = $1;
+
 -- name: GetUserByEmail :one
 select
     "id",
@@ -46,6 +58,11 @@ set
     "location" = $5
 where "id" = $6
 returning *;
+
+-- name: ChangePassword :exec
+update users
+set "password" = $1
+where "id" = $2;
 
 -- name: PromoteToAdmin :one
 update users

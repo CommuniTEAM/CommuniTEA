@@ -157,6 +157,8 @@ func (a *API) CreateUser() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
 			}
 
+			// TODO: Check for email in database
+
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -401,6 +403,67 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 	response.SetTitle("Update User")
 	response.SetDescription("Change one or some variables of your user account.")
+	response.SetTags("Users")
+	response.SetExpectedErrors(status.InvalidArgument, status.Unauthenticated, status.PermissionDenied)
+
+	return response
+}
+
+func (a *API) ChangePassword() usecase.Interactor {
+	type passwordInput struct {
+		defaultInput
+		ID              uuid.UUID `path:"id"`
+		OldPassword     string    `json:"old_password"      nullable:"false" required:"true"`
+		NewPassword     string    `json:"new_password"      nullable:"false" required:"true"`
+		NewPasswordConf string    `json:"new_password_conf" nullable:"false" required:"true"`
+	}
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input passwordInput, output *genericOutput) error {
+			userData := a.Auth.ValidateJWT(input.AccessToken)
+			if userData == nil {
+				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData.ID != input.ID {
+				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			if input.NewPassword != input.NewPasswordConf {
+				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			_, err = queries.Login(ctx, userData.Username)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get user from database: %w", err))
+				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
+			}
+
+			hashedPass, err := bcrypt.GenerateFromPassword([]byte(input.NewPassword), bcrypt.DefaultCost)
+			if err != nil {
+				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			err = queries.ChangePassword(ctx, db.ChangePasswordParams{ID: userData.ID, Password: hashedPass})
+			if err != nil {
+				log.Println(fmt.Errorf("could not change password: %w", err))
+				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			}
+
+			output.Message = successMsg
+			return nil
+		})
+
+	response.SetTitle("Change Password")
+	response.SetDescription("Change your account password.")
 	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument, status.Unauthenticated, status.PermissionDenied)
 

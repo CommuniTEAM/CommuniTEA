@@ -12,6 +12,22 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const changePassword = `-- name: ChangePassword :exec
+update users
+set "password" = $1
+where "id" = $2
+`
+
+type ChangePasswordParams struct {
+	Password []byte    `json:"password"`
+	ID       uuid.UUID `json:"id"`
+}
+
+func (q *Queries) ChangePassword(ctx context.Context, arg ChangePasswordParams) error {
+	_, err := q.db.Exec(ctx, changePassword, arg.Password, arg.ID)
+	return err
+}
+
 const createUser = `-- name: CreateUser :one
 insert into users (
     "id",
@@ -137,6 +153,44 @@ type GetUserByIDRow struct {
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow, error) {
 	row := q.db.QueryRow(ctx, getUserByID, id)
 	var i GetUserByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.Role,
+		&i.Email,
+		&i.Username,
+		&i.FirstName,
+		&i.LastName,
+		&i.Location,
+	)
+	return i, err
+}
+
+const getUserByUsername = `-- name: GetUserByUsername :one
+select
+    "id",
+    "role",
+    "email",
+    "username",
+    "first_name",
+    "last_name",
+    "location"
+from users
+where "username" = $1
+`
+
+type GetUserByUsernameRow struct {
+	ID        uuid.UUID   `json:"id"`
+	Role      string      `json:"role"`
+	Email     pgtype.Text `json:"email"`
+	Username  string      `json:"username"`
+	FirstName pgtype.Text `json:"first_name"`
+	LastName  pgtype.Text `json:"last_name"`
+	Location  uuid.UUID   `json:"location"`
+}
+
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
+	row := q.db.QueryRow(ctx, getUserByUsername, username)
+	var i GetUserByUsernameRow
 	err := row.Scan(
 		&i.ID,
 		&i.Role,
