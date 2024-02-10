@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 	"os"
@@ -65,4 +66,87 @@ func (suite *UsersTestSuite) TestGetUser() {
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+}
+
+func (suite *UsersTestSuite) TestCreateUser() {
+	t := suite.T()
+
+	// * Check 400 response
+	reqBody := []byte(`{
+		"username": "TestUser",
+		"state_code": "WA",
+		"email": "email@email.com",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"password": "string",
+		"password_confirmation": "string",
+		"role": "user"
+	}`)
+
+	req, err := http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	// * Check 200 response & body
+	reqBody = []byte(`{
+		"username": "TestUser",
+		"city_name": "Seattle",
+		"state_code": "WA",
+		"email": "email@email.com",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"password": "string",
+		"password_confirmation": "string",
+		"role": "user"
+	}`)
+
+	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody := []byte(`{
+		"access_token": "<ignore-diff>",
+		"token_type": "bearer",
+		"expires_in": 3600,
+		"id": "<ignore-diff>",
+		"username": "TestUser",
+		"email": "email@email.com",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"role": "user",
+		"location": {
+			"id": "4c33e0bc-3d43-4e77-aed0-b7aff09bb689",
+			"name": "Seattle",
+			"state": "WA"
+		}
+	}`)
+
+	assertjson.Equal(t, expectedBody, respBody)
+
+	// * Check 409 response & body
+	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusConflict, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
 }

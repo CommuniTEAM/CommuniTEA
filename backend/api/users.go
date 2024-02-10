@@ -157,8 +157,6 @@ func (a *API) CreateUser() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
 			}
 
-			// TODO: Check for email in database
-
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -166,6 +164,18 @@ func (a *API) CreateUser() usecase.Interactor {
 			defer conn.Release()
 
 			queries := db.New(conn)
+
+			_, err = queries.GetUserByUsername(ctx, input.Username)
+			if err == nil {
+				return status.Wrap(fmt.Errorf("username taken"), status.AlreadyExists)
+			}
+
+			if input.Email != "" {
+				_, err = queries.GetUserByEmail(ctx, pgtype.Text{String: input.Email, Valid: true})
+				if err == nil {
+					return status.Wrap(fmt.Errorf("email already in use"), status.AlreadyExists)
+				}
+			}
 
 			locationID, err := a.getLocationID(input.CityName, input.StateCode)
 			if err != nil {
@@ -228,7 +238,7 @@ func (a *API) CreateUser() usecase.Interactor {
 	response.SetTitle("Create User")
 	response.SetDescription("Make a new user account.")
 	response.SetTags("Users")
-	response.SetExpectedErrors(status.InvalidArgument)
+	response.SetExpectedErrors(status.InvalidArgument, status.AlreadyExists)
 
 	return response
 }
