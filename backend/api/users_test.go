@@ -256,6 +256,75 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 	assertjson.Equal(t, expectedBody, respBody)
 }
 
+func (suite *UsersTestSuite) TestPromoteToAdmin() {
+	t := suite.T()
+
+	// ID of the manually added user "user"
+	userID := "372bcfb3-6b1d-4925-9f3d-c5ec683a4294"
+
+	// * Check 401 response & body
+	req, err := http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID+"/promote", nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, body)
+
+	// * Check 403 response & body
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID+"/promote", nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.business.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	body, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, body)
+
+	// * Check 200 response & body
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID+"/promote", nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assert.Contains(t, string(body), "admin")
+
+	// * Check 400 response
+	userID = "fgdsd67uh-87yg-ghj" // invalid uuid
+
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID+"/promote", nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+}
+
 func (suite *UsersTestSuite) TestLogout() {
 	t := suite.T()
 
