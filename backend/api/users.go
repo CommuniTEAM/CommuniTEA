@@ -344,14 +344,23 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 			if input.CityName == location.Name && input.StateCode == location.State {
 				location = userData.Location
-			} else if input.CityName != "" && input.StateCode != "" {
-				locationID, dbErr := a.getLocationID(input.CityName, input.StateCode)
+			} else if input.CityName != "" || input.StateCode != "" {
+				cityName := input.CityName
+				stateCode := input.StateCode
+				if cityName == "" {
+					cityName = location.Name
+				}
+				if stateCode == "" {
+					stateCode = location.State
+				}
+
+				locationID, dbErr := a.getLocationID(cityName, stateCode)
 				if dbErr != nil {
 					return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
 				}
 				location.ID = locationID
-				location.Name = input.CityName
-				location.State = input.StateCode
+				location.Name = cityName
+				location.State = stateCode
 			}
 
 			// Send updated data to database
