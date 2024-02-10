@@ -71,9 +71,10 @@ func (suite *UsersTestSuite) TestGetUser() {
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }
 
-func (suite *UsersTestSuite) TestCreateUserAndAuth() {
+func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 	t := suite.T()
 
+	// CREATE USER
 	// * Check 400 response for CreateUser
 	reqBody := []byte(`{
 		"username": "TestUser",
@@ -94,7 +95,7 @@ func (suite *UsersTestSuite) TestCreateUserAndAuth() {
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 
-	// * Check 200 response & body for CreateUser
+	// * Check 200 response, body, & cookie for CreateUser
 	reqBody = []byte(`{
 		"username": "TestUser",
 		"city_name": "Seattle",
@@ -119,22 +120,8 @@ func (suite *UsersTestSuite) TestCreateUserAndAuth() {
 	require.NoError(t, err)
 	require.NoError(t, resp.Body.Close())
 
-	expectedBody := []byte(`{
-		"access_token": "<ignore-diff>",
-		"token_type": "bearer",
-		"expires_in": 3600,
-		"id": "<ignore-diff>",
-		"username": "TestUser",
-		"email": "email@email.com",
-		"first_name": "Testy",
-		"last_name": "Testington",
-		"role": "user",
-		"location": {
-			"id": "4c33e0bc-3d43-4e77-aed0-b7aff09bb689",
-			"name": "Seattle",
-			"state": "WA"
-		}
-	}`)
+	expectedBody, err := os.ReadFile("_testdata/users/token_data.json")
+	require.NoError(t, err)
 
 	assertjson.Equal(t, expectedBody, respBody)
 
@@ -158,6 +145,7 @@ func (suite *UsersTestSuite) TestCreateUserAndAuth() {
 
 	assertjson.Equal(t, suite.errBody, respBody)
 
+	// CHANGE PASSWORD
 	// * Check 401 response & body for ChangePassword
 	reqBody = []byte(fmt.Sprintf(`{
 		"id": "%v",
@@ -231,4 +219,39 @@ func (suite *UsersTestSuite) TestCreateUserAndAuth() {
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	// USER LOGIN
+	// * Check 401 response & cookie for UserLogin
+	reqBody = []byte(`{
+		"username": "TestUser",
+		"password": "fakePassword"
+	}`)
+
+	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/login", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	// * Check 200 response, body, & cookie for UserLogin
+	reqBody = []byte(`{
+		"username": "TestUser",
+		"password": "password"
+	}`)
+
+	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/login", bytes.NewBuffer(reqBody))
+	require.NoError(t, err)
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, expectedBody, respBody)
 }
