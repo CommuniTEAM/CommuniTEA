@@ -86,8 +86,8 @@ linters-settings:
 
   gocognit:
     # Minimal code complexity to report.
-    # Default: 30 (but we recommend 10-20)
-    min-complexity: 30
+    # Default: 30 (upped b/c swaggest adds like 15 by default)
+    min-complexity: 35
 
   gocritic:
     # Settings passed to gocritic.

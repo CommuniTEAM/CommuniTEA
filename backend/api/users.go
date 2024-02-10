@@ -149,8 +149,9 @@ func (a *API) CreateUser() usecase.Interactor {
 
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
-			if input.Role != "user" && input.Role != "business" {
-				return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
+			err := verifyRole(input.Role)
+			if err != nil {
+				return err
 			}
 
 			if input.Password != input.PasswordConf {
@@ -171,6 +172,11 @@ func (a *API) CreateUser() usecase.Interactor {
 			}
 
 			if input.Email != "" {
+				emailErr := verifyEmail(input.Email, "", queries)
+				if emailErr != nil {
+					return emailErr
+				}
+
 				_, err = queries.GetUserByEmail(ctx, pgtype.Text{String: input.Email, Valid: true})
 				if err == nil {
 					return status.Wrap(fmt.Errorf("email already in use"), status.AlreadyExists)
@@ -288,8 +294,6 @@ func (a *API) GetUser() usecase.Interactor {
 // UpdateUser accepts a first name, last name, email, role, and location as
 // optional inputs for a logged-in user and updates the database with the new
 // variables. Returns the updated user details and a new auth token.
-//
-//nolint:gocognit
 func (a *API) UpdateUser() usecase.Interactor {
 	type userUpdateInput struct {
 		defaultInput
@@ -325,8 +329,9 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 			role := userData.Role
 			if input.Role != role && input.Role != "" {
-				if input.Role != "user" && input.Role != "business" {
-					return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
+				roleErr := verifyRole(input.Role)
+				if roleErr != nil {
+					return roleErr
 				}
 				role = input.Role
 			}
@@ -343,37 +348,24 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 			email := userData.Email
 			if input.Email != "" {
-				match, regexpErr := regexp.MatchString("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)", input.Email)
-				if regexpErr != nil {
-					log.Println(fmt.Errorf("could not match regex: %w", regexpErr))
-					return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
-				}
-				if !match {
-					return status.Wrap(fmt.Errorf("invalid email address"), status.InvalidArgument)
-				}
-
-				userEmail, dbErr := queries.GetUserByEmail(ctx, pgtype.Text{String: input.Email, Valid: true})
-				if dbErr != nil {
-					log.Println(fmt.Errorf("failed to get user by email: %w", dbErr))
-					email = input.Email
-				} else if userEmail.ID != userData.ID {
-					return status.Wrap(fmt.Errorf("email already in use"), status.InvalidArgument)
+				emailErr := verifyEmail(input.Email, input.ID.String(), queries)
+				if emailErr != nil {
+					return emailErr
 				}
 			}
 
 			location := userData.Location
-			if input.CityName != "" && input.StateCode != "" {
-				if input.CityName == location.Name && input.StateCode == location.State {
-					location = userData.Location
-				} else {
-					locationID, dbErr := a.getLocationID(input.CityName, input.StateCode)
-					if dbErr != nil {
-						return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
-					}
-					location.ID = locationID
-					location.Name = input.CityName
-					location.State = input.StateCode
+
+			if input.CityName == location.Name && input.StateCode == location.State {
+				location = userData.Location
+			} else if input.CityName != "" && input.StateCode != "" {
+				locationID, dbErr := a.getLocationID(input.CityName, input.StateCode)
+				if dbErr != nil {
+					return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
 				}
+				location.ID = locationID
+				location.Name = input.CityName
+				location.State = input.StateCode
 			}
 
 			// Send updated data to database
@@ -595,4 +587,42 @@ func (a *API) DeleteUser() usecase.Interactor {
 	)
 
 	return response
+}
+
+// verifyRole is a helper function that checks a given string against the role
+// enums, "user" and "business". Errors are returned wrapped.
+func verifyRole(role string) error {
+	if role != "user" && role != "business" {
+		return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
+	}
+	return nil
+}
+
+// verifyEmail is a helper function that checks a given string against email
+// regex, then checks it against the database to verify that it is not in use
+// by another user. Errors are returned wrapped.
+func verifyEmail(email string, userID string, queries *db.Queries) error {
+	match, regexpErr := regexp.MatchString("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)", email)
+	if regexpErr != nil {
+		log.Println(fmt.Errorf("could not match regex: %w", regexpErr))
+		return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+	}
+	if !match {
+		return status.Wrap(fmt.Errorf("invalid email address"), status.InvalidArgument)
+	}
+
+	userData, err := queries.GetUserByEmail(context.Background(), pgtype.Text{String: email, Valid: true})
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows") {
+			return nil
+		}
+		log.Println(fmt.Errorf("failed to get user by email: %w", err))
+		return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+	}
+
+	if userID != "" && userID != userData.ID.String() {
+		return status.Wrap(fmt.Errorf("email already in use"), status.InvalidArgument)
+	}
+
+	return nil
 }
