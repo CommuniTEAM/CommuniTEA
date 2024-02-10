@@ -301,3 +301,64 @@ func (suite *UsersTestSuite) TestLogout() {
 
 	assertjson.Equal(t, expectedBody, body)
 }
+
+func (suite *UsersTestSuite) TestDeleteUser() {
+	t := suite.T()
+
+	// ID of the manually added user "business"
+	userID := "140e4411-a7f7-4c50-a2d4-f3d3fc9fc550"
+
+	// * Check 401 response & body
+	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, body)
+
+	// * Check 403 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	body, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, body)
+
+	// * Check 200 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.business.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	expectedBody := []byte(`{
+		"access_token": "<ignore-diff>",
+		"message": "success"
+	}`)
+
+	assertjson.Equal(t, expectedBody, body)
+}
