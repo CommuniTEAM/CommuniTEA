@@ -131,19 +131,65 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 	require.NoError(t, err)
 
 	// * Check 409 response & body for CreateUser
+	badInputs := []string{`{
+		"username": "TestUser",
+		"city_name": "Seattle",
+		"state_code": "WA",
+		"email": "test@email.com",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"password": "string",
+		"password_confirmation": "string",
+		"role": "user"
+	}`,
+		`{
+		"username": "User123",
+		"city_name": "Seattle",
+		"state_code": "WA",
+		"email": "email@email.com",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"password": "string",
+		"password_confirmation": "string",
+		"role": "user"
+	}`}
+
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusConflict, resp.StatusCode)
+
+		respBody, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+		require.NoError(t, resp.Body.Close())
+
+		assertjson.Equal(t, suite.errBody, respBody)
+	}
+
+	// * Check 400 response for CreateUser
+	reqBody = []byte(`{
+		"username": "User123",
+		"city_name": "Seattle",
+		"state_code": "WA",
+		"email": "email",
+		"first_name": "Testy",
+		"last_name": "Testington",
+		"password": "string",
+		"password_confirmation": "string",
+		"role": "user"
+	}`)
+
 	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/users", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)
 
 	resp, err = http.DefaultTransport.RoundTrip(req)
 	require.NoError(t, err)
 
-	assert.Equal(t, http.StatusConflict, resp.StatusCode)
-
-	respBody, err = io.ReadAll(resp.Body)
-	require.NoError(t, err)
-	require.NoError(t, resp.Body.Close())
-
-	assertjson.Equal(t, suite.errBody, respBody)
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 
 	// CHANGE PASSWORD
 	// * Check 401 response & body for ChangePassword
@@ -222,18 +268,20 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 
 	// USER LOGIN
 	// * Check 401 response & cookie for UserLogin
-	reqBody = []byte(`{
-		"username": "TestUser",
-		"password": "fakePassword"
-	}`)
+	badInputs = []string{
+		`{"username": "TestUser", "password": "fakePassword"}`,
+		`{"username": "FakeUser", "password": "fakePassword"}`,
+	}
 
-	req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/login", bytes.NewBuffer(reqBody))
-	require.NoError(t, err)
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPost, suite.server.URL+"/login", bytes.NewBufferString(input))
+		require.NoError(t, err)
 
-	resp, err = http.DefaultTransport.RoundTrip(req)
-	require.NoError(t, err)
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
 
-	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
 
 	// * Check 200 response, body, & cookie for UserLogin
 	reqBody = []byte(`{

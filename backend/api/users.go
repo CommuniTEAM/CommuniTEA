@@ -176,11 +176,6 @@ func (a *API) CreateUser() usecase.Interactor {
 				if emailErr != nil {
 					return emailErr
 				}
-
-				_, err = queries.GetUserByEmail(ctx, pgtype.Text{String: input.Email, Valid: true})
-				if err == nil {
-					return status.Wrap(fmt.Errorf("email already in use"), status.AlreadyExists)
-				}
 			}
 
 			locationID, err := a.getLocationID(input.CityName, input.StateCode)
@@ -620,8 +615,8 @@ func verifyEmail(email string, userID string, queries *db.Queries) error {
 		return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 	}
 
-	if userID != "" && userID != userData.ID.String() {
-		return status.Wrap(fmt.Errorf("email already in use"), status.InvalidArgument)
+	if userID != "" || userID != userData.ID.String() {
+		return status.Wrap(fmt.Errorf("email already in use"), status.AlreadyExists)
 	}
 
 	return nil
