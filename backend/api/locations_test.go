@@ -143,8 +143,8 @@ func (suite *LocationsTestSuite) TestCreateCity() {
 
 	// * Check 401 response & body
 	reqBody := []byte(`{
-		"name": "Chicago",
-		"state": "IL"
+		"city_name": "Chicago",
+		"state_code": "IL"
 	}`)
 	req, err := http.NewRequest(http.MethodPost, suite.server.URL+"/locations/cities", bytes.NewBuffer(reqBody))
 	require.NoError(t, err)

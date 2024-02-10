@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"regexp"
 	"strings"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -38,19 +37,8 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			// Verify that the user has the 'admin' role
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
-			}
-
-			// Verify that input matches required pattern
-			input.StateCode = strings.ToUpper(input.StateCode)
-			match, err := regexp.MatchString("^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$", input.StateCode)
-			if err != nil {
-				log.Println(fmt.Errorf("could not match regex: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
-			}
-			if !match {
-				return status.Wrap(fmt.Errorf("invalid state code"), status.InvalidArgument)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -215,7 +203,7 @@ func (a *API) UpdateCity() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
@@ -279,7 +267,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
-			if userData["role"] != adminRole {
+			if userData.Role != adminRole {
 				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 

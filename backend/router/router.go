@@ -49,7 +49,11 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 
 	// users
 	s.Post("/users", endpoints.CreateUser())
+	s.Get("/users/{id}", endpoints.GetUser())
+	s.Put("/users/{id}", endpoints.UpdateUser())
+	s.Put("/users/{id}/change-password", endpoints.ChangePassword())
 	s.Put("/users/{id}/promote", endpoints.PromoteToAdmin())
+	s.Delete("/users/{id}", endpoints.DeleteUser())
 
 	// locations
 	s.Post("/locations/cities", endpoints.CreateCity(), requireAuth)
