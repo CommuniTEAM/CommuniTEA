@@ -149,11 +149,6 @@ func (a *API) CreateUser() usecase.Interactor {
 
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
-			err := verifyRole(input.Role)
-			if err != nil {
-				return err
-			}
-
 			if input.Password != input.PasswordConf {
 				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
 			}
@@ -324,10 +319,6 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 			role := userData.Role
 			if input.Role != role && input.Role != "" {
-				roleErr := verifyRole(input.Role)
-				if roleErr != nil {
-					return roleErr
-				}
 				role = input.Role
 			}
 
@@ -582,15 +573,6 @@ func (a *API) DeleteUser() usecase.Interactor {
 	)
 
 	return response
-}
-
-// verifyRole is a helper function that checks a given string against the role
-// enums, "user" and "business". Errors are returned wrapped.
-func verifyRole(role string) error {
-	if role != "user" && role != "business" {
-		return status.Wrap(fmt.Errorf("role must be either 'user' or 'business'"), status.InvalidArgument)
-	}
-	return nil
 }
 
 // verifyEmail is a helper function that checks a given string against email
