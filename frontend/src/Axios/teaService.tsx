@@ -3,13 +3,13 @@ import axios from 'axios';
 const BASE_URL = `${import.meta.env.VITE_API_HOST}/teas/`;
 
 interface Tea {
-  id: number
-  name: string
-  img_url: string
-  description: string
-  brew_time: number
-  brew_temp: number
-  published: boolean
+  id: number;
+  name: string;
+  img_url: string;
+  description: string;
+  brew_time: number;
+  brew_temp: number;
+  published: boolean;
 }
 
 // GET request to fetch all teas

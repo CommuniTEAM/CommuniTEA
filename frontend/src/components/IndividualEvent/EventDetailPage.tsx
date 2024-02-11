@@ -1,53 +1,51 @@
-import { useState, useEffect } from 'react';
+import { Button, Divider, Paper, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Button, Divider, Paper, Typography,
-} from '@mui/material';
-import NavBar from '../LandingPage/Navbar';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
-import shareIcon from '../../assets/ShareIcon.png';
 import MapPinIcon from '../../assets/MapPinIcon.png';
-import OtherEvents from './OtherEvents';
+import shareIcon from '../../assets/ShareIcon.png';
 import Footer from '../LandingPage/Footer';
+import NavBar from '../LandingPage/Navbar';
 import RsvpForm from './Forms/RsvpForm';
+import OtherEvents from './OtherEvents';
 
 import './styles/IndividualEventStyles.css';
 
 interface EventData {
-  id?: number
-  image?: string
-  tag?: string
-  host?: string
-  name?: string
-  title?: string
-  location?: string
-  date?: string
-  startTime?: string
-  endTime?: string
-  price?: string
-  address?: string
-  attending?: string
-  headline?: string
-  headline2?: string
-  description?: string
-  eventHighlight1?: string
-  eventHighlight1Bullet1?: string
-  eventHighlight1Bullet2?: string
-  eventHighlight1Bullet3?: string
-  eventHighlight2?: string
-  eventHighlight2Bullet1?: string
-  eventHighlight2Bullet2?: string
-  eventHighlight2Bullet3?: string
-  eventHighlight3?: string
-  eventHighlight3Bullet1?: string
-  eventHighlight3Bullet2?: string
-  eventHighlight3Bullet3?: string
-  eventHighlight4?: string
-  eventHighlight4Bullet1?: string
-  eventHighlight4Bullet2?: string
-  eventHighlight4Bullet3?: string
-  whyAttend?: string
+  id?: number;
+  image?: string;
+  tag?: string;
+  host?: string;
+  name?: string;
+  title?: string;
+  location?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  price?: string;
+  address?: string;
+  attending?: string;
+  headline?: string;
+  headline2?: string;
+  description?: string;
+  eventHighlight1?: string;
+  eventHighlight1Bullet1?: string;
+  eventHighlight1Bullet2?: string;
+  eventHighlight1Bullet3?: string;
+  eventHighlight2?: string;
+  eventHighlight2Bullet1?: string;
+  eventHighlight2Bullet2?: string;
+  eventHighlight2Bullet3?: string;
+  eventHighlight3?: string;
+  eventHighlight3Bullet1?: string;
+  eventHighlight3Bullet2?: string;
+  eventHighlight3Bullet3?: string;
+  eventHighlight4?: string;
+  eventHighlight4Bullet1?: string;
+  eventHighlight4Bullet2?: string;
+  eventHighlight4Bullet3?: string;
+  whyAttend?: string;
 }
 
 export default function EventDetailPage(): JSX.Element {
@@ -147,9 +145,7 @@ export default function EventDetailPage(): JSX.Element {
                   variant="h5"
                   sx={{ fontFamily: 'Montserrat', fontSize: '1.5em' }}
                 >
-                  {eventData.startTime}
-                  -
-                  {eventData.endTime}
+                  {eventData.startTime}-{eventData.endTime}
                   PST
                 </Typography>
               </div>
@@ -396,8 +392,7 @@ export default function EventDetailPage(): JSX.Element {
                 variant="h4"
                 sx={{ fontFamily: 'Montserrat', textAlign: 'center' }}
               >
-                Upcoming events hosted by
-                {' '}
+                Upcoming events hosted by{' '}
                 <span className="eventHost">{eventData.host}</span>
               </Typography>
             </div>

@@ -1,0 +1,23 @@
+{
+    "capacity": 100,
+    "city": "07eca16a-8ee1-4c1a-831e-cb984a851bf3",
+    "date": "2021-12-31",
+    "end_time": {
+        "Microseconds": 5.04e10,
+        "Valid": true
+	},
+    "host": "e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e",
+    "html_description": "Test Description",
+    "id": "e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e",
+    "location_name": "Test Location",
+    "md_description": "Test Description",
+    "name": "Test Event",
+    "rsvps": true,
+    "start_time": {
+    "Microseconds": 4.32e10,
+        "Valid": true
+    },
+    "state": "WA",
+    "street_address": "123 Test St",
+    "zipcode": "98444"
+}

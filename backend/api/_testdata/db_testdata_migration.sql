@@ -75,3 +75,57 @@ insert into "locations_cities" (
 );
 
 -- users testdata
+
+-- business test data
+insert into "businesses" (
+    "id",
+    "name",
+    "street_address",
+    "city",
+    "state",
+    "zipcode",
+    "business_owner_id"
+) values (
+    'e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e',
+    'Test Business',
+    '123 Test St',
+    '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
+    'KS',
+    '98444',
+    '140e4411-a7f7-4c50-a2d4-f3d3fc9fc550'
+);
+
+-- events testdata
+insert into "events" (
+    "id",
+    "name",
+    "host",
+    "location_name",
+    "street_address",
+    "city",
+    "state",
+    "zipcode",
+    "date",
+    "start_time",
+    "end_time",
+    "md_description",
+    "html_description",
+    "rsvps",
+    "capacity"
+) values (
+    'e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e',
+    'Test Event',
+    'e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e',
+    'Test Location',
+    '123 Test St',
+    '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
+    'WA',
+    '98444',
+    '2021-12-31',
+    '12:00:00',
+    '14:00:00',
+    'Test Description',
+    'Test Description',
+    true,
+    100
+);

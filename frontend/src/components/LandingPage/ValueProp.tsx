@@ -1,7 +1,7 @@
-import './styles/ValuePropStyles.css';
-import PouringTea from '../../assets/PouringTea.png';
-import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg';
 import FriendsDrinkingTea from '../../assets/FriendsDrinkingTea.jpg';
+import PeopleDrinkingTea from '../../assets/PeopleDrinkingTea.jpg';
+import PouringTea from '../../assets/PouringTea.png';
+import './styles/ValuePropStyles.css';
 
 export default function ValueProp(): JSX.Element {
   return (

@@ -1,22 +1,22 @@
-import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 
 import './styles/CommuniTeaPage.css';
 
 interface Location {
-  lat: number
-  lng: number
-  name: string
+  lat: number;
+  lng: number;
+  name: string;
 }
 
 interface GoogleMapsMultiplePinsProps {
-  apiKey: string
-  locations: Location[]
+  apiKey: string;
+  locations: Location[];
 }
 
 interface MarkerAndInfoWindow {
-  marker: google.maps.Marker
-  infowindow: google.maps.InfoWindow
+  marker: google.maps.Marker;
+  infowindow: google.maps.InfoWindow;
 }
 
 function GoogleMapsMultiplePins({
