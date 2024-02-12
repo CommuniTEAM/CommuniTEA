@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"regexp"
@@ -57,17 +58,17 @@ func (a *API) UserLogin() usecase.Interactor {
 			userData, err := queries.Login(ctx, input.Username)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get user from database: %w", err))
-				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
+				return status.Wrap(errors.New("invalid credentials"), status.InvalidArgument)
 			}
 
 			if bcrypt.CompareHashAndPassword(userData.Password, []byte(input.Password)) != nil {
-				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
+				return status.Wrap(errors.New("invalid credentials"), status.InvalidArgument)
 			}
 
 			locationDetails, err := a.getLocationDetails(userData.Location)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get location details: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = userData.ID
@@ -81,7 +82,7 @@ func (a *API) UserLogin() usecase.Interactor {
 			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -102,7 +103,7 @@ func (a *API) UserLogin() usecase.Interactor {
 // 200 response is returned as the user is already not logged in.
 func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input defaultInput, output *logoutOutput) error {
+		func(_ context.Context, input defaultInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
 				output.Message = successMsg
@@ -116,7 +117,7 @@ func (a *API) UserLogout() usecase.Interactor {
 			)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.Token = token.Token
@@ -150,7 +151,7 @@ func (a *API) CreateUser() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			if input.Password != input.PasswordConf {
-				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
+				return status.Wrap(errors.New("passwords do not match"), status.InvalidArgument)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -163,7 +164,7 @@ func (a *API) CreateUser() usecase.Interactor {
 
 			_, err = queries.GetUserByUsername(ctx, input.Username)
 			if err == nil {
-				return status.Wrap(fmt.Errorf("username taken"), status.AlreadyExists)
+				return status.Wrap(errors.New("username taken"), status.AlreadyExists)
 			}
 
 			if input.Email != "" {
@@ -181,13 +182,13 @@ func (a *API) CreateUser() usecase.Interactor {
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			inputArgs := db.CreateUserParams{
@@ -204,13 +205,13 @@ func (a *API) CreateUser() usecase.Interactor {
 			userData, err := queries.CreateUser(ctx, inputArgs)
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create user: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			locationDetails, err := a.getLocationDetails(locationID)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get location details: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = userData.ID
@@ -224,7 +225,7 @@ func (a *API) CreateUser() usecase.Interactor {
 			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -253,10 +254,10 @@ func (a *API) GetUser() usecase.Interactor {
 			userDetails, err := queries.GetUserByID(ctx, input.ID)
 			if err != nil {
 				if strings.Contains(err.Error(), "no rows") {
-					return status.Wrap(fmt.Errorf("no user with that id"), status.NotFound)
+					return status.Wrap(errors.New("no user with that id"), status.NotFound)
 				}
 				log.Println(fmt.Errorf("could not get user details: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = userDetails.ID
@@ -300,11 +301,11 @@ func (a *API) UpdateUser() usecase.Interactor {
 		func(ctx context.Context, input userUpdateInput, output *auth.TokenData) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.ID != input.ID {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -356,7 +357,7 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 				locationID, dbErr := a.getLocationID(cityName, stateCode)
 				if dbErr != nil {
-					return status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+					return status.Wrap(errors.New("location does not exist"), status.InvalidArgument)
 				}
 				location.ID = locationID
 				location.Name = cityName
@@ -377,7 +378,7 @@ func (a *API) UpdateUser() usecase.Interactor {
 			updatedUser, err := queries.UpdateUser(ctx, inputArgs)
 			if err != nil {
 				log.Println(fmt.Errorf("failed to update user: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = updatedUser.ID
@@ -391,7 +392,7 @@ func (a *API) UpdateUser() usecase.Interactor {
 			output, err = a.Auth.GenerateNewJWT(output, false)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ExpiresIn = 3600
@@ -418,15 +419,15 @@ func (a *API) ChangePassword() usecase.Interactor {
 		func(ctx context.Context, input passwordInput, output *genericOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.ID != input.ID {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			if input.NewPassword != input.NewPasswordConf {
-				return status.Wrap(fmt.Errorf("passwords do not match"), status.InvalidArgument)
+				return status.Wrap(errors.New("passwords do not match"), status.InvalidArgument)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -440,19 +441,19 @@ func (a *API) ChangePassword() usecase.Interactor {
 			_, err = queries.Login(ctx, userData.Username)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get user from database: %w", err))
-				return status.Wrap(fmt.Errorf("invalid credentials"), status.InvalidArgument)
+				return status.Wrap(errors.New("invalid credentials"), status.InvalidArgument)
 			}
 
 			hashedPass, err := bcrypt.GenerateFromPassword([]byte(input.NewPassword), bcrypt.DefaultCost)
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			err = queries.ChangePassword(ctx, db.ChangePasswordParams{ID: userData.ID, Password: hashedPass})
 			if err != nil {
 				log.Println(fmt.Errorf("could not change password: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.Message = successMsg
@@ -475,11 +476,11 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.Role != adminRole {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -493,13 +494,13 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 			user, err := queries.GetUserByID(ctx, input.ID)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get user: %w", err))
-				return status.Wrap(fmt.Errorf("user does not exist"), status.InvalidArgument)
+				return status.Wrap(errors.New("user does not exist"), status.InvalidArgument)
 			}
 
 			promotedUser, err := queries.PromoteToAdmin(ctx, user.ID)
 			if err != nil {
 				log.Println(fmt.Errorf("could not promote user to admin role: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = promotedUser.ID
@@ -511,7 +512,7 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 			output.Location, err = a.getLocationDetails(promotedUser.Location)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get location details: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -536,11 +537,11 @@ func (a *API) DeleteUser() usecase.Interactor {
 		func(ctx context.Context, input deleteUserInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.ID != input.ID {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -554,7 +555,7 @@ func (a *API) DeleteUser() usecase.Interactor {
 			err = queries.DeleteUser(ctx, input.ID)
 			if err != nil {
 				log.Println(fmt.Errorf("could not delete user: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			token, err := a.Auth.GenerateNewJWT(
@@ -563,7 +564,7 @@ func (a *API) DeleteUser() usecase.Interactor {
 			)
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.Token = token.Token
@@ -591,10 +592,10 @@ func verifyEmail(email string, userID string, queries *db.Queries) error {
 	match, regexpErr := regexp.MatchString("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)", email)
 	if regexpErr != nil {
 		log.Println(fmt.Errorf("could not match regex: %w", regexpErr))
-		return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+		return status.Wrap(errors.New(internalErrMsg), status.Internal)
 	}
 	if !match {
-		return status.Wrap(fmt.Errorf("invalid email address"), status.InvalidArgument)
+		return status.Wrap(errors.New("invalid email address"), status.InvalidArgument)
 	}
 
 	userData, err := queries.GetUserByEmail(context.Background(), pgtype.Text{String: email, Valid: true})
@@ -603,11 +604,11 @@ func verifyEmail(email string, userID string, queries *db.Queries) error {
 			return nil
 		}
 		log.Println(fmt.Errorf("failed to get user by email: %w", err))
-		return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+		return status.Wrap(errors.New(internalErrMsg), status.Internal)
 	}
 
 	if userID != "" || userID != userData.ID.String() {
-		return status.Wrap(fmt.Errorf("email already in use"), status.AlreadyExists)
+		return status.Wrap(errors.New("email already in use"), status.AlreadyExists)
 	}
 
 	return nil
