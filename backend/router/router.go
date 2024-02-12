@@ -10,6 +10,7 @@ import (
 	"github.com/swaggest/jsonschema-go"
 	oapi "github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi31"
+	"github.com/swaggest/rest"
 	"github.com/swaggest/rest/nethttp"
 	"github.com/swaggest/rest/web"
 	swgui "github.com/swaggest/swgui/v5emb"
@@ -118,6 +119,20 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 			return nil
 		}),
 	)
+
+	// Prepend "/api" to endpoint URIs in production
+	if envType == "prod" {
+		s.Wrap(func(handler http.Handler) http.Handler {
+			var withRoute rest.HandlerWithRoute
+			if nethttp.HandlerAs(handler, &withRoute) {
+				return nethttp.HandlerWithRouteMiddleware(
+					withRoute.RouteMethod(),
+					"/api"+withRoute.RoutePattern(),
+				)(handler)
+			}
+			return handler
+		})
+	}
 
 	// Forgive appended slashes on URLs
 	s.Use(middleware.StripSlashes)
