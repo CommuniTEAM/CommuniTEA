@@ -68,17 +68,13 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
 
-	// Swagger UI endpoint at /docs
-	s.Docs("/docs", swgui.New)
-	s.Handle("/", http.RedirectHandler("/docs", http.StatusSeeOther))
-
 	return s
 }
 
 // NewRouter creates a custom router for the http server in line with
 // openapi specifications. It bundles the included api endpoints into
 // the Swagger UI in the browser, available at /docs.
-func NewRouter(endpoints *api.API) http.Handler {
+func NewRouter(endpoints *api.API, envType string) http.Handler {
 	// Initialize openAPI 3.1 reflector
 	reflector := openapi31.NewReflector()
 
@@ -128,6 +124,18 @@ func NewRouter(endpoints *api.API) http.Handler {
 
 	// Add API endpoints to router
 	addEndpoints(s, endpoints)
+
+	// Swagger UI endpoint at /docs
+	s.Docs("/docs", swgui.New)
+	s.Handle("/", http.RedirectHandler(
+		func(env string) string {
+			if env == "prod" {
+				return "/api/docs"
+			}
+			return "/docs"
+		}(envType),
+		http.StatusSeeOther,
+	))
 
 	return s
 }

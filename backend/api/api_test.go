@@ -58,7 +58,7 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	api := &api.API{DBPool: dbPool, Auth: authenticator}
-	suite.server = httptest.NewServer(router.NewRouter(api))
+	suite.server = httptest.NewServer(router.NewRouter(api, "test"))
 
 	suite.errBody, err = os.ReadFile("_testdata/error_response.json")
 	if err != nil {

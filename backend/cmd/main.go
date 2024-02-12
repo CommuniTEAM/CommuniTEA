@@ -61,7 +61,7 @@ func main() {
 	endpoints := &api.API{DBPool: dbPool, Auth: authenticator}
 
 	// Initialize router
-	s := router.NewRouter(endpoints)
+	s := router.NewRouter(endpoints, Env)
 
 	// Configure and start the server
 	const serverTimeout = 5
