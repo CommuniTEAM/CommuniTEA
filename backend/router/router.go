@@ -10,6 +10,7 @@ import (
 	"github.com/swaggest/jsonschema-go"
 	oapi "github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi31"
+	"github.com/swaggest/rest"
 	"github.com/swaggest/rest/nethttp"
 	"github.com/swaggest/rest/web"
 	swgui "github.com/swaggest/swgui/v5emb"
@@ -68,17 +69,13 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
 
-	// Swagger UI endpoint at /docs
-	s.Docs("/docs", swgui.New)
-	s.Handle("/", http.RedirectHandler("/docs", http.StatusSeeOther))
-
 	return s
 }
 
 // NewRouter creates a custom router for the http server in line with
 // openapi specifications. It bundles the included api endpoints into
 // the Swagger UI in the browser, available at /docs.
-func NewRouter(endpoints *api.API) http.Handler {
+func NewRouter(endpoints *api.API, envType string) http.Handler {
 	// Initialize openAPI 3.1 reflector
 	reflector := openapi31.NewReflector()
 
@@ -123,11 +120,37 @@ func NewRouter(endpoints *api.API) http.Handler {
 		}),
 	)
 
+	// Prepend "/api" to endpoint URIs in production
+	if envType == "prod" {
+		s.Wrap(func(handler http.Handler) http.Handler {
+			var withRoute rest.HandlerWithRoute
+			if nethttp.HandlerAs(handler, &withRoute) {
+				return nethttp.HandlerWithRouteMiddleware(
+					withRoute.RouteMethod(),
+					"/api"+withRoute.RoutePattern(),
+				)(handler)
+			}
+			return handler
+		})
+	}
+
 	// Forgive appended slashes on URLs
 	s.Use(middleware.StripSlashes)
 
 	// Add API endpoints to router
 	addEndpoints(s, endpoints)
+
+	// Swagger UI endpoint at /docs
+	s.Docs("/docs", swgui.New)
+	s.Handle("/", http.RedirectHandler(
+		func(env string) string {
+			if env == "prod" {
+				return "/api/docs"
+			}
+			return "/docs"
+		}(envType),
+		http.StatusSeeOther,
+	))
 
 	return s
 }

@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
@@ -59,7 +60,7 @@ func (a *API) dbConn(ctx context.Context) (*pgxpool.Conn, error) {
 	conn, err := a.DBPool.Acquire(ctx)
 	if err != nil {
 		log.Println(fmt.Errorf("could not acquire db connection: %w", err))
-		return nil, status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+		return nil, status.Wrap(errors.New(internalErrMsg), status.Internal)
 	}
 	return conn, nil
 }

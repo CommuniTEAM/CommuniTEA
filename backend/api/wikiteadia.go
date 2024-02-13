@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -32,7 +33,7 @@ func (a *API) CreateTea() usecase.Interactor {
 
 		// If the token was invalid or nonexistent then userData will be nil
 		if userData == nil {
-			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 		}
 
 		conn, err := a.dbConn(ctx)
