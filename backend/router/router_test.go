@@ -13,19 +13,23 @@ import (
 
 func TestNewRouter(t *testing.T) {
 	mockDBPool, err := pgxmock.NewPool()
+
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	authenicator, err := auth.NewAuthenticator()
+
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	endpoints := &api.API{DBPool: mockDBPool, Auth: authenicator}
+
 	r := router.NewRouter(endpoints)
 
 	req, err := http.NewRequest(http.MethodGet, "/docs", nil)
+
 	if err != nil {
 		t.Fatalf("unexpected error while creating request: %v", err)
 	}

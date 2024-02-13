@@ -21,16 +21,16 @@ insert into teas (
 values ($1, $2, $3, $4, $5, $6, $7)
 returning *;
 
--- name: UpdateTea :exec
+-- name: UpdateTea :one
 update teas
 set
-    name = $2,
-    img_url = $3,
-    description = $4,
-    brew_time = $5,
-    brew_temp = $6,
-    published = $7
-where id = $1
+    "name" = $2,
+    "img_url" = $3,
+    "description" = $4,
+    "brew_time" = $5,
+    "brew_temp" = $6,
+    "published" = $7
+where "id" = $1
 returning *;
 
 -- name: DeleteTea :exec
