@@ -1,13 +1,18 @@
 package auth_test
 
 import (
-	"strings"
 	"testing"
+
+	"github.com/CommuniTEAM/CommuniTEA/auth"
+	"github.com/stretchr/testify/require"
 )
 
-// Placeholder b/c Codecov won't assess coverage for packages w/o a test
-func TestTest(t *testing.T) {
-	if strings.ToLower("TEST") != "test" {
-		t.Fatalf("Test failed")
+func TestNewAuthenticator(t *testing.T) {
+	auth, err := auth.NewAuthenticator()
+	require.NoError(t, err)
+
+	if err != nil {
+		require.Nil(t, auth)
 	}
+	require.NotNil(t, auth)
 }
