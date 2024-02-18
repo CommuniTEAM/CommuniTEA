@@ -1,16 +1,18 @@
-import NavBar from './Navbar';
-import HeroBanner from './HeroBanner';
-import ValueProp from './ValueProp';
-import FeaturedTeas from './FeaturedTeas';
 import '../../App.css';
-import HowItWorks from './HowItWorks';
 import BusinessShowcase from './BusinessShowcase';
+import FeaturedTeas from './FeaturedTeas';
 import Footer from './Footer';
+import HeroBanner from './HeroBanner';
+import HowItWorks from './HowItWorks';
+import NavBar from './Navbar';
+import TestRating from './TestFile/TestRating';
+import ValueProp from './ValueProp';
 
 export default function LandingPage(): JSX.Element {
   return (
     <div>
       <NavBar />
+      <TestRating />
       <HeroBanner />
       <ValueProp />
       <FeaturedTeas />
