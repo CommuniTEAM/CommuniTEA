@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import * as React from 'react';
 
 export default function TestRating() {
@@ -19,6 +18,7 @@ export default function TestRating() {
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
+          console.log(event);
         }}
       />
       <Typography component="legend" sx={{ color: 'red' }}>
