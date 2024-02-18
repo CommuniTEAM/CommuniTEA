@@ -67,6 +67,7 @@ func (a *API) CreateTea() usecase.Interactor {
 		}
 		defer conn.Release()
 		queries := db.New(conn)
+
 		newUUID, err := uuid.NewRandom()
 		if err != nil {
 			return fmt.Errorf("failed to create UUID: %w", err)
@@ -96,7 +97,9 @@ func (a *API) CreateTea() usecase.Interactor {
 
 		*output, err = queries.CreateTea(ctx, teaParams)
 		if err != nil {
-			return fmt.Errorf("failed to create tea: %w", err)
+			log.Println(fmt.Errorf("failed to create tea: %w", err))
+
+			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
 		}
 		return nil
 	})
@@ -104,7 +107,12 @@ func (a *API) CreateTea() usecase.Interactor {
 	response.SetTitle("Create Tea")
 	response.SetDescription("Make a new tea")
 	response.SetTags("Teas")
-	response.SetExpectedErrors(status.InvalidArgument)
+	response.SetExpectedErrors(
+
+		status.InvalidArgument,
+
+		status.Unauthenticated,
+	)
 	return response
 }
 
@@ -128,7 +136,7 @@ func (a *API) UpdateTea() usecase.Interactor {
 		defer conn.Release()
 		queries := db.New(conn)
 
-		// Get original city details
+		// Get original tea details
 		_, errCheck := queries.GetTea(ctx, input.ID)
 		if errCheck != nil {
 			if strings.Contains(errCheck.Error(), "no rows") {
