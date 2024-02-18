@@ -10,6 +10,7 @@ import (
 	"github.com/swaggest/jsonschema-go"
 	oapi "github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi31"
+	"github.com/swaggest/rest"
 	"github.com/swaggest/rest/nethttp"
 	"github.com/swaggest/rest/web"
 	swgui "github.com/swaggest/swgui/v5emb"
@@ -59,8 +60,11 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	// users
 
 	s.Post("/users", endpoints.CreateUser())
-
+	s.Get("/users/{id}", endpoints.GetUser())
+	s.Put("/users/{id}", endpoints.UpdateUser())
+	s.Put("/users/{id}/change-password", endpoints.ChangePassword())
 	s.Put("/users/{id}/promote", endpoints.PromoteToAdmin())
+	s.Delete("/users/{id}", endpoints.DeleteUser())
 
 	// locations
 
@@ -86,12 +90,6 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 
 	s.Put("/teas/{id}", endpoints.UpdateTea())
 
-	// Swagger UI endpoint at /docs
-
-	s.Docs("/docs", swgui.New)
-
-	s.Handle("/", http.RedirectHandler("/docs", http.StatusSeeOther))
-
 	return s
 }
 
@@ -100,8 +98,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 // openapi specifications. It bundles the included api endpoints into
 
 // the Swagger UI in the browser, available at /docs.
-
-func NewRouter(endpoints *api.API) http.Handler {
+func NewRouter(endpoints *api.API, envType string) http.Handler {
 	// Initialize openAPI 3.1 reflector
 
 	reflector := openapi31.NewReflector()
@@ -168,6 +165,20 @@ func NewRouter(endpoints *api.API) http.Handler {
 		}),
 	)
 
+	// Prepend "/api" to endpoint URIs in production
+	if envType == "prod" {
+		s.Wrap(func(handler http.Handler) http.Handler {
+			var withRoute rest.HandlerWithRoute
+			if nethttp.HandlerAs(handler, &withRoute) {
+				return nethttp.HandlerWithRouteMiddleware(
+					withRoute.RouteMethod(),
+					"/api"+withRoute.RoutePattern(),
+				)(handler)
+			}
+			return handler
+		})
+	}
+
 	// Forgive appended slashes on URLs
 
 	s.Use(middleware.StripSlashes)
@@ -175,6 +186,18 @@ func NewRouter(endpoints *api.API) http.Handler {
 	// Add API endpoints to router
 
 	addEndpoints(s, endpoints)
+
+	// Swagger UI endpoint at /docs
+	s.Docs("/docs", swgui.New)
+	s.Handle("/", http.RedirectHandler(
+		func(env string) string {
+			if env == "prod" {
+				return "/api/docs"
+			}
+			return "/docs"
+		}(envType),
+		http.StatusSeeOther,
+	))
 
 	return s
 }

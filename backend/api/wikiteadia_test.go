@@ -27,7 +27,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"name": "Earl Grey",
+
+
+
+
 
 
 
@@ -35,7 +43,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
   		"description": "It is a black tea mix",
+
+
+
+
 
 
 
@@ -43,11 +59,23 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
   		"brew_temp": 175,
 
 
 
+
+
+
+
   		"published": false
+
+
+
+
 
 
 
@@ -81,7 +109,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"img_url": "https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+
+
+
 
 
 
@@ -89,11 +125,23 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"brew_time": "5 minutes",
 
 
 
+
+
+
+
 		"brew_temp": "175",
+
+
+
+
 
 
 
@@ -103,7 +151,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"img_url": "https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+
+
+
 
 
 
@@ -111,11 +167,23 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"brew_time": 5,
 
 
 
+
+
+
+
 		"brew_temp": "175F",
+
+
+
+
 
 
 
@@ -160,7 +228,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"id": "<ignore-diff>",
+
+
+
+
 
 
 
@@ -168,7 +244,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"img_url": "https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+
+
+
 
 
 
@@ -176,7 +260,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"brew_time": "20 minutes",
+
+
+
+
 
 
 
@@ -184,7 +276,15 @@ func (suite *WikiteadiaTestSuite) TestCreateTea() {
 
 
 
+
+
+
+
 		"published": false
+
+
+
+
 
 
 
@@ -202,7 +302,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
 		"name": "Earl Grey",
+
+
+
+
 
 
 
@@ -210,7 +318,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   		"description": "It is a black tea mix",
+
+
+
+
 
 
 
@@ -218,11 +334,23 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   		"brew_temp": 175,
 
 
 
+
+
+
+
   		"published": false
+
+
+
+
 
 
 
@@ -302,7 +430,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
 		"img_url": "https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+
+
+
 
 
 
@@ -310,11 +446,23 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
 		"brew_time": 5,
 
 
 
+
+
+
+
 		"brew_temp": "175F",
+
+
+
+
 
 
 
@@ -341,7 +489,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
     "name": "Earl Grey",
+
+
+
+
 
 
 
@@ -349,7 +505,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
     "description": "It is a black tea mix from England",
+
+
+
+
 
 
 
@@ -357,7 +521,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
     "brew_temp": 175,
+
+
+
+
 
 
 
@@ -385,7 +557,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   "id": "c64ff5ab-7323-4142-9077-aea320c3c4cc",
+
+
+
+
 
 
 
@@ -393,7 +573,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   "img_url": "https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+
+
+
 
 
 
@@ -401,7 +589,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   "brew_time": "5 minutes",
+
+
+
+
 
 
 
@@ -409,7 +605,15 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 
 
+
+
+
+
   "published": true
+
+
+
+
 
 
 

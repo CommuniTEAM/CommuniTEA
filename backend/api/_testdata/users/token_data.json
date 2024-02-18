@@ -1,0 +1,16 @@
+{
+    "access_token": "<ignore-diff>",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "id": "<ignore-diff>",
+    "username": "TestUser",
+    "email": "email@email.com",
+    "first_name": "Testy",
+    "last_name": "Testington",
+    "role": "user",
+    "location": {
+        "id": "4c33e0bc-3d43-4e77-aed0-b7aff09bb689",
+        "name": "Seattle",
+        "state": "WA"
+    }
+}

@@ -1,3 +1,7 @@
 {
-  "recommendations": ["biomejs.biome", "golang.go"]
+  "recommendations": [
+    "biomejs.biome",
+    "golang.go",
+    "streetsidesoftware.code-spell-checker"
+  ]
 }

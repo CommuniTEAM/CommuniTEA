@@ -3,7 +3,9 @@ package auth
 import (
 	"crypto/rand"
 	"crypto/rsa"
+	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	db "github.com/CommuniTEAM/CommuniTEA/db/sqlc"
@@ -22,36 +24,41 @@ type TokenCookie struct {
 
 type TokenData struct {
 	TokenCookie
-
-	TokenType string `json:"token_type"`
-
-	ExpiresIn int `json:"expires_in"`
-
-	ID uuid.UUID `json:"id"`
-
-	Role string `json:"role"`
-
-	Username string `json:"username"`
-
-	FirstName string `json:"first_name,omitempty"`
-
-	LastName string `json:"last_name,omitempty"`
-
-	Location db.LocationsCity `json:"location"`
+	TokenType string           `json:"token_type"`
+	ExpiresIn int              `json:"expires_in"`
+	ID        uuid.UUID        `json:"id"`
+	Role      string           `json:"role"`
+	Username  string           `json:"username"`
+	FirstName string           `json:"first_name,omitempty"`
+	LastName  string           `json:"last_name,omitempty"`
+	Email     string           `json:"email,omitempty"`
+	Location  db.LocationsCity `json:"location"`
 }
 
 // ValidateJWT takes a signed JWT, verifies it against the key, then parses
 
 // the enclosed data and returns it. Returns nil if the token is invalid.
-
-func (key *Authenticator) ValidateJWT(token string) map[string]interface{} {
+func (key *Authenticator) ValidateJWT(token string) *TokenData {
 	verifiedToken, err := jwt.Parse([]byte(token), jwt.WithKey(jwa.RS256, key.signingKey))
 
 	if err != nil {
 		return nil
 	}
 
-	return verifiedToken.PrivateClaims()
+	jsonbody, err := json.Marshal(verifiedToken.PrivateClaims())
+	if err != nil {
+		log.Printf("could not marshal token claims: %v", err)
+		return nil
+	}
+
+	var userData TokenData
+	err = json.Unmarshal(jsonbody, &userData)
+	if err != nil {
+		log.Printf("could not unmarshal token data: %v", err)
+		return nil
+	}
+
+	return &userData
 }
 
 // GenerateNewJWT takes a struct of a validated user's information and appends
@@ -79,7 +86,7 @@ func (key *Authenticator) GenerateNewJWT(tokenData *TokenData, expired bool) (*T
 		jwtBuilder.Claim(`first_name`, tokenData.FirstName)
 
 		jwtBuilder.Claim(`last_name`, tokenData.LastName)
-
+		jwtBuilder.Claim(`email`, tokenData.Email)
 		jwtBuilder.Claim(`location`, tokenData.Location)
 
 		jwtBuilder.IssuedAt(time.Now())
@@ -106,7 +113,7 @@ func (key *Authenticator) GenerateNewJWT(tokenData *TokenData, expired bool) (*T
 	}
 
 	tokenData.Token = string(signedToken)
-
+	tokenData.TokenType = "bearer"
 	return tokenData, nil
 }
 

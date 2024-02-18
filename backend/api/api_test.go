@@ -49,9 +49,7 @@ type TestSuite struct {
 // SetupSuite instantiates a test suite by setting up a new test
 
 // database container, connecting it to the API, and starting an
-
-// httptest server.
-
+// httptest server. You do not need to call this function.
 func (suite *TestSuite) SetupSuite() {
 	suite.ctx = context.Background()
 
@@ -78,8 +76,7 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	api := &api.API{DBPool: dbPool, Auth: authenticator}
-
-	suite.server = httptest.NewServer(router.NewRouter(api))
+	suite.server = httptest.NewServer(router.NewRouter(api, "test"))
 
 	suite.errBody, err = os.ReadFile("_testdata/error_response.json")
 
@@ -93,10 +90,8 @@ func (suite *TestSuite) SetupSuite() {
 		log.Fatalf("could not read _testdata/success_response.json")
 	}
 
-	// Generate jwts for different user roles
-
-	// data aligns with _testdata/db_testdata_migration.sql
-
+	// Generate jwts for different user roles.
+	// Data aligns with _testdata/db_testdata_migration.sql
 	userData := auth.TokenData{
 
 		ExpiresIn: 3600,
@@ -191,9 +186,7 @@ func (suite *TestSuite) TearDownSuite() {
 }
 
 // CreatePostgresContainer is a helper function that sets up a test database
-
-// container and returns its pointer.
-
+// container and returns its pointer. You do not need to call this function.
 func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 	pgContainer, err := postgres.RunContainer(ctx,
 

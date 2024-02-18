@@ -74,6 +74,7 @@ insert into "locations_cities" (
     'KS'
 );
 
+-- teas testdata
 insert into "teas" (
     "id",
     "name",
@@ -91,3 +92,5 @@ insert into "teas" (
     175,
     false
 );
+
+-- users testdata

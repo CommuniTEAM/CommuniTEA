@@ -18,15 +18,13 @@ func TestNewRouter(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	authenicator, err := auth.NewAuthenticator()
-
+	authenticator, err := auth.NewAuthenticator()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	endpoints := &api.API{DBPool: mockDBPool, Auth: authenicator}
-
-	r := router.NewRouter(endpoints)
+	endpoints := &api.API{DBPool: mockDBPool, Auth: authenticator}
+	r := router.NewRouter(endpoints, "prod")
 
 	req, err := http.NewRequest(http.MethodGet, "/docs", nil)
 

@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -59,7 +60,7 @@ func (a *API) CreateTea() usecase.Interactor {
 
 		// If the token was invalid or nonexistent then userData will be nil
 		if userData == nil {
-			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 		}
 		conn, err := a.dbConn(ctx)
 		if err != nil {
@@ -125,7 +126,7 @@ func (a *API) UpdateTea() usecase.Interactor {
 			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
 		}
 
-		if userData["role"] != adminRole {
+		if userData.Role != adminRole {
 			return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
 		}
 

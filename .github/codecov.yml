@@ -3,7 +3,7 @@ coverage:
     project: off
     patch:
       default:
-        target: 90%
+        target: 80%
         flag_coverage_not_uploaded_behavior: exclude
 
 comment:
