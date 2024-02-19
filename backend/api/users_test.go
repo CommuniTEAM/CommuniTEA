@@ -477,8 +477,8 @@ func (suite *UsersTestSuite) TestLogout() {
 func (suite *UsersTestSuite) TestDeleteUser() {
 	t := suite.T()
 
-	// ID of the manually added user "business"
-	userID := "140e4411-a7f7-4c50-a2d4-f3d3fc9fc550"
+	// ID of the manually added user "admin"
+	userID := "e6473137-f4ef-46cc-a5e5-96ccb9d41043"
 
 	// * Check 401 response & body
 	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
@@ -499,7 +499,7 @@ func (suite *UsersTestSuite) TestDeleteUser() {
 	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
 	require.NoError(t, err)
 
-	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
 
 	resp, err = http.DefaultTransport.RoundTrip(req)
 	require.NoError(t, err)
@@ -516,7 +516,7 @@ func (suite *UsersTestSuite) TestDeleteUser() {
 	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
 	require.NoError(t, err)
 
-	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.business.Token})
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
 
 	resp, err = http.DefaultTransport.RoundTrip(req)
 	require.NoError(t, err)
