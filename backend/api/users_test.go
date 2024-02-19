@@ -304,7 +304,6 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 	assertjson.Equal(t, expectedBody, respBody)
 }
 
-// TODO: Finish fleshing out these tests
 func (suite *UsersTestSuite) TestUpdateUser() {
 	t := suite.T()
 
@@ -312,7 +311,9 @@ func (suite *UsersTestSuite) TestUpdateUser() {
 	userID := "372bcfb3-6b1d-4925-9f3d-c5ec683a4294"
 
 	reqBody := []byte(`{
-		"first_name": "Tester"
+		"first_name": "Tester",
+		"last_name": "Testerson",
+		"role": "business"
 	}`)
 
 	// * Check 401 response & body
@@ -357,6 +358,26 @@ func (suite *UsersTestSuite) TestUpdateUser() {
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	// * Check 400 response
+	badInputs := []string{
+		`{"city_name": "Kansas City", "state_code": "KY"}`,
+		`{"city_name": "Arlington"}`,
+		`{"state_code": "WI"}`,
+		`{"email": "real-email"}`,
+	}
+
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
 }
 
 func (suite *UsersTestSuite) TestPromoteToAdmin() {
