@@ -21,7 +21,7 @@ exclude_rules = ambiguous.column_count, structure.column_order, RF05
 # other tools and several style guides. Many projects however prefer
 # something a little longer.
 # Set to zero or negative to disable checks.
-max_line_length = 120
+max_line_length = -120
 
 # CPU processes to use while linting.
 # The default is "single threaded" to allow easy debugging, but this

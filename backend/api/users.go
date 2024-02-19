@@ -161,7 +161,6 @@ func (a *API) CreateUser() usecase.Interactor {
 			defer conn.Release()
 
 			queries := db.New(conn)
-
 			_, err = queries.GetUserByUsername(ctx, input.Username)
 			if err == nil {
 				return status.Wrap(errors.New("username taken"), status.AlreadyExists)

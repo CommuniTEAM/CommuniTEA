@@ -33,7 +33,6 @@ func TestNewRouter(t *testing.T) {
 	rw := httptest.NewRecorder()
 
 	r.ServeHTTP(rw, req)
-
 	if http.StatusOK != rw.Code {
 		t.Fatalf("expected status code to be 200, but got: %v", rw.Code)
 	}

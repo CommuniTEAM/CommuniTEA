@@ -308,6 +308,7 @@ func (suite *LocationsTestSuite) TestUpdateCity() {
 		`{"name": "Buffalo"}`,
 		`{"name": "buffalo"}`,
 	}
+
 	for _, input := range badInputs {
 		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/locations/cities/"+cityID, bytes.NewBufferString(input))
 		require.NoError(t, err)

@@ -505,16 +505,16 @@ func (q *Queries) GetTeas(ctx context.Context, published bool) ([]Tea, error) {
 	return items, nil
 }
 
-const updateTea = `-- name: UpdateTea :exec
+const updateTea = `-- name: UpdateTea :one
 update teas
 set
-    name = $2,
-    img_url = $3,
-    description = $4,
-    brew_time = $5,
-    brew_temp = $6,
-    published = $7
-where id = $1
+    "name" = $2,
+    "img_url" = $3,
+    "description" = $4,
+    "brew_time" = $5,
+    "brew_temp" = $6,
+    "published" = $7
+where "id" = $1
 returning id, name, img_url, description, brew_time, brew_temp, published
 `
 
@@ -528,8 +528,8 @@ type UpdateTeaParams struct {
 	Published   bool          `json:"published"`
 }
 
-func (q *Queries) UpdateTea(ctx context.Context, arg UpdateTeaParams) error {
-	_, err := q.db.Exec(ctx, updateTea,
+func (q *Queries) UpdateTea(ctx context.Context, arg UpdateTeaParams) (Tea, error) {
+	row := q.db.QueryRow(ctx, updateTea,
 		arg.ID,
 		arg.Name,
 		arg.ImgUrl,
@@ -538,7 +538,17 @@ func (q *Queries) UpdateTea(ctx context.Context, arg UpdateTeaParams) error {
 		arg.BrewTemp,
 		arg.Published,
 	)
-	return err
+	var i Tea
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.ImgUrl,
+		&i.Description,
+		&i.BrewTime,
+		&i.BrewTemp,
+		&i.Published,
+	)
+	return i, err
 }
 
 const updateTeaAromaticTag = `-- name: UpdateTeaAromaticTag :exec
