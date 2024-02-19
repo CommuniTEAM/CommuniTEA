@@ -114,9 +114,6 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
 			})
-			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
-				cu.HTTPStatus = http.StatusConflict
-			})
 			return nil
 		}),
 	)
