@@ -19,7 +19,7 @@ jobs:
   #       working-directory: frontend
   #   steps:
   #     - name: Checkout 'frontend' folder
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
   #       with:
   #         sparse-checkout: |
   #           frontend
@@ -39,7 +39,7 @@ jobs:
         working-directory: backend
     steps:
       - name: Checkout 'backend' folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             backend
