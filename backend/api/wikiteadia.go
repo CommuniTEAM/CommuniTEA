@@ -54,6 +54,12 @@ type updateTeaInput struct {
 	Published bool `json:"published"`
 }
 
+type teaPublishedPatch struct {
+	defaultInput
+	ID        uuid.UUID `path:"id"`
+	Published bool      `json:"published"`
+}
+
 func (a *API) CreateTea() usecase.Interactor {
 	response := usecase.NewInteractor(func(ctx context.Context, input teaInput, output *db.Tea) error {
 		userData := a.Auth.ValidateJWT(input.AccessToken)
@@ -189,6 +195,63 @@ func (a *API) UpdateTea() usecase.Interactor {
 		status.Unauthenticated,
 		status.PermissionDenied,
 		status.AlreadyExists,
+		status.NotFound,
+	)
+
+	return response
+}
+
+func (a *API) PublishTea() usecase.Interactor {
+	response := usecase.NewInteractor(func(ctx context.Context, input teaPublishedPatch, output *db.Tea) error {
+		userData := a.Auth.ValidateJWT(input.AccessToken)
+
+		// If the token was invalid or nonexistent then userData will be nil
+		if userData == nil {
+			return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
+		}
+
+		if userData.Role != adminRole {
+			return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
+		}
+
+		conn, err := a.dbConn(ctx)
+		if err != nil {
+			return err
+		}
+		defer conn.Release()
+		queries := db.New(conn)
+
+		// Get original tea details
+		_, errCheck := queries.GetTea(ctx, input.ID)
+		if errCheck != nil {
+			if strings.Contains(errCheck.Error(), "no rows") {
+				return status.Wrap(errors.New("no tea with that id"), status.NotFound)
+			}
+			log.Println(fmt.Errorf("could not get tea: %w", errCheck))
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
+		}
+
+		teaParams := db.PublishTeaParams{
+			ID:        input.ID,
+			Published: input.Published,
+		}
+
+		*output, err = queries.PublishTea(ctx, teaParams)
+
+		if err != nil {
+			log.Println("could not publish tea information: %w", err)
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
+		}
+		return nil
+	})
+
+	response.SetTitle("Publish Tea")
+	response.SetDescription("Publish a new tea")
+	response.SetTags("Teas")
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
 		status.NotFound,
 	)
 

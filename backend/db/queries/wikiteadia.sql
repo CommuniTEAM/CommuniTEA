@@ -33,6 +33,12 @@ set
 where "id" = $1
 returning *;
 
+-- name: PublishTea :one
+update teas
+set "published" = $2
+where "id" = $1
+returning *;
+
 -- name: DeleteTea :exec
 delete from teas
 where id = $1;
