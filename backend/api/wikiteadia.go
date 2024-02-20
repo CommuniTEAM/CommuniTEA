@@ -220,3 +220,46 @@ func (a *API) GetAllTeas() usecase.Interactor {
 
 	return response
 }
+
+func (a *API) DeleteTea() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input uuidInput, output *genericOutput) error {
+			userData := a.Auth.ValidateJWT(input.AccessToken)
+			if userData == nil {
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
+			}
+
+			if userData.Role != adminRole {
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
+			}
+
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			err = queries.DeleteTea(ctx, input.ID)
+			if err != nil {
+				log.Println(fmt.Errorf("could not delete tea: %w", err))
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
+			}
+
+			output.Message = successMsg
+
+			return nil
+		})
+
+	response.SetTitle("Delete Tea")
+	response.SetDescription("Delete Tea Data.")
+	response.SetTags("Teas")
+	response.SetExpectedErrors(
+		status.InvalidArgument,
+		status.Unauthenticated,
+		status.PermissionDenied,
+	)
+
+	return response
+}

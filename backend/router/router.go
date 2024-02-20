@@ -69,6 +69,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
 	s.Put("/teas/{id}", endpoints.UpdateTea())
+	s.Delete("/teas/{id}", endpoints.DeleteTea())
 
 	return s
 }

@@ -289,3 +289,71 @@ func (suite *WikiteadiaTestSuite) TestUpdateTea() {
 
 	assertjson.Equal(t, expectedBody, respBody)
 }
+
+func (suite *WikiteadiaTestSuite) TestDeleteTea() {
+	t := suite.T()
+
+	teaID := "c64ff5ab-7323-4142-9077-aea320c3c4cc"
+
+	// * Test 401 response & body
+	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/teas/"+teaID, nil)
+	require.NoError(t, err)
+
+	resp, err := http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Test 403 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/teas/"+teaID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusForbidden, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.errBody, respBody)
+
+	// * Test 400 response
+	badInput := "lkashdflkj"
+
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/teas/"+badInput, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	// * Test 200 response & body
+	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/teas/"+teaID, nil)
+	require.NoError(t, err)
+
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+
+	resp, err = http.DefaultTransport.RoundTrip(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	respBody, err = io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	require.NoError(t, resp.Body.Close())
+
+	assertjson.Equal(t, suite.successBody, respBody)
+}
