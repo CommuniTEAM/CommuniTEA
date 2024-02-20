@@ -17,12 +17,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userInput struct {
-	defaultInput
-
-	ID uuid.UUID `nullable:"false" path:"id" required:"true"`
-}
-
 type logoutOutput struct {
 	genericOutput
 	auth.TokenCookie
@@ -39,31 +33,24 @@ type userOutput struct {
 }
 
 // UserLogin takes an inputted username and password and, if the credentials
-
 // are valid, returns the user's data along with an authenticating jwt cookie.
-
 func (a *API) UserLogin() usecase.Interactor {
 	type loginInput struct {
 		Username string `json:"username" nullable:"false" required:"true"`
-
 		Password string `json:"password" nullable:"false" required:"true"`
 	}
 
 	response := usecase.NewInteractor(
-
 		func(ctx context.Context, input loginInput, output *auth.TokenData) error {
 			conn, err := a.dbConn(ctx)
-
 			if err != nil {
 				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
 
 			userData, err := queries.Login(ctx, input.Username)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not get user from database: %w", err))
 				return status.Wrap(errors.New("invalid credentials"), status.InvalidArgument)
@@ -74,26 +61,20 @@ func (a *API) UserLogin() usecase.Interactor {
 			}
 
 			locationDetails, err := a.getLocationDetails(userData.Location)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not get location details: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = userData.ID
-
 			output.Location = locationDetails
-
 			output.Role = userData.Role
 			output.Email = userData.Email.String
 			output.Username = userData.Username
-
 			output.FirstName = userData.FirstName.String
-
 			output.LastName = userData.LastName.String
 
 			output, err = a.Auth.GenerateNewJWT(output, false)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
@@ -104,71 +85,52 @@ func (a *API) UserLogin() usecase.Interactor {
 		})
 
 	response.SetTitle("Login")
-
 	response.SetDescription("Log in to an existing account.")
-
 	response.SetTags("Auth")
-
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
 }
 
 // UserLogout takes in an optional auth cookie and, if valid, returns a new
-
 // auth cookie with an expiry time one hour in the past, rendering it invalid.
-
 // If the passed-in cookie is already invalid or there is no cookie, an empty
-
 // 200 response is returned as the user is already not logged in.
-
 func (a *API) UserLogout() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(_ context.Context, input defaultInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
-
 			if userData == nil {
 				output.Message = successMsg
-
 				output.Token = ""
-
 				return nil
 			}
 
 			token, err := a.Auth.GenerateNewJWT(
-
 				&auth.TokenData{},
-
 				true,
 			)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.Token = token.Token
-
 			output.Message = successMsg
 
 			return nil
 		})
 
 	response.SetTitle("Logout")
-
 	response.SetDescription("Log out of an account.")
-
 	response.SetTags("Auth")
-
 	response.SetExpectedErrors(status.InvalidArgument)
 
 	return response
 }
 
 // CreateUser takes in a user's information, saves it to the database, then
-
 // logs them in and returns the user's data and an authenticating jwt cookie.
-
 func (a *API) CreateUser() usecase.Interactor {
 	type newUserInput struct {
 		cityInput
@@ -182,22 +144,18 @@ func (a *API) CreateUser() usecase.Interactor {
 	}
 
 	response := usecase.NewInteractor(
-
 		func(ctx context.Context, input newUserInput, output *auth.TokenData) error {
 			if input.Password != input.PasswordConf {
 				return status.Wrap(errors.New("passwords do not match"), status.InvalidArgument)
 			}
 
 			conn, err := a.dbConn(ctx)
-
 			if err != nil {
 				return err
 			}
-
 			defer conn.Release()
 
 			queries := db.New(conn)
-
 			_, err = queries.GetUserByUsername(ctx, input.Username)
 			if err == nil {
 				return status.Wrap(errors.New("username taken"), status.AlreadyExists)
@@ -211,72 +169,54 @@ func (a *API) CreateUser() usecase.Interactor {
 			}
 
 			locationID, err := a.getLocationID(input.CityName, input.StateCode)
-
 			if err != nil {
 				return err
 			}
 
 			newUUID, err := uuid.NewRandom()
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			hashPass, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not hash inputted password: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			inputArgs := db.CreateUserParams{
-
-				ID: newUUID,
-
-				Role: input.Role,
-
-				Username: input.Username,
-
+				ID:        newUUID,
+				Role:      input.Role,
+				Username:  input.Username,
 				FirstName: pgtype.Text{String: input.FirstName, Valid: (input.FirstName != "")},
-
-				LastName: pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
-
-				Email: pgtype.Text{String: input.Email, Valid: (input.Email != "")},
-
-				Password: hashPass,
-
-				Location: locationID,
+				LastName:  pgtype.Text{String: input.LastName, Valid: (input.LastName != "")},
+				Email:     pgtype.Text{String: input.Email, Valid: (input.Email != "")},
+				Password:  hashPass,
+				Location:  locationID,
 			}
 
 			userData, err := queries.CreateUser(ctx, inputArgs)
-
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create user: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			locationDetails, err := a.getLocationDetails(locationID)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not get location details: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			output.ID = userData.ID
-
 			output.Role = userData.Role
-
 			output.Username = userData.Username
-
 			output.FirstName = userData.FirstName.String
-
 			output.LastName = userData.LastName.String
 			output.Email = userData.Email.String
 			output.Location = locationDetails
 
 			output, err = a.Auth.GenerateNewJWT(output, false)
-
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new jwt: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
@@ -287,7 +227,6 @@ func (a *API) CreateUser() usecase.Interactor {
 		})
 
 	response.SetTitle("Create User")
-
 	response.SetDescription("Make a new user account.")
 	response.SetTags("Users")
 	response.SetExpectedErrors(status.InvalidArgument, status.AlreadyExists)
@@ -297,7 +236,7 @@ func (a *API) CreateUser() usecase.Interactor {
 
 func (a *API) GetUser() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input userInput, output *userOutput) error {
+		func(ctx context.Context, input uuidInput, output *userOutput) error {
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -342,14 +281,13 @@ func (a *API) GetUser() usecase.Interactor {
 // variables. Returns the updated user details and a new auth token.
 func (a *API) UpdateUser() usecase.Interactor {
 	type userUpdateInput struct {
-		defaultInput
-		ID        uuid.UUID `path:"id"`
-		FirstName string    `json:"first_name"`
-		LastName  string    `json:"last_name"`
-		Email     string    `json:"email"`
-		Role      string    `enum:"user,business" json:"role"`
-		StateCode string    `json:"state_code"    maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
-		CityName  string    `json:"city_name"     minLength:"1" nullable:"false"`
+		uuidInput
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Email     string `json:"email"`
+		Role      string `enum:"user,business" json:"role"`
+		StateCode string `json:"state_code"    maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+		CityName  string `json:"city_name"     minLength:"1" nullable:"false"`
 	}
 
 	response := usecase.NewInteractor(
@@ -464,11 +402,10 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 func (a *API) ChangePassword() usecase.Interactor {
 	type passwordInput struct {
-		defaultInput
-		ID              uuid.UUID `path:"id"`
-		OldPassword     string    `json:"old_password"      nullable:"false" required:"true"`
-		NewPassword     string    `json:"new_password"      nullable:"false" required:"true"`
-		NewPasswordConf string    `json:"new_password_conf" nullable:"false" required:"true"`
+		uuidInput
+		OldPassword     string `json:"old_password"      nullable:"false" required:"true"`
+		NewPassword     string `json:"new_password"      nullable:"false" required:"true"`
+		NewPasswordConf string `json:"new_password_conf" nullable:"false" required:"true"`
 	}
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input passwordInput, output *genericOutput) error {
@@ -527,7 +464,7 @@ func (a *API) ChangePassword() usecase.Interactor {
 // promotes the user with the given ID to the admin role.
 func (a *API) PromoteToAdmin() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input userInput, output *userOutput) error {
+		func(ctx context.Context, input uuidInput, output *userOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
@@ -583,13 +520,8 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 // DeleteUser takes a user ID and deletes the associated account from the
 // database IF the request comes from the user with the same ID.
 func (a *API) DeleteUser() usecase.Interactor {
-	type deleteUserInput struct {
-		defaultInput
-		ID uuid.UUID `path:"id"`
-	}
-
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input deleteUserInput, output *logoutOutput) error {
+		func(ctx context.Context, input uuidInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
 				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)

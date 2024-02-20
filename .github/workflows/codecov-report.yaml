@@ -19,18 +19,19 @@ jobs:
   #       working-directory: frontend
   #   steps:
   #     - name: Checkout 'frontend' folder
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
   #       with:
   #         sparse-checkout: |
   #           frontend
   #           codecov.yml
   #     # Insert steps for running frontend unit tests here
   #     - name: Upload test coverage to Codecov
-  #       uses: codecov/codecov-action@v3
+  #       uses: codecov/codecov-action@v4
   #       env:
   #         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   #       with:
   #         flags: frontend
+  #         fail_ci_if_error: true
 
   backend-coverage:
     runs-on: ubuntu-latest
@@ -39,7 +40,7 @@ jobs:
         working-directory: backend
     steps:
       - name: Checkout 'backend' folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             backend
@@ -56,8 +57,9 @@ jobs:
       - name: Run unit tests w/ coverage report
         run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
       - name: Upload test coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           flags: backend
+          fail_ci_if_error: true

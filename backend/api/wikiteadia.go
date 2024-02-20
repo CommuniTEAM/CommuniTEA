@@ -100,7 +100,7 @@ func (a *API) CreateTea() usecase.Interactor {
 		if err != nil {
 			log.Println(fmt.Errorf("failed to create tea: %w", err))
 
-			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
 		}
 		return nil
 	})
@@ -123,11 +123,11 @@ func (a *API) UpdateTea() usecase.Interactor {
 
 		// If the token was invalid or nonexistent then userData will be nil
 		if userData == nil {
-			return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+			return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 		}
 
 		if userData.Role != adminRole {
-			return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+			return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 		}
 
 		conn, err := a.dbConn(ctx)
@@ -141,10 +141,10 @@ func (a *API) UpdateTea() usecase.Interactor {
 		_, errCheck := queries.GetTea(ctx, input.ID)
 		if errCheck != nil {
 			if strings.Contains(errCheck.Error(), "no rows") {
-				return status.Wrap(fmt.Errorf("no tea with that id"), status.NotFound)
+				return status.Wrap(errors.New("no tea with that id"), status.NotFound)
 			}
 			log.Println(fmt.Errorf("could not get tea: %w", errCheck))
-			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
 		}
 
 		isImgURLValid := true
@@ -176,7 +176,7 @@ func (a *API) UpdateTea() usecase.Interactor {
 
 		if err != nil {
 			log.Println("could not update tea information: %w", err)
-			return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
 		}
 		return nil
 	})

@@ -92,5 +92,3 @@ insert into "teas" (
     175,
     false
 );
-
--- users testdata

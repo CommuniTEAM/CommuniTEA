@@ -304,19 +304,23 @@ func (suite *UsersTestSuite) TestCreateUserAndPasswords() {
 	assertjson.Equal(t, expectedBody, respBody)
 }
 
-// TODO: Finish fleshing out these tests
 func (suite *UsersTestSuite) TestUpdateUser() {
 	t := suite.T()
 
 	// ID of the manually added user "user"
 	userID := "372bcfb3-6b1d-4925-9f3d-c5ec683a4294"
 
-	reqBody := []byte(`{
-		"first_name": "Tester"
-	}`)
+	reqBody := `{
+		"first_name": "Tester",
+		"last_name": "Testerson",
+		"role": "business",
+		"email": "real@email.test",
+		"city_name": "Tacoma",
+		"state_code": "WA"
+	}`
 
 	// * Check 401 response & body
-	req, err := http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBufferString(reqBody))
 	require.NoError(t, err)
 
 	resp, err := http.DefaultTransport.RoundTrip(req)
@@ -331,7 +335,7 @@ func (suite *UsersTestSuite) TestUpdateUser() {
 	assertjson.Equal(t, suite.errBody, body)
 
 	// * Check 403 response & body
-	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBuffer(reqBody))
+	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBufferString(reqBody))
 	require.NoError(t, err)
 
 	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.business.Token})
@@ -348,15 +352,38 @@ func (suite *UsersTestSuite) TestUpdateUser() {
 	assertjson.Equal(t, suite.errBody, body)
 
 	// * Check 200 response
-	req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBuffer(reqBody))
-	require.NoError(t, err)
+	inputs := []string{reqBody, `{"city_name": "Tacoma", "state_code": "WA", "email": "itJustWorks@email.test"}`}
+	for _, input := range inputs {
+		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBufferString(input))
+		require.NoError(t, err)
 
-	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
 
-	resp, err = http.DefaultTransport.RoundTrip(req)
-	require.NoError(t, err)
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+	}
+
+	// * Check 400 response
+	badInputs := []string{
+		`{"city_name": "Kansas City", "state_code": "KY"}`,
+		`{"city_name": "Arlington"}`,
+		`{"state_code": "WI"}`,
+		`{"email": "real-email"}`,
+	}
+
+	for _, input := range badInputs {
+		req, err = http.NewRequest(http.MethodPut, suite.server.URL+"/users/"+userID, bytes.NewBufferString(input))
+		require.NoError(t, err)
+
+		req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
+
+		resp, err = http.DefaultTransport.RoundTrip(req)
+		require.NoError(t, err)
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	}
 }
 
 func (suite *UsersTestSuite) TestPromoteToAdmin() {
@@ -477,8 +504,8 @@ func (suite *UsersTestSuite) TestLogout() {
 func (suite *UsersTestSuite) TestDeleteUser() {
 	t := suite.T()
 
-	// ID of the manually added user "business"
-	userID := "140e4411-a7f7-4c50-a2d4-f3d3fc9fc550"
+	// ID of the manually added user "admin"
+	userID := "e6473137-f4ef-46cc-a5e5-96ccb9d41043"
 
 	// * Check 401 response & body
 	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
@@ -499,7 +526,7 @@ func (suite *UsersTestSuite) TestDeleteUser() {
 	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
 	require.NoError(t, err)
 
-	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.user.Token})
 
 	resp, err = http.DefaultTransport.RoundTrip(req)
 	require.NoError(t, err)
@@ -516,7 +543,7 @@ func (suite *UsersTestSuite) TestDeleteUser() {
 	req, err = http.NewRequest(http.MethodDelete, suite.server.URL+"/users/"+userID, nil)
 	require.NoError(t, err)
 
-	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.business.Token})
+	req.AddCookie(&http.Cookie{Name: "bearer-token", Value: suite.authTokens.admin.Token})
 
 	resp, err = http.DefaultTransport.RoundTrip(req)
 	require.NoError(t, err)

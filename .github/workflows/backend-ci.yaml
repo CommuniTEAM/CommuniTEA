@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 'backend' folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             backend
@@ -32,7 +32,7 @@ jobs:
           go-version: '1.21'
           cache: false
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
           version: v1.55.2
           working-directory: backend
@@ -44,7 +44,7 @@ jobs:
         working-directory: backend
     steps:
       - name: Checkout 'backend' folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             backend
@@ -61,7 +61,7 @@ jobs:
       - name: Run tests w/ coverage report
         run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
       - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:

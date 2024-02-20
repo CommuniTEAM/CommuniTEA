@@ -13,7 +13,6 @@ import (
 
 func TestNewRouter(t *testing.T) {
 	mockDBPool, err := pgxmock.NewPool()
-
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,7 +26,6 @@ func TestNewRouter(t *testing.T) {
 	r := router.NewRouter(endpoints, "prod")
 
 	req, err := http.NewRequest(http.MethodGet, "/docs", nil)
-
 	if err != nil {
 		t.Fatalf("unexpected error while creating request: %v", err)
 	}
@@ -35,7 +33,6 @@ func TestNewRouter(t *testing.T) {
 	rw := httptest.NewRecorder()
 
 	r.ServeHTTP(rw, req)
-
 	if http.StatusOK != rw.Code {
 		t.Fatalf("expected status code to be 200, but got: %v", rw.Code)
 	}
