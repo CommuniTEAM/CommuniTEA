@@ -295,7 +295,7 @@ func (suite *WikiteadiaTestSuite) TestPublishTea() {
 
 	teaID := "c64ff5ab-7323-4142-9077-aea320c3c4cc"
 
-	reqBody := `{published": false}`
+	reqBody := `{"published": false}`
 
 	// * Check 401 response & body
 
