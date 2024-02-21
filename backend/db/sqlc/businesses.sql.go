@@ -7,7 +7,55 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
+
+const createBusiness = `-- name: CreateBusiness :one
+insert into businesses (
+    id,
+    name,
+    street_address,
+    city, state,
+    zipcode,
+    business_owner_id
+)
+values ($1, $2, $3, $4, $5, $6, $7)
+returning id, name, street_address, city, state, zipcode, business_owner_id
+`
+
+type CreateBusinessParams struct {
+	ID              uuid.UUID `json:"id"`
+	Name            string    `json:"name"`
+	StreetAddress   string    `json:"street_address"`
+	City            uuid.UUID `json:"city"`
+	State           string    `json:"state"`
+	Zipcode         string    `json:"zipcode"`
+	BusinessOwnerID uuid.UUID `json:"business_owner_id"`
+}
+
+func (q *Queries) CreateBusiness(ctx context.Context, arg CreateBusinessParams) (Business, error) {
+	row := q.db.QueryRow(ctx, createBusiness,
+		arg.ID,
+		arg.Name,
+		arg.StreetAddress,
+		arg.City,
+		arg.State,
+		arg.Zipcode,
+		arg.BusinessOwnerID,
+	)
+	var i Business
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.StreetAddress,
+		&i.City,
+		&i.State,
+		&i.Zipcode,
+		&i.BusinessOwnerID,
+	)
+	return i, err
+}
 
 const getAllBusinesses = `-- name: GetAllBusinesses :many
 select id, name, street_address, city, state, zipcode, business_owner_id from businesses
