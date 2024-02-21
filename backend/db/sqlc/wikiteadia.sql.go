@@ -505,6 +505,33 @@ func (q *Queries) GetTeas(ctx context.Context, published bool) ([]Tea, error) {
 	return items, nil
 }
 
+const publishTea = `-- name: PublishTea :one
+update teas
+set "published" = $2
+where "id" = $1
+returning id, name, img_url, description, brew_time, brew_temp, published
+`
+
+type PublishTeaParams struct {
+	ID        uuid.UUID `json:"id"`
+	Published bool      `json:"published"`
+}
+
+func (q *Queries) PublishTea(ctx context.Context, arg PublishTeaParams) (Tea, error) {
+	row := q.db.QueryRow(ctx, publishTea, arg.ID, arg.Published)
+	var i Tea
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.ImgUrl,
+		&i.Description,
+		&i.BrewTime,
+		&i.BrewTemp,
+		&i.Published,
+	)
+	return i, err
+}
+
 const updateTea = `-- name: UpdateTea :one
 update teas
 set
