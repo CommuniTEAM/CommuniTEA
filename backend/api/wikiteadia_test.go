@@ -421,7 +421,7 @@ func (suite *WikiteadiaTestSuite) TestPublishTea() {
 func (suite *WikiteadiaTestSuite) TestDeleteTea() {
 	t := suite.T()
 
-	teaID := "c64ff5ab-7323-4142-9077-aea320c3c4cc"
+	teaID := "c64ff5ab-7323-4142-9077-aea320c3c4cf"
 
 	// * Test 401 response & body
 	req, err := http.NewRequest(http.MethodDelete, suite.server.URL+"/teas/"+teaID, nil)
