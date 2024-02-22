@@ -68,6 +68,9 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	// wikiteadia
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
+	s.Put("/teas/{id}", endpoints.UpdateTea())
+	s.Patch("/teas/{id}", endpoints.PublishTea())
+	s.Delete("/teas/{id}", endpoints.DeleteTea())
 
 	// Businesses
 	s.Get("/businesses", endpoints.GetAllBusinesses())
@@ -116,9 +119,6 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
-			})
-			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
-				cu.HTTPStatus = http.StatusConflict
 			})
 			return nil
 		}),

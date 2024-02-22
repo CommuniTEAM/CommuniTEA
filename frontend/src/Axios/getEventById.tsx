@@ -1,43 +1,43 @@
+import DataCoffee from '../assets/DataCoffee.png';
+import FourSeasonsTea from '../assets/FourSeasonsTea.png';
+import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 import TeaExpo from '../assets/TeaExpo.jpg';
 import TeaTasting from '../assets/TeaTasting.png';
-import FourSeasonsTea from '../assets/FourSeasonsTea.png';
-import DataCoffee from '../assets/DataCoffee.png';
-import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 
 interface Event {
-  id?: number
-  image?: string
-  tag?: string
-  host?: string
-  name?: string
-  title?: string
-  location?: string
-  date?: string
-  startTime?: string
-  endTime?: string
-  price?: string
-  address?: string
-  attending?: string
-  headline?: string
-  headline2?: string
-  description: string
-  eventHighlight1?: string
-  eventHighlight1Bullet1?: string
-  eventHighlight1Bullet2?: string
-  eventHighlight1Bullet3?: string
-  eventHighlight2?: string
-  eventHighlight2Bullet1?: string
-  eventHighlight2Bullet2?: string
-  eventHighlight2Bullet3?: string
-  eventHighlight3?: string
-  eventHighlight3Bullet1?: string
-  eventHighlight3Bullet2?: string
-  eventHighlight3Bullet3?: string
-  eventHighlight4?: string
-  eventHighlight4Bullet1?: string
-  eventHighlight4Bullet2?: string
-  eventHighlight4Bullet3?: string
-  whyAttend?: string
+  id?: number;
+  image?: string;
+  tag?: string;
+  host?: string;
+  name?: string;
+  title?: string;
+  location?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  price?: string;
+  address?: string;
+  attending?: string;
+  headline?: string;
+  headline2?: string;
+  description: string;
+  eventHighlight1?: string;
+  eventHighlight1Bullet1?: string;
+  eventHighlight1Bullet2?: string;
+  eventHighlight1Bullet3?: string;
+  eventHighlight2?: string;
+  eventHighlight2Bullet1?: string;
+  eventHighlight2Bullet2?: string;
+  eventHighlight2Bullet3?: string;
+  eventHighlight3?: string;
+  eventHighlight3Bullet1?: string;
+  eventHighlight3Bullet2?: string;
+  eventHighlight3Bullet3?: string;
+  eventHighlight4?: string;
+  eventHighlight4Bullet1?: string;
+  eventHighlight4Bullet2?: string;
+  eventHighlight4Bullet3?: string;
+  whyAttend?: string;
 }
 
 const eventData = [
@@ -253,17 +253,18 @@ const eventData = [
   },
 ];
 
-const getEventById = async (eventId: number): Promise<Event | undefined> => new Promise((resolve, reject) => {
-  setTimeout(() => {
-    const foundEvent = eventData.find(
-      (eventItem) => eventItem.id === eventId,
-    );
-    if (foundEvent !== undefined) {
-      resolve(foundEvent);
-    } else {
-      reject(new Error('Event not found'));
-    }
-  }, 1000);
-});
+const getEventById = async (eventId: number): Promise<Event | undefined> =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const foundEvent = eventData.find(
+        (eventItem) => eventItem.id === eventId,
+      );
+      if (foundEvent !== undefined) {
+        resolve(foundEvent);
+      } else {
+        reject(new Error('Event not found'));
+      }
+    }, 1000);
+  });
 
 export default getEventById;

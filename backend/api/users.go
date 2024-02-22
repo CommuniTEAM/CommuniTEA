@@ -17,11 +17,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userInput struct {
-	defaultInput
-	ID uuid.UUID `nullable:"false" path:"id" required:"true"`
-}
-
 type logoutOutput struct {
 	genericOutput
 	auth.TokenCookie
@@ -161,7 +156,6 @@ func (a *API) CreateUser() usecase.Interactor {
 			defer conn.Release()
 
 			queries := db.New(conn)
-
 			_, err = queries.GetUserByUsername(ctx, input.Username)
 			if err == nil {
 				return status.Wrap(errors.New("username taken"), status.AlreadyExists)
@@ -242,7 +236,7 @@ func (a *API) CreateUser() usecase.Interactor {
 
 func (a *API) GetUser() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input userInput, output *userOutput) error {
+		func(ctx context.Context, input uuidInput, output *userOutput) error {
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -287,14 +281,13 @@ func (a *API) GetUser() usecase.Interactor {
 // variables. Returns the updated user details and a new auth token.
 func (a *API) UpdateUser() usecase.Interactor {
 	type userUpdateInput struct {
-		defaultInput
-		ID        uuid.UUID `path:"id"`
-		FirstName string    `json:"first_name"`
-		LastName  string    `json:"last_name"`
-		Email     string    `json:"email"`
-		Role      string    `enum:"user,business" json:"role"`
-		StateCode string    `json:"state_code"    maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
-		CityName  string    `json:"city_name"     minLength:"1" nullable:"false"`
+		uuidInput
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Email     string `json:"email"`
+		Role      string `enum:"user,business" json:"role"`
+		StateCode string `json:"state_code"    maxLength:"2" minLength:"2"    nullable:"false" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
+		CityName  string `json:"city_name"     minLength:"1" nullable:"false"`
 	}
 
 	response := usecase.NewInteractor(
@@ -409,11 +402,10 @@ func (a *API) UpdateUser() usecase.Interactor {
 
 func (a *API) ChangePassword() usecase.Interactor {
 	type passwordInput struct {
-		defaultInput
-		ID              uuid.UUID `path:"id"`
-		OldPassword     string    `json:"old_password"      nullable:"false" required:"true"`
-		NewPassword     string    `json:"new_password"      nullable:"false" required:"true"`
-		NewPasswordConf string    `json:"new_password_conf" nullable:"false" required:"true"`
+		uuidInput
+		OldPassword     string `json:"old_password"      nullable:"false" required:"true"`
+		NewPassword     string `json:"new_password"      nullable:"false" required:"true"`
+		NewPasswordConf string `json:"new_password_conf" nullable:"false" required:"true"`
 	}
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input passwordInput, output *genericOutput) error {
@@ -472,7 +464,7 @@ func (a *API) ChangePassword() usecase.Interactor {
 // promotes the user with the given ID to the admin role.
 func (a *API) PromoteToAdmin() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input userInput, output *userOutput) error {
+		func(ctx context.Context, input uuidInput, output *userOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
@@ -528,13 +520,8 @@ func (a *API) PromoteToAdmin() usecase.Interactor {
 // DeleteUser takes a user ID and deletes the associated account from the
 // database IF the request comes from the user with the same ID.
 func (a *API) DeleteUser() usecase.Interactor {
-	type deleteUserInput struct {
-		defaultInput
-		ID uuid.UUID `path:"id"`
-	}
-
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input deleteUserInput, output *logoutOutput) error {
+		func(ctx context.Context, input uuidInput, output *logoutOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 			if userData == nil {
 				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)

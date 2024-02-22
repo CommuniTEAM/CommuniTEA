@@ -1,9 +1,10 @@
 import { Button, TextField, Typography } from '@mui/material';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import '../styles/RsvpFormStyles.css';
 
+// Define the validation schema
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is Required'),
   last_name: Yup.string().required('Last Name is Required'),
@@ -40,9 +41,7 @@ export default function RsvpForm(): JSX.Element {
           setSubmitting(false);
         }}
       >
-        {({
-          isSubmitting, errors, touched, handleChange, handleBlur,
-        }) => (
+        {({ isSubmitting, errors, touched, handleChange, handleBlur }) => (
           <Form>
             <div className="inputFieldsContainer">
               <TextField
@@ -51,7 +50,7 @@ export default function RsvpForm(): JSX.Element {
                 label="First Name"
                 placeholder="First Name"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 margin="dense"
                 error={!!(touched.first_name && errors.first_name)}
                 onChange={handleChange}
@@ -68,7 +67,7 @@ export default function RsvpForm(): JSX.Element {
                 label="Last Name"
                 placeholder="Last Name"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 margin="dense"
                 error={Boolean(touched.last_name && errors.last_name)}
                 onChange={handleChange}
@@ -85,7 +84,7 @@ export default function RsvpForm(): JSX.Element {
                 label="Email"
                 placeholder="Email"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 margin="dense"
                 error={Boolean(touched.email && errors.email)}
                 onChange={handleChange}
@@ -102,7 +101,7 @@ export default function RsvpForm(): JSX.Element {
                 label="Phone Number"
                 placeholder="Phone Number"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 margin="dense"
                 error={Boolean(touched.phone && errors.phone)}
                 onChange={handleChange}
@@ -119,7 +118,7 @@ export default function RsvpForm(): JSX.Element {
                 label="Number of Attendees"
                 placeholder="Number of Attendees"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 margin="dense"
                 error={Boolean(touched.num_attendees && errors.num_attendees)}
                 onChange={handleChange}

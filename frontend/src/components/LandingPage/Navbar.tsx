@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
 import {
   AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
   Avatar,
+  Box,
   Button,
-  Tooltip,
-  MenuItem,
   Container,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MenuIcon from '../../assets/MenuIcon.png';
-import CommuniteaLogo from '../../assets/CommuniteaLogo.svg';
 import '../../App.css';
+import CommuniteaLogo from '../../assets/CommuniteaLogo.svg';
+import MenuIcon from '../../assets/MenuIcon.png';
 
 function NavBar(): JSX.Element {
   const navigate = useNavigate();
@@ -54,27 +54,29 @@ function NavBar(): JSX.Element {
   };
 
   // Toggles the state of the drawer
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown'
-        && ((event as React.KeyboardEvent).key === 'Tab'
-          || (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    setDrawerOpen(open);
-  };
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      setDrawerOpen(open);
+    };
 
-  const toggleMenuDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown'
-        && ((event as React.KeyboardEvent).key === 'Tab'
-          || (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    setSettingsDrawerOpen(open);
-  };
+  const toggleMenuDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      setSettingsDrawerOpen(open);
+    };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#FFF5E1' }}>
@@ -96,7 +98,7 @@ function NavBar(): JSX.Element {
             />
             <Typography
               variant="h6"
-              noWrap
+              noWrap={true}
               component="a"
               href="#"
               sx={{
@@ -198,7 +200,7 @@ function NavBar(): JSX.Element {
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              keepMounted
+              keepMounted={true}
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}

@@ -1,18 +1,18 @@
 import {
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
-  CardActionArea,
 } from '@mui/material';
-import Slider from 'react-slick';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import CoylesBakeshop from '../../../assets/CoylesBakeshop.jpg';
 import MiroTea from '../../../assets/MiroTea.png';
 import QueenMaryTea from '../../../assets/QueenMaryTea.png';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 export default function OtherEventCards(): JSX.Element {
   const theme = useTheme();
@@ -21,16 +21,28 @@ export default function OtherEventCards(): JSX.Element {
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const getImageHeight = (): string => {
-    if (largeScreen) return '10vw';
-    if (mediumScreen) return '10vw';
-    if (smallScreen) return '10vw';
+    if (largeScreen) {
+      return '10vw';
+    }
+    if (mediumScreen) {
+      return '10vw';
+    }
+    if (smallScreen) {
+      return '10vw';
+    }
     return '60vw';
   };
 
   const getCardHeight = (): string => {
-    if (largeScreen) return '18vw';
-    if (mediumScreen) return '20vw';
-    if (smallScreen) return '20vw';
+    if (largeScreen) {
+      return '18vw';
+    }
+    if (mediumScreen) {
+      return '20vw';
+    }
+    if (smallScreen) {
+      return '20vw';
+    }
     return '60vw';
   };
 
@@ -175,7 +187,7 @@ export default function OtherEventCards(): JSX.Element {
               />
               <CardContent sx={{ height: '40%' }}>
                 <Typography
-                  gutterBottom
+                  gutterBottom={true}
                   variant="body1"
                   component="div"
                   sx={{
@@ -187,7 +199,7 @@ export default function OtherEventCards(): JSX.Element {
                   Partner
                 </Typography>
                 <Typography
-                  gutterBottom
+                  gutterBottom={true}
                   variant="h5"
                   component="div"
                   sx={{ fontFamily: 'Montserrat', fontWeight: 700 }}

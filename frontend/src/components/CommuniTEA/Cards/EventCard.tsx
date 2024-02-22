@@ -6,22 +6,22 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import LikeIcon from '../../../assets/LikeIcon.png';
 import getEvents from '../../../Axios/getEvents';
+import LikeIcon from '../../../assets/LikeIcon.png';
 
 interface Event {
-  id: number
-  image: string
-  name: string
-  title: string
-  Location: string
-  Date: string
-  Time: string
-  Price: string
-  Address: string
-  Attending: string
+  id: number;
+  image: string;
+  name: string;
+  title: string;
+  Location: string;
+  Date: string;
+  Time: string;
+  Price: string;
+  Address: string;
+  Attending: string;
 }
 
 export default function EventCards(): JSX.Element {
@@ -32,7 +32,7 @@ export default function EventCards(): JSX.Element {
   useEffect(() => {
     getEvents()
       .then((response) => {
-        setEvents(response.data);
+        setEvents(response);
       })
       .catch((error) => {
         console.error('Failed to fetch events', error);
@@ -60,7 +60,7 @@ export default function EventCards(): JSX.Element {
               style={{ display: 'flex', flexDirection: 'column', width: '40%' }}
             >
               <CardContent sx={{ marginBottom: '2vh' }}>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom={true} variant="h5" component="div">
                   {event.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

@@ -64,6 +64,7 @@ func (suite *TestSuite) SetupSuite() {
 	if err != nil {
 		log.Fatalf("could not read _testdata/error_response.json")
 	}
+
 	suite.successBody, err = os.ReadFile("_testdata/success_response.json")
 	if err != nil {
 		log.Fatalf("could not read _testdata/success_response.json")
@@ -81,6 +82,7 @@ func (suite *TestSuite) SetupSuite() {
 			Name:  "Seattle",
 			State: "WA",
 		}}
+
 	userToken, err := api.Auth.GenerateNewJWT(&userData, false)
 	if err != nil {
 		log.Fatalf("could not generate user token: %v", err)

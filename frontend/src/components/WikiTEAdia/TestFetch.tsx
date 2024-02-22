@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchTeas } from '../../Axios/teaService';
 
 interface Tea {
-  id: number
-  name: string
-  img_url: string
-  description: string
-  brew_time: number
-  brew_temp: number
-  published: boolean
+  id: number;
+  name: string;
+  img_url: string;
+  description: string;
+  brew_time: number;
+  brew_temp: number;
+  published: boolean;
 }
 export default function TestFetch(): JSX.Element {
   const [teas, setTeas] = useState<Tea[]>([]);

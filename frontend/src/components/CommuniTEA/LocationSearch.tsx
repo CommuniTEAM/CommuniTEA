@@ -4,11 +4,17 @@ import MapPinIcon from '../../assets/MapPinIcon.png';
 export default function LocationSearch(): JSX.Element {
   // TODO: Add functionality to the searchbox
   return (
-    <div style={{ maxWidth: '50%', backgroundColor: '#FFFFF0', marginTop: '1vw' }}>
+    <div
+      style={{ maxWidth: '50%', backgroundColor: '#FFFFF0', marginTop: '1vw' }}
+    >
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', flexGrow: 2, marginLeft: '1vw',
-        }}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexGrow: 2,
+            marginLeft: '1vw',
+          }}
         >
           <img
             src={MapPinIcon}
