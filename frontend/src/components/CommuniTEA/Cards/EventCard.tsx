@@ -6,10 +6,10 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import getEvents from '../../../Axios/getEvents';
 import LikeIcon from '../../../assets/LikeIcon.png';
+import getEvents from '../../../Axios/getEvents';
 
 interface Event {
   id: number;
@@ -60,7 +60,7 @@ export default function EventCards(): JSX.Element {
               style={{ display: 'flex', flexDirection: 'column', width: '40%' }}
             >
               <CardContent sx={{ marginBottom: '2vh' }}>
-                <Typography gutterBottom={true} variant="h5" component="div">
+                <Typography gutterBottom variant="h5" component="div">
                   {event.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

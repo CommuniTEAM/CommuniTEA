@@ -1,16 +1,16 @@
 import {
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
+  CardActionArea,
 } from '@mui/material';
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick-theme.css';
-import 'slick-carousel/slick/slick.css';
 import CoylesBakeshop from '../../../assets/CoylesBakeshop.jpg';
 import MiroTea from '../../../assets/MiroTea.png';
 import QueenMaryTea from '../../../assets/QueenMaryTea.png';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import '../../CommuniTEA/styles/CommuniTeaPage.css';
 
@@ -166,7 +166,7 @@ export default function BusinessPartnerCards(): JSX.Element {
               />
               <CardContent sx={{ height: '40%' }}>
                 <Typography
-                  gutterBottom={true}
+                  gutterBottom
                   variant="body1"
                   component="div"
                   sx={{
@@ -178,7 +178,7 @@ export default function BusinessPartnerCards(): JSX.Element {
                   Partner
                 </Typography>
                 <Typography
-                  gutterBottom={true}
+                  gutterBottom
                   variant="h5"
                   component="div"
                   sx={{ fontFamily: 'Montserrat', fontWeight: 700 }}

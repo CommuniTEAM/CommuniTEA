@@ -1,25 +1,25 @@
+import React, { useState } from 'react';
 import {
   AppBar,
-  Avatar,
   Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Avatar,
   Button,
+  Tooltip,
+  MenuItem,
   Container,
   Drawer,
-  IconButton,
   List,
   ListItem,
   ListItemText,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Tooltip,
-  Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../App.css';
-import CommuniteaLogo from '../../assets/CommuniteaLogo.svg';
 import MenuIcon from '../../assets/MenuIcon.png';
+import CommuniteaLogo from '../../assets/CommuniteaLogo.svg';
+import '../../App.css';
 
 function NavBar(): JSX.Element {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ function NavBar(): JSX.Element {
             />
             <Typography
               variant="h6"
-              noWrap={true}
+              noWrap
               component="a"
               href="#"
               sx={{
@@ -200,7 +200,7 @@ function NavBar(): JSX.Element {
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              keepMounted={true}
+              keepMounted
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}

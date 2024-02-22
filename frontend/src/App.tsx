@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AboutUs from './components/AboutUs/AboutUs';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/LandingPage/LandingPage';
 import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage';
 import EventDetailPage from './components/IndividualEvent/EventDetailPage';
-import LandingPage from './components/LandingPage/LandingPage';
-import NotFound from './components/NotFound';
+import AboutUs from './components/AboutUs/AboutUs';
 import TestFetch from './components/WikiTEAdia/TestFetch';
+import NotFound from './components/NotFound';
 
 function App(): ReactElement {
   return (

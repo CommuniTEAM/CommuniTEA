@@ -3,9 +3,9 @@ import Footer from '../LandingPage/Footer';
 import NavBar from '../LandingPage/Navbar';
 import HeroBanner from './HeroBanner';
 import TeamMemberCarousel from './TeamMemberCarousel';
+import CoryDetails from './TeamMemberDetails/CoryDetails';
 import AngelaDetails from './TeamMemberDetails/AngelaDetails';
 import BrianDetails from './TeamMemberDetails/BrianDetails';
-import CoryDetails from './TeamMemberDetails/CoryDetails';
 
 import './styles/TeamMemberDetailsStyles.css';
 

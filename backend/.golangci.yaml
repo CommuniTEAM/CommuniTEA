@@ -43,39 +43,39 @@ linters-settings:
     # Default: []
     exclude:
       # std libs
-      - '^net/http.Client$'
-      - '^net/http.Cookie$'
-      - '^net/http.Request$'
-      - '^net/http.Response$'
-      - '^net/http.Server$'
-      - '^net/http.Transport$'
-      - '^net/url.URL$'
-      - '^os/exec.Cmd$'
-      - '^reflect.StructField$'
+      - "^net/http.Client$"
+      - "^net/http.Cookie$"
+      - "^net/http.Request$"
+      - "^net/http.Response$"
+      - "^net/http.Server$"
+      - "^net/http.Transport$"
+      - "^net/url.URL$"
+      - "^os/exec.Cmd$"
+      - "^reflect.StructField$"
       # public libs
-      - '^github.com/Shopify/sarama.Config$'
-      - '^github.com/Shopify/sarama.ProducerMessage$'
-      - '^github.com/mitchellh/mapstructure.DecoderConfig$'
-      - '^github.com/prometheus/client_golang/.+Opts$'
-      - '^github.com/spf13/cobra.Command$'
-      - '^github.com/spf13/cobra.CompletionOptions$'
-      - '^github.com/stretchr/testify/mock.Mock$'
-      - '^github.com/testcontainers/testcontainers-go.+Request$'
-      - '^github.com/testcontainers/testcontainers-go.FromDockerfile$'
-      - '^golang.org/x/tools/go/analysis.Analyzer$'
-      - '^google.golang.org/protobuf/.+Options$'
-      - '^gopkg.in/yaml.v3.Node$'
-      - '^github.com/swaggest/jsonschema-go.Schema$'
-      - '^github.com/rs/cors.Options$'
+      - "^github.com/Shopify/sarama.Config$"
+      - "^github.com/Shopify/sarama.ProducerMessage$"
+      - "^github.com/mitchellh/mapstructure.DecoderConfig$"
+      - "^github.com/prometheus/client_golang/.+Opts$"
+      - "^github.com/spf13/cobra.Command$"
+      - "^github.com/spf13/cobra.CompletionOptions$"
+      - "^github.com/stretchr/testify/mock.Mock$"
+      - "^github.com/testcontainers/testcontainers-go.+Request$"
+      - "^github.com/testcontainers/testcontainers-go.FromDockerfile$"
+      - "^golang.org/x/tools/go/analysis.Analyzer$"
+      - "^google.golang.org/protobuf/.+Options$"
+      - "^gopkg.in/yaml.v3.Node$"
+      - "^github.com/swaggest/jsonschema-go.Schema$"
+      - "^github.com/rs/cors.Options$"
       # project libs
-      - '^github.com/CommuniTEAM/CommuniTEA/router.httpResponse$'
-      - '^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$'
+      - "^github.com/CommuniTEAM/CommuniTEA/router.httpResponse$"
+      - "^github.com/CommuniTEAM/CommuniTEA/auth.TokenData$"
 
   funlen:
     # Checks the number of lines in a function.
     # If lower than 0, disable the check.
     # Default: 60
-    lines: 125
+    lines: 150
     # Checks the number of statements in a function.
     # If lower than 0, disable the check.
     # Default: 40
@@ -130,7 +130,7 @@ linters-settings:
         - github.com/golang/protobuf:
             recommendations:
               - google.golang.org/protobuf
-            reason: 'see https://developers.google.com/protocol-buffers/docs/reference/go/faq#modules'
+            reason: "see https://developers.google.com/protocol-buffers/docs/reference/go/faq#modules"
         - github.com/satori/go.uuid:
             recommendations:
               - github.com/google/uuid
@@ -318,7 +318,7 @@ issues:
   exclude-rules:
     # - source: "(noinspection|TODO)"
     #   linters: [ godot ]
-    - source: '//noinspection'
+    - source: "//noinspection"
       linters: [gocritic]
     - path: "_test\\.go"
       linters:

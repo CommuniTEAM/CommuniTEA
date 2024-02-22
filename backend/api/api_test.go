@@ -58,12 +58,13 @@ func (suite *TestSuite) SetupSuite() {
 	}
 
 	api := &api.API{DBPool: dbPool, Auth: authenticator}
-	suite.server = httptest.NewServer(router.NewRouter(api))
+	suite.server = httptest.NewServer(router.NewRouter(api, "test"))
 
 	suite.errBody, err = os.ReadFile("_testdata/error_response.json")
 	if err != nil {
 		log.Fatalf("could not read _testdata/error_response.json")
 	}
+
 	suite.successBody, err = os.ReadFile("_testdata/success_response.json")
 	if err != nil {
 		log.Fatalf("could not read _testdata/success_response.json")
@@ -81,6 +82,7 @@ func (suite *TestSuite) SetupSuite() {
 			Name:  "Seattle",
 			State: "WA",
 		}}
+
 	userToken, err := api.Auth.GenerateNewJWT(&userData, false)
 	if err != nil {
 		log.Fatalf("could not generate user token: %v", err)

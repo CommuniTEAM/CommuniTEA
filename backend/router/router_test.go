@@ -17,13 +17,13 @@ func TestNewRouter(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	authenicator, err := auth.NewAuthenticator()
+	authenticator, err := auth.NewAuthenticator()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	endpoints := &api.API{DBPool: mockDBPool, Auth: authenicator}
-	r := router.NewRouter(endpoints)
+	endpoints := &api.API{DBPool: mockDBPool, Auth: authenticator}
+	r := router.NewRouter(endpoints, "prod")
 
 	req, err := http.NewRequest(http.MethodGet, "/docs", nil)
 	if err != nil {
@@ -33,7 +33,6 @@ func TestNewRouter(t *testing.T) {
 	rw := httptest.NewRecorder()
 
 	r.ServeHTTP(rw, req)
-
 	if http.StatusOK != rw.Code {
 		t.Fatalf("expected status code to be 200, but got: %v", rw.Code)
 	}

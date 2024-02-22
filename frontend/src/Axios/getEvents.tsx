@@ -1,8 +1,8 @@
-import DataCoffee from '../assets/DataCoffee.png';
-import FourSeasonsTea from '../assets/FourSeasonsTea.png';
-import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 import TeaExpo from '../assets/TeaExpo.jpg';
 import TeaTasting from '../assets/TeaTasting.png';
+import FourSeasonsTea from '../assets/FourSeasonsTea.png';
+import DataCoffee from '../assets/DataCoffee.png';
+import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 
 const getEvents = async (): Promise<any> =>
   new Promise((resolve) => {

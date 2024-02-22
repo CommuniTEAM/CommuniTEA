@@ -1,9 +1,9 @@
-import { Typography } from '@mui/material';
 import Slider from 'react-slick';
+import { Typography } from '@mui/material';
 
+import Cory from '../../assets/Cory.jpg';
 import Angela from '../../assets/Angela.jpg';
 import Brian from '../../assets/Brian.jpg';
-import Cory from '../../assets/Cory.jpg';
 
 import './styles/TeamMemberDetailsStyles.css';
 

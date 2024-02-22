@@ -43,12 +43,12 @@ jobs:
         working-directory: backend
     steps:
       - name: Checkout 'db' folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             backend/db
       - name: Install sqlc
-        uses: sqlc-dev/setup-sqlc@v3
+        uses: sqlc-dev/setup-sqlc@v4
         with:
           sqlc-version: '1.25.0'
       - name: Verify sqlc codegen

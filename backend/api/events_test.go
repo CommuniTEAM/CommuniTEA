@@ -23,9 +23,9 @@ func TestEventsTestSuite(t *testing.T) {
 func (suite *EventsTestSuite) TestGetAllEvents() {
 	t := suite.T()
 
-	eventId := "e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e"
+	eventID := "e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e"
 
-	req, err := http.NewRequest("GET", suite.server.URL+"/events/"+eventId, nil)
+	req, err := http.NewRequest(http.MethodGet, suite.server.URL+"/events/"+eventID, nil)
 	require.NoError(t, err)
 
 	resp, err := http.DefaultTransport.RoundTrip(req)

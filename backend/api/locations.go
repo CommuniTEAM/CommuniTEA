@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -33,12 +34,12 @@ func (a *API) CreateCity() usecase.Interactor {
 
 			// If the token was invalid or nonexistent then userData will be nil
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			// Verify that the user has the 'admin' role
 			if userData.Role != adminRole {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -53,13 +54,13 @@ func (a *API) CreateCity() usecase.Interactor {
 			_, err = a.getLocationID(input.CityName, input.StateCode)
 			if err == nil {
 				// If err is nil then the location already exists
-				return status.Wrap(fmt.Errorf("location already exists"), status.AlreadyExists)
+				return status.Wrap(errors.New("location already exists"), status.AlreadyExists)
 			}
 
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			inputArgs := db.CreateCityParams{
@@ -69,9 +70,10 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
+
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create city: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -106,10 +108,10 @@ func (a *API) GetCity() usecase.Interactor {
 			*output, err = queries.GetCity(ctx, input.ID)
 			if err != nil {
 				if strings.Contains(err.Error(), "no rows") {
-					return status.Wrap(fmt.Errorf("no city with that id"), status.NotFound)
+					return status.Wrap(errors.New("no city with that id"), status.NotFound)
 				}
 				log.Println(fmt.Errorf("could not get city: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -129,6 +131,7 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 	type stateInput struct {
 		StateCode string `maxLength:"2" minLength:"2" path:"state-code" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
 	}
+
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
@@ -143,9 +146,8 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 			output.Cities, err = queries.GetAllCitiesInState(ctx, input.StateCode)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get all cities in state: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
-
 			return nil
 		})
 
@@ -161,7 +163,7 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 // in the database.
 func (a *API) GetAllCities() usecase.Interactor {
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input defaultInput, output *citiesOutput) error {
+		func(ctx context.Context, _ defaultInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -173,7 +175,7 @@ func (a *API) GetAllCities() usecase.Interactor {
 			output.Cities, err = queries.GetAllCities(ctx)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get all cities: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -200,11 +202,11 @@ func (a *API) UpdateCity() usecase.Interactor {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
 
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.Role != adminRole {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -219,23 +221,23 @@ func (a *API) UpdateCity() usecase.Interactor {
 			city, err := queries.GetCity(ctx, input.ID)
 			if err != nil {
 				if strings.Contains(err.Error(), "no rows") {
-					return status.Wrap(fmt.Errorf("no city with that id"), status.NotFound)
+					return status.Wrap(errors.New("no city with that id"), status.NotFound)
 				}
 				log.Println(fmt.Errorf("could not get city: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			// Check that the new city name won't conflict
 			_, err = a.getLocationID(input.Name, city.State)
 			if err == nil {
 				// If err is nil then a city with the new name already exists
-				return status.Wrap(fmt.Errorf("could not update: a city with that name already exists"), status.AlreadyExists)
+				return status.Wrap(errors.New("could not update: a city with that name already exists"), status.AlreadyExists)
 			}
 
 			*output, err = queries.UpdateCityName(ctx, db.UpdateCityNameParams{ID: input.ID, Name: input.Name})
 			if err != nil {
 				log.Println("could not update city name: %w", err)
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -262,13 +264,12 @@ func (a *API) DeleteCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *genericOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
-
 			if userData == nil {
-				return status.Wrap(fmt.Errorf("you must be logged in to perform this action"), status.Unauthenticated)
+				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
 
 			if userData.Role != adminRole {
-				return status.Wrap(fmt.Errorf("you do not have permission to perform this action"), status.PermissionDenied)
+				return status.Wrap(errors.New("you do not have permission to perform this action"), status.PermissionDenied)
 			}
 
 			conn, err := a.dbConn(ctx)
@@ -282,11 +283,12 @@ func (a *API) DeleteCity() usecase.Interactor {
 			err = queries.DeleteCity(ctx, input.ID)
 			if err != nil {
 				if strings.Contains(err.Error(), "fkey") {
-					return status.Wrap(fmt.Errorf("cannot delete a location that is in use by other data"), status.Aborted)
+					return status.Wrap(errors.New("cannot delete a location that is in use by other data"), status.Aborted)
 				}
 				log.Println(fmt.Errorf("could not delete city: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
+
 			output.Message = successMsg
 			return nil
 		})
@@ -312,7 +314,7 @@ func (a *API) GetAllStates() usecase.Interactor {
 	}
 
 	response := usecase.NewInteractor(
-		func(ctx context.Context, input defaultInput, output *statesOutput) error {
+		func(ctx context.Context, _ defaultInput, output *statesOutput) error {
 			conn, err := a.dbConn(ctx)
 			if err != nil {
 				return err
@@ -324,7 +326,7 @@ func (a *API) GetAllStates() usecase.Interactor {
 			output.States, err = queries.GetAllStates(ctx)
 			if err != nil {
 				log.Println(fmt.Errorf("could not get all states: %w", err))
-				return status.Wrap(fmt.Errorf(internalErrMsg), status.Internal)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
 
 			return nil
@@ -354,7 +356,7 @@ func (a *API) getLocationID(cityName string, stateCode string) (uuid.UUID, error
 		State: stateCode,
 	})
 	if err != nil {
-		return uuid.UUID{}, status.Wrap(fmt.Errorf("location does not exist"), status.InvalidArgument)
+		return uuid.UUID{}, status.Wrap(errors.New("location does not exist"), status.InvalidArgument)
 	}
 
 	return locationID, nil
