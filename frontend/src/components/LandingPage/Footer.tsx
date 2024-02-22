@@ -1,6 +1,6 @@
+import { IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, IconButton } from '@mui/material';
 import GitHubIcon from '../../assets/GitHubIcon.png';
 
 import './styles/FooterStyles.css';

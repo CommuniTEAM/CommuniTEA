@@ -1,9 +1,9 @@
-import Slider from 'react-slick';
 import { Typography } from '@mui/material';
+import Slider from 'react-slick';
 
-import Cory from '../../assets/Cory.jpg';
 import Angela from '../../assets/Angela.jpg';
 import Brian from '../../assets/Brian.jpg';
+import Cory from '../../assets/Cory.jpg';
 
 import './styles/TeamMemberDetailsStyles.css';
 
@@ -18,7 +18,10 @@ export default function TeamMemberCarousel({
     onSelectTeamMember(name);
   };
 
-  const handleKeyPress = (event: any, memberName: any): void => {
+  const handleKeyPress = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    memberName: string,
+  ): void => {
     if (event.key === 'Enter' || event.key === ' ') {
       onSelectTeamMember(memberName);
     }

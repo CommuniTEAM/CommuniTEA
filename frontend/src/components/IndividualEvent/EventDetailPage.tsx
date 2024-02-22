@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button, Divider, Paper, Typography } from '@mui/material';
-import NavBar from '../LandingPage/Navbar';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import getEventById from '../../Axios/getEventById';
 import LikeIcon from '../../assets/LikeIcon.png';
-import shareIcon from '../../assets/ShareIcon.png';
 import MapPinIcon from '../../assets/MapPinIcon.png';
-import OtherEvents from './OtherEvents';
+import shareIcon from '../../assets/ShareIcon.png';
 import Footer from '../LandingPage/Footer';
+import NavBar from '../LandingPage/Navbar';
 import RsvpForm from './Forms/RsvpForm';
+import OtherEvents from './OtherEvents';
 
 import './styles/IndividualEventStyles.css';
 
@@ -76,7 +76,7 @@ export default function EventDetailPage(): JSX.Element {
       }
     };
 
-    void fetchEventData();
+    fetchEventData();
   }, [eventId]);
 
   if (loading) {
