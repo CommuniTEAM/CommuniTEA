@@ -32,7 +32,7 @@ export default function EventCards(): JSX.Element {
   useEffect(() => {
     getEvents()
       .then((response) => {
-        setEvents(response.data);
+        setEvents(response);
       })
       .catch((error) => {
         console.error('Failed to fetch events', error);
