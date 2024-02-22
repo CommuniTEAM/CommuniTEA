@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AboutUs from './components/AboutUs/AboutUs';
+import TestComponent from './components/Businesses/TestComponent';
 import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage';
 import EventDetailPage from './components/IndividualEvent/EventDetailPage';
 import JoditTest from './components/Jodit/JoditTest';
@@ -19,6 +20,7 @@ function App(): ReactElement {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/test" element={<TestFetch />} />
         <Route path="/jodit" element={<JoditTest />} />
+        <Route path="/business-test" element={<TestComponent />} />
       </Routes>
     </Router>
   );
