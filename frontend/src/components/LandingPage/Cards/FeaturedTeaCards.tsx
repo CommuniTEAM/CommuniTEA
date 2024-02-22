@@ -1,15 +1,15 @@
-import '../styles/FeaturedTeaCardStyles.css';
 import {
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
-  CardActionArea,
 } from '@mui/material';
 import ChamomileTea from '../../../assets/ChamomileTea.jpg';
 import DarjeelingTea from '../../../assets/DarjeelingTea.jpg';
-import OolongTea from '../../../assets/OolongTea.png';
 import GreenTea from '../../../assets/GreenTea.jpg';
+import OolongTea from '../../../assets/OolongTea.png';
+import '../styles/FeaturedTeaCardStyles.css';
 
 export default function FeaturedTeaCards(): JSX.Element {
   // This is test data. Replace when API is ready.
@@ -56,7 +56,7 @@ export default function FeaturedTeaCards(): JSX.Element {
             />
             <CardContent className="featuredTeaCardContent">
               <Typography
-                gutterBottom
+                gutterBottom={true}
                 variant="body1"
                 component="div"
                 className="featuredTypographyBody1"
@@ -64,7 +64,7 @@ export default function FeaturedTeaCards(): JSX.Element {
                 Featured
               </Typography>
               <Typography
-                gutterBottom
+                gutterBottom={true}
                 variant="h5"
                 component="div"
                 className="featuredTypographyH5"

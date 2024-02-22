@@ -1,22 +1,22 @@
-import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 
 import './styles/CommuniTeaPage.css';
 
 interface Location {
-  lat: number
-  lng: number
-  name: string
+  lat: number;
+  lng: number;
+  name: string;
 }
 
 interface GoogleMapsMultiplePinsProps {
-  apiKey: string
-  locations: Location[]
+  apiKey: string;
+  locations: Location[];
 }
 
 interface MarkerAndInfoWindow {
-  marker: google.maps.Marker
-  infowindow: google.maps.InfoWindow
+  marker: google.maps.Marker;
+  infowindow: google.maps.InfoWindow;
 }
 
 function GoogleMapsMultiplePins({
@@ -40,7 +40,7 @@ function GoogleMapsMultiplePins({
         });
 
         // Add markers and InfoWindows to the map
-        locations.forEach((location) => {
+        for (const location of locations) {
           const marker = new window.google.maps.Marker({
             position: { lat: location.lat, lng: location.lng },
             map,
@@ -60,7 +60,7 @@ function GoogleMapsMultiplePins({
           });
 
           markers.current.push({ marker, infowindow }); // Store the marker and infowindow
-        });
+        }
       }
     };
 
@@ -70,10 +70,10 @@ function GoogleMapsMultiplePins({
     return () => {
       document.body.removeChild(script);
       // Clean up markers and InfoWindows
-      markers.current.forEach((item) => {
+      for (const item of markers.current) {
         item.infowindow.close();
         item.marker.setMap(null);
-      });
+      }
       markers.current = [];
     };
   }, [apiKey, locations]);

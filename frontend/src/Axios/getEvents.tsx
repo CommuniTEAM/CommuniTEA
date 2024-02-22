@@ -1,13 +1,26 @@
+import DataCoffee from '../assets/DataCoffee.png';
+import FourSeasonsTea from '../assets/FourSeasonsTea.png';
+import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 import TeaExpo from '../assets/TeaExpo.jpg';
 import TeaTasting from '../assets/TeaTasting.png';
-import FourSeasonsTea from '../assets/FourSeasonsTea.png';
-import DataCoffee from '../assets/DataCoffee.png';
-import TeaAndPainting from '../assets/TeaAndPainting.jpg';
 
-const getEvents = async (): Promise<any> => new Promise((resolve) => {
-  setTimeout(() => {
-    resolve({
-      data: [
+interface Event {
+  id: number;
+  image: string;
+  name: string;
+  title: string;
+  Location: string;
+  Date: string;
+  Time: string;
+  Price: string;
+  Address: string;
+  Attending: string;
+}
+
+const getEvents = async (): Promise<Event[]> =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
         {
           id: 1,
           image: TeaExpo,
@@ -68,9 +81,8 @@ const getEvents = async (): Promise<any> => new Promise((resolve) => {
           Address: '4228 Stone Way N',
           Attending: '30',
         },
-      ],
+      ]);
     });
   });
-});
 
 export default getEvents;
