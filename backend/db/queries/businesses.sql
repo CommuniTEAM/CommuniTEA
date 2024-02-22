@@ -24,3 +24,7 @@ set
     "business_owner_id" = $7
 where "id" = $1
 returning *;
+
+-- name: DeleteBusiness :exec
+delete from businesses
+where id = $1;

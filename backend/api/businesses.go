@@ -143,3 +143,35 @@ func (a *API) UpdateBusiness() usecase.Interactor {
 
 	return response
 }
+
+// DeleteBusiness deletes a business in the database
+func (a *API) DeleteBusiness() usecase.Interactor {
+	response := usecase.NewInteractor(
+		func(ctx context.Context, input uuidInput, output *genericOutput) error {
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			err = queries.DeleteBusiness(ctx, input.ID)
+			if err != nil {
+				log.Println("Could not delete business:", err)
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
+			}
+
+			output.Message = successMsg
+
+			return nil
+		},
+	)
+
+	response.SetTitle("Delete Business")
+	response.SetDescription("Delete a business in the database")
+	response.SetTags("Businesses")
+	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}

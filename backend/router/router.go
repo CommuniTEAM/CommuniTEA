@@ -76,6 +76,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/businesses", endpoints.GetAllBusinesses())
 	s.Post("/businesses", endpoints.CreateBusinesses())
 	s.Put("/businesses/{id}", endpoints.UpdateBusiness())
+	s.Delete("/businesses/{id}", endpoints.DeleteBusiness())
 
 	return s
 }

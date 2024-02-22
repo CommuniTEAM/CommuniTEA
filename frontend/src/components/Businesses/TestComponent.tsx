@@ -86,6 +86,21 @@ export default function BusinessTable(): JSX.Element {
     setOpenModal(true); // Open the modal
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`${BASE_URL}/businesses/${id}`);
+
+      // Remove the deleted business from the list
+      setBusinesses((prevBusinesses) =>
+        prevBusinesses.filter((business) => business.id !== id),
+      );
+
+      console.log('Business deleted successfully');
+    } catch (error) {
+      console.error('Error deleting business', error);
+    }
+  };
+
   return (
     <div style={{ padding: '100px 50px 0 100px' }}>
       <h2>Businesses</h2>
@@ -198,6 +213,13 @@ export default function BusinessTable(): JSX.Element {
                   onClick={() => handleUpdate(business)}
                 >
                   Update
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => handleDelete(business.id)}
+                  style={{ marginLeft: '10px' }}
+                >
+                  Delete
                 </Button>
               </td>
             </tr>
