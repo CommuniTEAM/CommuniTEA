@@ -26,7 +26,7 @@
         "useSingleCaseStatement": "error"
       },
       "suspicious": {
-        "noConsoleLog": "warn",
+        "noConsoleLog": "off",
         "noApproximativeNumericConstant": "warn",
         "noMisrefactoredShorthandAssign": "warn"
       }

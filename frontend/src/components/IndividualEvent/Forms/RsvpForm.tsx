@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import '../styles/RsvpFormStyles.css';
 
+// Define the validation schema
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is Required'),
   last_name: Yup.string().required('Last Name is Required'),
@@ -36,6 +37,7 @@ export default function RsvpForm(): JSX.Element {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
+          console.log(values);
           setSubmitting(false);
         }}
       >
