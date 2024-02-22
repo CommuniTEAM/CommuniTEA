@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -90,6 +91,23 @@ export default function Filters(): JSX.Element {
         </FormControl>
       </div>
       <div className="businessCards">
+        <Button
+          variant="contained"
+          className="addBusinessButton"
+          sx={{
+            margin: '30px 0px',
+            fontSize: '1rem',
+            width: '100%',
+            backgroundColor: '#8B4513',
+            borderRadius: '50px',
+            fontFamily: 'Montserrat',
+            '&:hover': {
+              backgroundColor: '#8B4513',
+            },
+          }}
+        >
+          Add a Business
+        </Button>
         <EventCards />
       </div>
     </div>

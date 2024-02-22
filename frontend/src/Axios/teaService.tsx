@@ -3,13 +3,13 @@ import axios from 'axios';
 const BASE_URL = `${import.meta.env.VITE_API_HOST}/teas/`;
 
 interface Tea {
-  id: number
-  name: string
-  img_url: string
-  description: string
-  brew_time: number
-  brew_temp: number
-  published: boolean
+  id: number;
+  name: string;
+  img_url: string;
+  description: string;
+  brew_time: number;
+  brew_temp: number;
+  published: boolean;
 }
 
 // GET request to fetch all teas
@@ -24,7 +24,7 @@ export const fetchTeas = async (published: boolean): Promise<Tea[]> => {
 };
 
 // POST request to create a new tea
-export const createTea = async (tea: any): Promise<Tea[]> => {
+export const createTea = async (tea: Tea): Promise<Tea[]> => {
   try {
     const response = await axios.post(BASE_URL, tea);
     return response.data;
@@ -35,7 +35,7 @@ export const createTea = async (tea: any): Promise<Tea[]> => {
 };
 
 // PUT request to update a tea
-export const updateTea = async (tea: any): Promise<Tea[]> => {
+export const updateTea = async (tea: Tea): Promise<Tea[]> => {
   try {
     const response = await axios.put(`${BASE_URL}${tea.id}`, tea);
     return response.data;
