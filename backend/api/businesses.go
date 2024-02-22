@@ -25,6 +25,17 @@ type businessOutput struct {
 	Businesses []db.Business `json:"businesses"`
 }
 
+type updateBusinessInput struct {
+	defaultInput
+	ID              uuid.UUID `path:"id"`
+	Name            string    `json:"name"              nullable:"false" required:"true"`
+	StreetAddress   string    `json:"street_address"    nullable:"false" required:"true"`
+	City            uuid.UUID `json:"city"              nullable:"false" required:"true"`
+	State           string    `json:"state"             nullable:"false" required:"true"`
+	Zipcode         string    `json:"zipcode"           nullable:"false" required:"true"`
+	BusinessOwnerID uuid.UUID `json:"business_owner_id" nullable:"false" required:"true"`
+}
+
 // GetAllBusinesses returns all businesses in the database
 func (a *API) GetAllBusinesses() usecase.Interactor {
 	response := usecase.NewInteractor(
@@ -89,6 +100,44 @@ func (a *API) CreateBusinesses() usecase.Interactor {
 
 	response.SetTitle("Create Business")
 	response.SetDescription("Make a new business")
+	response.SetTags("Businesses")
+	response.SetExpectedErrors(status.InvalidArgument)
+
+	return response
+}
+
+// UpdateBusiness updates a business in the database
+func (a *API) UpdateBusiness() usecase.Interactor {
+	response := usecase.NewInteractor(func(ctx context.Context, input updateBusinessInput, output *db.Business) error {
+		conn, err := a.dbConn(ctx)
+		if err != nil {
+			return err
+		}
+		defer conn.Release()
+
+		queries := db.New(conn)
+
+		businessParams := db.UpdateBusinessParams{ // Changed to UpdateBusinessParams
+			ID:              input.ID,
+			Name:            input.Name,
+			StreetAddress:   input.StreetAddress,
+			City:            input.City,
+			State:           input.State,
+			Zipcode:         input.Zipcode,
+			BusinessOwnerID: input.BusinessOwnerID,
+		}
+
+		*output, err = queries.UpdateBusiness(ctx, businessParams)
+		if err != nil {
+			log.Println("Could not update business information:", err)
+			return status.Wrap(errors.New(internalErrMsg), status.Internal)
+		}
+
+		return nil
+	})
+
+	response.SetTitle("Update Business")
+	response.SetDescription("Update a business in the database")
 	response.SetTags("Businesses")
 	response.SetExpectedErrors(status.InvalidArgument)
 

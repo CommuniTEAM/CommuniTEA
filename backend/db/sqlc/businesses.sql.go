@@ -88,3 +88,49 @@ func (q *Queries) GetAllBusinesses(ctx context.Context) ([]Business, error) {
 	}
 	return items, nil
 }
+
+const updateBusiness = `-- name: UpdateBusiness :one
+update businesses
+set
+    "name" = $2,
+    "street_address" = $3,
+    "city" = $4,
+    "state" = $5,
+    "zipcode" = $6,
+    "business_owner_id" = $7
+where "id" = $1
+returning id, name, street_address, city, state, zipcode, business_owner_id
+`
+
+type UpdateBusinessParams struct {
+	ID              uuid.UUID `json:"id"`
+	Name            string    `json:"name"`
+	StreetAddress   string    `json:"street_address"`
+	City            uuid.UUID `json:"city"`
+	State           string    `json:"state"`
+	Zipcode         string    `json:"zipcode"`
+	BusinessOwnerID uuid.UUID `json:"business_owner_id"`
+}
+
+func (q *Queries) UpdateBusiness(ctx context.Context, arg UpdateBusinessParams) (Business, error) {
+	row := q.db.QueryRow(ctx, updateBusiness,
+		arg.ID,
+		arg.Name,
+		arg.StreetAddress,
+		arg.City,
+		arg.State,
+		arg.Zipcode,
+		arg.BusinessOwnerID,
+	)
+	var i Business
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.StreetAddress,
+		&i.City,
+		&i.State,
+		&i.Zipcode,
+		&i.BusinessOwnerID,
+	)
+	return i, err
+}

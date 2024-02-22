@@ -32,3 +32,17 @@ export const createBusiness = async (formData: BusinessFormData) => {
     throw error;
   }
 };
+
+// Update business
+export const updateBusiness = async (
+  id: string,
+  formData: BusinessFormData,
+) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/businesses/${id}`, formData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating business', error);
+    throw error;
+  }
+};

@@ -12,3 +12,15 @@ insert into businesses (
 )
 values ($1, $2, $3, $4, $5, $6, $7)
 returning *;
+
+-- name: UpdateBusiness :one
+update businesses
+set
+    "name" = $2,
+    "street_address" = $3,
+    "city" = $4,
+    "state" = $5,
+    "zipcode" = $6,
+    "business_owner_id" = $7
+where "id" = $1
+returning *;

@@ -53,35 +53,37 @@ export default function BusinessTable(): JSX.Element {
 
   const handleSubmit = async () => {
     try {
-      // Define headers
       const headers = {
         'Content-Type': 'application/json',
       };
 
-      // Make a POST request to add the new business
-      await axios.post(`${BASE_URL}/businesses`, newBusiness, { headers });
+      if (newBusiness.id) {
+        // Update existing business
+        await axios.put(
+          `${BASE_URL}/businesses/${newBusiness.id}`,
+          newBusiness,
+          { headers },
+        );
+        console.log('Business updated successfully');
+      } else {
+        // Add new business
+        await axios.post(`${BASE_URL}/businesses`, newBusiness, { headers });
+        console.log('Business added successfully');
+      }
 
-      // Log success message
-      console.log('Business added successfully');
+      setOpenModal(false); // Close the modal
 
-      // Close the modal and reset the form state
-      setOpenModal(false);
-      setNewBusiness({
-        id: '',
-        name: '',
-        street_address: '',
-        city: '',
-        state: '',
-        zipcode: '',
-        business_owner_id: '',
-      });
-
-      // Fetch the updated list of businesses
+      // Fetch updated business data
       const response = await axios.get(`${BASE_URL}/businesses`);
       setBusinesses(response.data.businesses);
     } catch (error) {
-      console.error('Error adding business', error);
+      console.error('Error updating or adding business', error);
     }
+  };
+
+  const handleUpdate = (business: Business) => {
+    setNewBusiness(business); // Populate the modal fields with the selected business
+    setOpenModal(true); // Open the modal
   };
 
   return (
@@ -107,7 +109,7 @@ export default function BusinessTable(): JSX.Element {
               boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <h3>Add New Business</h3>
+            <h3>{newBusiness.id ? 'Update Business' : 'Add New Business'}</h3>
             <TextField
               label="Name"
               value={newBusiness.name}
@@ -128,6 +130,9 @@ export default function BusinessTable(): JSX.Element {
               onChange={(e) => handleInputChange(e, 'city')}
               fullWidth={true}
               style={{ marginBottom: '10px' }}
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               label="State"
@@ -135,6 +140,9 @@ export default function BusinessTable(): JSX.Element {
               onChange={(e) => handleInputChange(e, 'state')}
               fullWidth={true}
               style={{ marginBottom: '10px' }}
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               label="Zipcode"
@@ -142,12 +150,18 @@ export default function BusinessTable(): JSX.Element {
               onChange={(e) => handleInputChange(e, 'zipcode')}
               fullWidth={true}
               style={{ marginBottom: '10px' }}
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               label="Business Owner"
               value={newBusiness.business_owner_id}
               onChange={(e) => handleInputChange(e, 'business_owner_id')}
               fullWidth={true}
+              InputProps={{
+                readOnly: true,
+              }}
               style={{ marginBottom: '10px' }}
             />
             <Button
@@ -155,7 +169,7 @@ export default function BusinessTable(): JSX.Element {
               onClick={handleSubmit}
               style={{ marginTop: '10px' }}
             >
-              Add
+              {newBusiness.id ? 'Update' : 'Add'}
             </Button>
           </div>
         </div>
@@ -178,6 +192,14 @@ export default function BusinessTable(): JSX.Element {
               <td>{business.city}</td>
               <td>{business.state}</td>
               <td>{business.zipcode}</td>
+              <td>
+                <Button
+                  variant="contained"
+                  onClick={() => handleUpdate(business)}
+                >
+                  Update
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>
