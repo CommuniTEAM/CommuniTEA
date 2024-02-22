@@ -9,6 +9,7 @@ interface Business {
   city: string;
   state: string;
   zipcode: string;
+  business_owner_id: string;
 }
 
 const BASE_URL = `${import.meta.env.VITE_API_HOST}`;
@@ -23,6 +24,7 @@ export default function BusinessTable(): JSX.Element {
     city: '',
     state: '',
     zipcode: '',
+    business_owner_id: '',
   });
 
   useEffect(() => {
@@ -51,8 +53,16 @@ export default function BusinessTable(): JSX.Element {
 
   const handleSubmit = async () => {
     try {
+      // Define headers
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
       // Make a POST request to add the new business
-      await axios.post(`${BASE_URL}/businesses`, newBusiness);
+      await axios.post(`${BASE_URL}/businesses`, newBusiness, { headers });
+
+      // Log success message
+      console.log('Business added successfully');
 
       // Close the modal and reset the form state
       setOpenModal(false);
@@ -63,6 +73,7 @@ export default function BusinessTable(): JSX.Element {
         city: '',
         state: '',
         zipcode: '',
+        business_owner_id: '',
       });
 
       // Fetch the updated list of businesses
@@ -74,7 +85,7 @@ export default function BusinessTable(): JSX.Element {
   };
 
   return (
-    <div>
+    <div style={{ padding: '100px 50px 0 100px' }}>
       <h2>Businesses</h2>
       <Button variant="contained" onClick={() => setOpenModal(true)}>
         Add Business
@@ -129,6 +140,13 @@ export default function BusinessTable(): JSX.Element {
               label="Zipcode"
               value={newBusiness.zipcode}
               onChange={(e) => handleInputChange(e, 'zipcode')}
+              fullWidth={true}
+              style={{ marginBottom: '10px' }}
+            />
+            <TextField
+              label="Business Owner"
+              value={newBusiness.business_owner_id}
+              onChange={(e) => handleInputChange(e, 'business_owner_id')}
               fullWidth={true}
               style={{ marginBottom: '10px' }}
             />
