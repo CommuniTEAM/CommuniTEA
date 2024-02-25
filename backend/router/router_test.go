@@ -33,7 +33,21 @@ func TestNewRouter(t *testing.T) {
 	rw := httptest.NewRecorder()
 
 	r.ServeHTTP(rw, req)
+	if http.StatusOK != rw.Code {
+		t.Fatalf("expected status code to be 200, but got: %v", rw.Code)
+	}
 
+	endpoints = &api.API{DBPool: mockDBPool, Auth: authenticator}
+	r = router.NewRouter(endpoints, "test")
+
+	req, err = http.NewRequest(http.MethodGet, "/docs", nil)
+	if err != nil {
+		t.Fatalf("unexpected error while creating request: %v", err)
+	}
+
+	rw = httptest.NewRecorder()
+
+	r.ServeHTTP(rw, req)
 	if http.StatusOK != rw.Code {
 		t.Fatalf("expected status code to be 200, but got: %v", rw.Code)
 	}

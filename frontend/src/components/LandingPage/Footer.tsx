@@ -1,6 +1,6 @@
+import { IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, IconButton } from '@mui/material';
 import GitHubIcon from '../../assets/GitHubIcon.png';
 
 import './styles/FooterStyles.css';
@@ -15,10 +15,10 @@ export default function Footer(): JSX.Element {
   ];
 
   interface MenuItemPaths {
-    'About Us': string
-    'Contact Us': string
+    'About Us': string;
+    'Contact Us': string;
     // Add other menu items
-    [key: string]: string | undefined
+    [key: string]: string | undefined;
   }
 
   const menuItemPaths: MenuItemPaths = {

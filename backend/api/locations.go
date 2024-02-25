@@ -70,6 +70,7 @@ func (a *API) CreateCity() usecase.Interactor {
 			}
 
 			*output, err = queries.CreateCity(ctx, inputArgs)
+
 			if err != nil {
 				log.Println(fmt.Errorf("failed to create city: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
@@ -130,6 +131,7 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 	type stateInput struct {
 		StateCode string `maxLength:"2" minLength:"2" path:"state-code" pattern:"^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$"`
 	}
+
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input stateInput, output *citiesOutput) error {
 			conn, err := a.dbConn(ctx)
@@ -146,7 +148,6 @@ func (a *API) GetAllCitiesInState() usecase.Interactor {
 				log.Println(fmt.Errorf("could not get all cities in state: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
-
 			return nil
 		})
 
@@ -263,7 +264,6 @@ func (a *API) DeleteCity() usecase.Interactor {
 	response := usecase.NewInteractor(
 		func(ctx context.Context, input uuidInput, output *genericOutput) error {
 			userData := a.Auth.ValidateJWT(input.AccessToken)
-
 			if userData == nil {
 				return status.Wrap(errors.New("you must be logged in to perform this action"), status.Unauthenticated)
 			}
@@ -288,6 +288,7 @@ func (a *API) DeleteCity() usecase.Interactor {
 				log.Println(fmt.Errorf("could not delete city: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
+
 			output.Message = successMsg
 			return nil
 		})

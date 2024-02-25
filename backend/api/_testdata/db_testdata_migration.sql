@@ -74,4 +74,39 @@ insert into "locations_cities" (
     'KS'
 );
 
--- users testdata
+-- teas testdata
+insert into "teas" (
+    "id",
+    "name",
+    "img_url",
+    "description",
+    "brew_time",
+    "brew_temp",
+    "published"
+) values (
+    'c64ff5ab-7323-4142-9077-aea320c3c4cc',
+    'Earl Grey',
+    'https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'It is a black tea mix',
+    '20 minutes',
+    175,
+    false
+);
+
+insert into "teas" (
+    "id",
+    "name",
+    "img_url",
+    "description",
+    "brew_time",
+    "brew_temp",
+    "published"
+) values (
+    'c64ff5ab-7323-4142-9077-aea320c3c4cf',
+    'Black Tea',
+    'https://images.unsplash.com/photo-1605618826115-fb9e775cfb40?q=80&w=1779&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'It is a black tea mix',
+    '20 minutes',
+    175,
+    false
+);

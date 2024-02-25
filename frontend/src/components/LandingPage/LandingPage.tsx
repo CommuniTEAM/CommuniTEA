@@ -5,14 +5,12 @@ import Footer from './Footer';
 import HeroBanner from './HeroBanner';
 import HowItWorks from './HowItWorks';
 import NavBar from './Navbar';
-import TestRating from './TestFile/TestRating';
 import ValueProp from './ValueProp';
 
 export default function LandingPage(): JSX.Element {
   return (
     <div>
       <NavBar />
-      <TestRating />
       <HeroBanner />
       <ValueProp />
       <FeaturedTeas />

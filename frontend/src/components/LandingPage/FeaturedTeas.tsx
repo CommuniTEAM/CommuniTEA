@@ -1,6 +1,6 @@
 import '../../App.css';
-import './styles/FeaturedTeasStyles.css';
 import FeaturedTeaCards from './Cards/FeaturedTeaCards';
+import './styles/FeaturedTeasStyles.css';
 
 export default function FeaturedTeas(): JSX.Element {
   return (

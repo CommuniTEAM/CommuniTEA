@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/google/uuid"
 	"github.com/rs/cors"
 	"github.com/swaggest/jsonschema-go"
@@ -17,6 +17,7 @@ import (
 )
 
 const securityName = "authCookie"
+const prod = "prod"
 
 // httpResponse provides generic json schema for an http response's
 // accompanying json body.
@@ -68,6 +69,9 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	// wikiteadia
 	s.Get("/teas/{published}", endpoints.GetAllTeas())
 	s.Post("/teas", endpoints.CreateTea())
+	s.Put("/teas/{id}", endpoints.UpdateTea())
+	s.Patch("/teas/{id}", endpoints.PublishTea())
+	s.Delete("/teas/{id}", endpoints.DeleteTea())
 
 	return s
 }
@@ -100,28 +104,18 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 	// Set up middleware wraps
 	s.Wrap(
 		middleware.Logger,
-		cors.New(cors.Options{
-			AllowedOrigins:      []string{"http://localhost:3000", "https://communitea.life"},
-			AllowedMethods:      []string{"GET", "POST", "PUT", "DELETE"},
-			AllowedHeaders:      []string{"Content-Type"},
-			AllowCredentials:    true,
-			AllowPrivateNetwork: true,
-		}).Handler,
 
 		// Describe additional response schema
 		nethttp.OpenAPIAnnotationsMiddleware(s.OpenAPICollector, func(oc oapi.OperationContext) error {
 			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
 				cu.HTTPStatus = http.StatusBadRequest
 			})
-			oc.AddRespStructure(httpResponse{}, func(cu *oapi.ContentUnit) {
-				cu.HTTPStatus = http.StatusConflict
-			})
 			return nil
 		}),
 	)
 
 	// Prepend "/api" to endpoint URIs in production
-	if envType == "prod" {
+	if envType == prod {
 		s.Wrap(func(handler http.Handler) http.Handler {
 			var withRoute rest.HandlerWithRoute
 			if nethttp.HandlerAs(handler, &withRoute) {
@@ -134,8 +128,23 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 		})
 	}
 
-	// Forgive appended slashes on URLs
-	s.Use(middleware.StripSlashes)
+	s.Use(
+		cors.New(cors.Options{
+			AllowedOrigins: func(env string) []string {
+				if env == prod {
+					return []string{"https://communitea.life"}
+				}
+				return []string{"http://localhost:3000"}
+			}(envType),
+			AllowedMethods:      []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
+			AllowedHeaders:      []string{"Content-Type"},
+			AllowCredentials:    true,
+			AllowPrivateNetwork: true,
+		}).Handler,
+
+		// Forgive appended slashes on URLs
+		middleware.StripSlashes,
+	)
 
 	// Add API endpoints to router
 	addEndpoints(s, endpoints)
@@ -144,7 +153,7 @@ func NewRouter(endpoints *api.API, envType string) http.Handler {
 	s.Docs("/docs", swgui.New)
 	s.Handle("/", http.RedirectHandler(
 		func(env string) string {
-			if env == "prod" {
+			if env == prod {
 				return "/api/docs"
 			}
 			return "/docs"
