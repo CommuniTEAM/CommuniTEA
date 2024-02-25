@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AboutUs from './components/AboutUs/AboutUs';
 import CommuniTeaPage from './components/CommuniTEA/CommuniTeaPage';
+import ContactUsPage from './components/ContactUs/ContactUs';
 import EventDetailPage from './components/IndividualEvent/EventDetailPage';
 import JoditTest from './components/Jodit/JoditTest';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -17,6 +18,7 @@ function App(): ReactElement {
         <Route path="/communitea" element={<CommuniTeaPage />} />
         <Route path="/event/:eventId" element={<EventDetailPage />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUsPage />} />
         <Route path="/test" element={<TestFetch />} />
         <Route path="/jodit" element={<JoditTest />} />
       </Routes>

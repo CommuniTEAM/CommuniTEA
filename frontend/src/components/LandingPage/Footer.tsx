@@ -23,7 +23,7 @@ export default function Footer(): JSX.Element {
 
   const menuItemPaths: MenuItemPaths = {
     'About Us': '/about',
-    'Contact Us': '#',
+    'Contact Us': '/contact-us',
     'Privacy Policy': '#',
     'Terms of Service': '#',
     FAQ: '#',
