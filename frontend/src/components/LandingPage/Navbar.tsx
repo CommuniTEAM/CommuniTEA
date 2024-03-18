@@ -29,7 +29,7 @@ function NavBar(): JSX.Element {
 
   // Placeholder navigation pages and settings
   const pages = ['About Us', 'WikiTEAdia', 'CommuniTEA'];
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+  const settings = ['Account', 'Dashboard', 'Logout'];
 
   // Navigation Handlers
   const handleHomeNavigation = (): void => {
