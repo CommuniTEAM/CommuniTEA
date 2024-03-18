@@ -64,13 +64,14 @@ insert into "locations_cities" (
     'NY'
 );
 
+-- DO NOT USE: DELETED IN TEST
 insert into "locations_cities" (
     "id",
     "name",
     "state"
 ) values (
     '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
-    'Kansas City',
+    'Delete Me',
     'KS'
 );
 
@@ -124,7 +125,7 @@ insert into "businesses" (
     'e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e',
     'Test Business',
     '123 Test St',
-    '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
+    '6937755c-7e87-4226-9692-36d3019be32a',
     'KS',
     '98444',
     '140e4411-a7f7-4c50-a2d4-f3d3fc9fc550'
@@ -153,7 +154,7 @@ insert into "events" (
     'e6e8e3e3-3e3e-4e3e-8e3e-3e3e3e3e3e3e',
     'Test Location',
     '123 Test St',
-    '07eca16a-8ee1-4c1a-831e-cb984a851bf3',
+    '6937755c-7e87-4226-9692-36d3019be32a',
     'WA',
     '98444',
     '2021-12-31',

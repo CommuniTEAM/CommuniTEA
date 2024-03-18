@@ -368,7 +368,7 @@ func (suite *LocationsTestSuite) TestUpdateCity() {
 func (suite *LocationsTestSuite) TestDeleteCity() {
 	t := suite.T()
 
-	// ID of the manually added Kansas City entry
+	// ID of the manually added "Delete Me" entry
 	cityID := "07eca16a-8ee1-4c1a-831e-cb984a851bf3"
 
 	// * Test 401 response & body
