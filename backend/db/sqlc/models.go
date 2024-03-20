@@ -14,7 +14,6 @@ type Business struct {
 	Name            string    `json:"name"`
 	StreetAddress   string    `json:"street_address"`
 	City            uuid.UUID `json:"city"`
-	State           string    `json:"state"`
 	Zipcode         string    `json:"zipcode"`
 	BusinessOwnerID uuid.UUID `json:"business_owner_id"`
 }
@@ -41,21 +40,20 @@ type BusinessReview struct {
 }
 
 type Event struct {
-	ID              uuid.UUID   `json:"id"`
-	Name            string      `json:"name"`
-	Host            uuid.UUID   `json:"host"`
-	LocationName    pgtype.Text `json:"location_name"`
-	StreetAddress   string      `json:"street_address"`
-	City            uuid.UUID   `json:"city"`
-	State           string      `json:"state"`
-	Zipcode         string      `json:"zipcode"`
-	Date            pgtype.Date `json:"date"`
-	StartTime       pgtype.Time `json:"start_time"`
-	EndTime         pgtype.Time `json:"end_time"`
-	MdDescription   pgtype.Text `json:"md_description"`
-	HtmlDescription pgtype.Text `json:"html_description"`
-	Rsvps           bool        `json:"rsvps"`
-	Capacity        pgtype.Int4 `json:"capacity"`
+	ID               uuid.UUID        `json:"id"`
+	Name             string           `json:"name"`
+	Host             uuid.UUID        `json:"host"`
+	LocationName     pgtype.Text      `json:"location_name"`
+	StreetAddress    string           `json:"street_address"`
+	City             uuid.UUID        `json:"city"`
+	Zipcode          string           `json:"zipcode"`
+	StartTime        pgtype.Timestamp `json:"start_time"`
+	EndTime          pgtype.Timestamp `json:"end_time"`
+	MdDescription    pgtype.Text      `json:"md_description"`
+	HtmlDescription  pgtype.Text      `json:"html_description"`
+	Rsvps            bool             `json:"rsvps"`
+	Capacity         pgtype.Int4      `json:"capacity"`
+	TimezoneLocation string           `json:"timezone_location"`
 }
 
 type EventCategory struct {
@@ -140,6 +138,10 @@ type TeaOriginTag struct {
 	ID    uuid.UUID   `json:"id"`
 	Name  pgtype.Text `json:"name"`
 	TeaID uuid.UUID   `json:"tea_id"`
+}
+
+type TimezoneLocation struct {
+	ZoneID string `json:"zone_id"`
 }
 
 type User struct {

@@ -79,7 +79,6 @@ CREATE TABLE public.businesses (
     name character varying(100) NOT NULL,
     street_address character varying(100) NOT NULL,
     city uuid NOT NULL,
-    state character varying(2) NOT NULL,
     zipcode character varying(5) NOT NULL,
     business_owner_id uuid NOT NULL
 );
@@ -159,15 +158,14 @@ CREATE TABLE public.events (
     location_name character varying(100),
     street_address character varying(100) NOT NULL,
     city uuid NOT NULL,
-    state character varying(2) NOT NULL,
     zipcode character varying(5) NOT NULL,
-    date date NOT NULL,
-    start_time time without time zone NOT NULL,
-    end_time time without time zone NOT NULL,
+    start_time timestamp without time zone NOT NULL,
+    end_time timestamp without time zone NOT NULL,
     md_description text,
     html_description text,
     rsvps boolean NOT NULL,
-    capacity integer
+    capacity integer,
+    timezone_location character varying(50) NOT NULL
 );
 
 
@@ -273,6 +271,15 @@ CREATE TABLE public.teas (
     brew_time character varying(50),
     brew_temp double precision,
     published boolean NOT NULL
+);
+
+
+--
+-- Name: timezone_locations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.timezone_locations (
+    zone_id character varying(50) NOT NULL
 );
 
 
@@ -489,6 +496,14 @@ ALTER TABLE ONLY public.teas
 
 
 --
+-- Name: timezone_locations timezone_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.timezone_locations
+    ADD CONSTRAINT timezone_locations_pkey PRIMARY KEY (zone_id);
+
+
+--
 -- Name: user_favorite_teas user_favorite_teas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -593,14 +608,6 @@ ALTER TABLE ONLY public.businesses
 
 
 --
--- Name: businesses businesses_state_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.businesses
-    ADD CONSTRAINT businesses_state_fkey FOREIGN KEY (state) REFERENCES public.locations_states(abbreviation);
-
-
---
 -- Name: event_category_tags event_category_tags_category_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -689,11 +696,11 @@ ALTER TABLE ONLY public.events
 
 
 --
--- Name: events events_state_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_timezone_location_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.events
-    ADD CONSTRAINT events_state_fkey FOREIGN KEY (state) REFERENCES public.locations_states(abbreviation);
+    ADD CONSTRAINT events_timezone_location_fkey FOREIGN KEY (timezone_location) REFERENCES public.timezone_locations(zone_id);
 
 
 --
@@ -802,4 +809,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20231212061145'),
     ('20231214012512'),
     ('20231214035807'),
-    ('20240106002631');
+    ('20240106002631'),
+    ('20240318042602'),
+    ('20240320042524');

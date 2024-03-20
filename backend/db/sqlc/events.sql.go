@@ -9,7 +9,68 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const createEvent = `-- name: CreateEvent :one
+insert into "events" ("id", "name", "host", "location_name", "street_address", "city", "zipcode", "start_time", "end_time", "md_description", "html_description", "rsvps", "capacity", "timezone_location")
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+returning id, name, host, location_name, street_address, city, zipcode, start_time, end_time, md_description, html_description, rsvps, capacity, timezone_location
+`
+
+type CreateEventParams struct {
+	ID               uuid.UUID        `json:"id"`
+	Name             string           `json:"name"`
+	Host             uuid.UUID        `json:"host"`
+	LocationName     pgtype.Text      `json:"location_name"`
+	StreetAddress    string           `json:"street_address"`
+	City             uuid.UUID        `json:"city"`
+	Zipcode          string           `json:"zipcode"`
+	StartTime        pgtype.Timestamp `json:"start_time"`
+	EndTime          pgtype.Timestamp `json:"end_time"`
+	MdDescription    pgtype.Text      `json:"md_description"`
+	HtmlDescription  pgtype.Text      `json:"html_description"`
+	Rsvps            bool             `json:"rsvps"`
+	Capacity         pgtype.Int4      `json:"capacity"`
+	TimezoneLocation string           `json:"timezone_location"`
+}
+
+func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error) {
+	row := q.db.QueryRow(ctx, createEvent,
+		arg.ID,
+		arg.Name,
+		arg.Host,
+		arg.LocationName,
+		arg.StreetAddress,
+		arg.City,
+		arg.Zipcode,
+		arg.StartTime,
+		arg.EndTime,
+		arg.MdDescription,
+		arg.HtmlDescription,
+		arg.Rsvps,
+		arg.Capacity,
+		arg.TimezoneLocation,
+	)
+	var i Event
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Host,
+		&i.LocationName,
+		&i.StreetAddress,
+		&i.City,
+		&i.Zipcode,
+		&i.StartTime,
+		&i.EndTime,
+		&i.MdDescription,
+		&i.HtmlDescription,
+		&i.Rsvps,
+		&i.Capacity,
+		&i.TimezoneLocation,
+	)
+	return i, err
+}
 
 const getEventByID = `-- name: GetEventByID :one
 select
@@ -19,15 +80,14 @@ select
     "location_name",
     "street_address",
     "city",
-    "state",
     "zipcode",
-    "date",
     "start_time",
     "end_time",
     "md_description",
     "html_description",
     "rsvps",
-    "capacity"
+    "capacity",
+    "timezone_location"
 from events
 where "id" = $1
 `
@@ -42,15 +102,14 @@ func (q *Queries) GetEventByID(ctx context.Context, id uuid.UUID) (Event, error)
 		&i.LocationName,
 		&i.StreetAddress,
 		&i.City,
-		&i.State,
 		&i.Zipcode,
-		&i.Date,
 		&i.StartTime,
 		&i.EndTime,
 		&i.MdDescription,
 		&i.HtmlDescription,
 		&i.Rsvps,
 		&i.Capacity,
+		&i.TimezoneLocation,
 	)
 	return i, err
 }
