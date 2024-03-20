@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	_ "time/tzdata"
 
 	"github.com/CommuniTEAM/CommuniTEA/api"
 	"github.com/CommuniTEAM/CommuniTEA/auth"

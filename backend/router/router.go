@@ -75,6 +75,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 
 	// events
 	s.Get("/events/{id}", endpoints.GetEvent())
+	s.Post("/events", endpoints.CreateEvent())
 
 	return s
 }

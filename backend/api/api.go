@@ -50,6 +50,7 @@ const (
 	// code. Used by endpoints in status.Wrap()
 	internalErrMsg string = "could not process request, please try again"
 	adminRole      string = "admin"
+	businessRole   string = "business"
 	successMsg     string = "success"
 )
 
