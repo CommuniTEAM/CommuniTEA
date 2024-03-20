@@ -63,11 +63,14 @@ func main() {
 	// Initialize router
 	s := router.NewRouter(endpoints, Env)
 
+	// Wrap the router with the CORS middleware
+	wrappedRouter := corsMiddleware(s)
+
 	// Configure and start the server
 	const serverTimeout = 5
 	server := &http.Server{
 		Addr:              serverPort,
-		Handler:           s,
+		Handler:           wrappedRouter,
 		ReadHeaderTimeout: serverTimeout * time.Second,
 	}
 
@@ -79,4 +82,22 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Errorf("could not start the http(s) server: %w", err))
 	}
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		// Handle preflight requests
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// Call the next handler in the chain
+		next.ServeHTTP(w, r)
+	})
 }

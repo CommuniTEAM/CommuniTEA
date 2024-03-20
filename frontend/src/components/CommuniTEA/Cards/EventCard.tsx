@@ -30,13 +30,16 @@ export default function EventCards(): JSX.Element {
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    getEvents()
-      .then((response) => {
+    const fetchEvents = async () => {
+      try {
+        const response = await getEvents();
         setEvents(response);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch events', error);
-      });
+      } catch (e) {
+        console.error('Failed to fetch events', e);
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   return (
