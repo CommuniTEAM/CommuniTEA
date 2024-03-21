@@ -49,7 +49,6 @@ type Event struct {
 	Zipcode          string           `json:"zipcode"`
 	StartTime        pgtype.Timestamp `json:"start_time"`
 	EndTime          pgtype.Timestamp `json:"end_time"`
-	MdDescription    pgtype.Text      `json:"md_description"`
 	HtmlDescription  pgtype.Text      `json:"html_description"`
 	Rsvps            bool             `json:"rsvps"`
 	Capacity         pgtype.Int4      `json:"capacity"`

@@ -375,7 +375,8 @@ func (a *API) getLocationDetails(locationID uuid.UUID) (db.LocationsCity, error)
 
 	locationDetails, err := queries.GetCity(context.Background(), locationID)
 	if err != nil {
-		return db.LocationsCity{}, fmt.Errorf("could not get city: %w", err)
+		log.Println(fmt.Errorf("could not get city: %w", err))
+		return db.LocationsCity{}, status.Wrap(errors.New(internalErrMsg), status.Internal)
 	}
 
 	return locationDetails, nil

@@ -13,9 +13,9 @@ import (
 )
 
 const createEvent = `-- name: CreateEvent :one
-insert into "events" ("id", "name", "host", "location_name", "street_address", "city", "zipcode", "start_time", "end_time", "md_description", "html_description", "rsvps", "capacity", "timezone_location")
-values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-returning id, name, host, location_name, street_address, city, zipcode, start_time, end_time, md_description, html_description, rsvps, capacity, timezone_location
+insert into "events" ("id", "name", "host", "location_name", "street_address", "city", "zipcode", "start_time", "end_time", "html_description", "rsvps", "capacity", "timezone_location")
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+returning id, name, host, location_name, street_address, city, zipcode, start_time, end_time, html_description, rsvps, capacity, timezone_location
 `
 
 type CreateEventParams struct {
@@ -28,7 +28,6 @@ type CreateEventParams struct {
 	Zipcode          string           `json:"zipcode"`
 	StartTime        pgtype.Timestamp `json:"start_time"`
 	EndTime          pgtype.Timestamp `json:"end_time"`
-	MdDescription    pgtype.Text      `json:"md_description"`
 	HtmlDescription  pgtype.Text      `json:"html_description"`
 	Rsvps            bool             `json:"rsvps"`
 	Capacity         pgtype.Int4      `json:"capacity"`
@@ -46,7 +45,6 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 		arg.Zipcode,
 		arg.StartTime,
 		arg.EndTime,
-		arg.MdDescription,
 		arg.HtmlDescription,
 		arg.Rsvps,
 		arg.Capacity,
@@ -63,7 +61,6 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 		&i.Zipcode,
 		&i.StartTime,
 		&i.EndTime,
-		&i.MdDescription,
 		&i.HtmlDescription,
 		&i.Rsvps,
 		&i.Capacity,
@@ -83,7 +80,6 @@ select
     "zipcode",
     "start_time",
     "end_time",
-    "md_description",
     "html_description",
     "rsvps",
     "capacity",
@@ -105,7 +101,6 @@ func (q *Queries) GetEventByID(ctx context.Context, id uuid.UUID) (Event, error)
 		&i.Zipcode,
 		&i.StartTime,
 		&i.EndTime,
-		&i.MdDescription,
 		&i.HtmlDescription,
 		&i.Rsvps,
 		&i.Capacity,

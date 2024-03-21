@@ -9,6 +9,9 @@ alter table "events"
 drop if exists "date";
 
 alter table "events"
+drop if exists "md_description";
+
+alter table "events"
 drop if exists "state";
 
 alter table "businesses"

@@ -161,7 +161,6 @@ CREATE TABLE public.events (
     zipcode character varying(5) NOT NULL,
     start_time timestamp without time zone NOT NULL,
     end_time timestamp without time zone NOT NULL,
-    md_description text,
     html_description text,
     rsvps boolean NOT NULL,
     capacity integer,
