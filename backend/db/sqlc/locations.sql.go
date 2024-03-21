@@ -113,6 +113,30 @@ func (q *Queries) GetAllStates(ctx context.Context) ([]LocationsState, error) {
 	return items, nil
 }
 
+const getAllTimezones = `-- name: GetAllTimezones :many
+select zone_id from timezone_locations
+`
+
+func (q *Queries) GetAllTimezones(ctx context.Context) ([]string, error) {
+	rows, err := q.db.Query(ctx, getAllTimezones)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var zone_id string
+		if err := rows.Scan(&zone_id); err != nil {
+			return nil, err
+		}
+		items = append(items, zone_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCity = `-- name: GetCity :one
 select id, name, state from locations_cities
 where "id" = $1

@@ -63,6 +63,7 @@ func addEndpoints(s *web.Service, endpoints *api.API) *web.Service {
 	s.Get("/locations/cities/{id}", endpoints.GetCity())
 	s.Get("/locations/states", endpoints.GetAllStates())
 	s.Get("/locations/states/{state-code}/cities", endpoints.GetAllCitiesInState())
+	s.Get("/locations/timezones", endpoints.GetIANATimezones())
 	s.Put("/locations/cities/{id}", endpoints.UpdateCity(), requireAuth)
 	s.Delete("/locations/cities/{id}", endpoints.DeleteCity(), requireAuth)
 

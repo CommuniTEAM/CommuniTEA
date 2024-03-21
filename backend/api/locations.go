@@ -339,6 +339,39 @@ func (a *API) GetAllStates() usecase.Interactor {
 	return response
 }
 
+// GetIANATimezones takes no input parameters and returns a list of all the
+// IANA timezone locations in the database.
+func (a *API) GetIANATimezones() usecase.Interactor {
+	type timezonesOutput struct {
+		Timezones []string `json:"timezones"`
+	}
+
+	response := usecase.NewInteractor(
+		func(ctx context.Context, _ defaultInput, output *timezonesOutput) error {
+			conn, err := a.dbConn(ctx)
+			if err != nil {
+				return err
+			}
+			defer conn.Release()
+
+			queries := db.New(conn)
+
+			output.Timezones, err = queries.GetAllTimezones(ctx)
+			if err != nil {
+				log.Println(fmt.Errorf("could not get all IANA timezone locations: %w", err))
+				return status.Wrap(errors.New(internalErrMsg), status.Internal)
+			}
+
+			return nil
+		})
+
+	response.SetTitle("Get All IANA Timezone Locations")
+	response.SetDescription("Get a list of every IANA timezone location in the database.")
+	response.SetTags("Locations")
+
+	return response
+}
+
 // getLocationID is a helper function that returns the ID of a location, given
 // a city name and a state code as strings, if it exists. Any errors returned
 // are wrapped.

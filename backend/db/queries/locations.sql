@@ -32,3 +32,6 @@ returning *;
 -- name: DeleteCity :exec
 delete from locations_cities
 where "id" = $1;
+
+-- name: GetAllTimezones :many
+select * from timezone_locations;
