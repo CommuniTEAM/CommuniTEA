@@ -18,21 +18,25 @@ import (
 const timeFormat = "01-02-2006 15:04"
 
 type eventOutput struct {
-	ID               uuid.UUID `json:"id"`
-	Name             string    `json:"name"`
-	Host             uuid.UUID `json:"host"`
-	LocationName     string    `json:"location_name"`
-	StreetAddress    string    `json:"street_address"`
-	CityName         string    `json:"city_name"`
-	CityID           uuid.UUID `json:"city_id"`
-	StateCode        string    `example:"CA"                   json:"state_code"`
-	Zipcode          string    `example:"12345"                json:"zipcode"`
-	StartTime        string    `example:"01-02-2006 15:04 MST" json:"start_time"`
-	EndTime          string    `example:"01-02-2006 15:04 MST" json:"end_time"`
-	HTMLDescription  string    `json:"html_description"`
-	Rsvps            bool      `json:"rsvps"`
-	Capacity         int32     `json:"capacity"`
-	TimezoneLocation string    `json:"timezone_location"`
+	ID               uuid.UUID     `json:"id"`
+	Name             string        `json:"name"`
+	Host             uuid.UUID     `json:"host"`
+	Location         eventLocation `json:"location"`
+	StartTime        string        `example:"01-02-2006 15:04 MST" json:"start_time"`
+	EndTime          string        `example:"01-02-2006 15:04 MST" json:"end_time"`
+	HTMLDescription  string        `json:"html_description"`
+	Rsvps            bool          `json:"rsvps"`
+	Capacity         int32         `json:"capacity"`
+	TimezoneLocation string        `json:"timezone_location"`
+}
+
+type eventLocation struct {
+	Name          string    `example:"The Tea House" json:"name"`
+	StreetAddress string    `example:"123 45th St."  json:"street_address"`
+	City          string    `example:"Los Angeles"   json:"city"`
+	CityID        uuid.UUID `json:"city_id"`
+	StateCode     string    `example:"CA"            json:"state_code"`
+	Zipcode       string    `example:"12345"         json:"zipcode"`
 }
 
 func (a *API) GetEvent() usecase.Interactor {
@@ -63,12 +67,12 @@ func (a *API) GetEvent() usecase.Interactor {
 			output.ID = eventDetails.ID
 			output.Name = eventDetails.Name
 			output.Host = eventDetails.Host
-			output.LocationName = eventDetails.LocationName.String
-			output.StreetAddress = eventDetails.StreetAddress
-			output.CityID = eventDetails.City
-			output.CityName = eventCity.Name
-			output.StateCode = eventCity.State
-			output.Zipcode = eventDetails.Zipcode
+			output.Location.Name = eventDetails.LocationName.String
+			output.Location.StreetAddress = eventDetails.StreetAddress
+			output.Location.CityID = eventDetails.City
+			output.Location.City = eventCity.Name
+			output.Location.StateCode = eventCity.State
+			output.Location.Zipcode = eventDetails.Zipcode
 			output.HTMLDescription = eventDetails.HtmlDescription.String
 			output.Rsvps = eventDetails.Rsvps
 			output.Capacity = eventDetails.Capacity.Int32
@@ -135,11 +139,6 @@ func (a *API) CreateEvent() usecase.Interactor {
 				return status.Wrap(errors.New("could not parse start time"), status.InvalidArgument)
 			}
 
-			timezone := parsedStart.Location().String()
-			if timezone != parsedEnd.Location().String() {
-				return status.Wrap(errors.New("start and end timezones do not match"), status.InvalidArgument)
-			}
-
 			newUUID, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(fmt.Errorf("could not generate new uuid: %w", err))
@@ -172,11 +171,17 @@ func (a *API) CreateEvent() usecase.Interactor {
 				HtmlDescription:  pgtype.Text{String: input.HTMLDescription, Valid: len(input.HTMLDescription) != 0},
 				Rsvps:            input.Rsvps,
 				Capacity:         pgtype.Int4{Int32: input.Capacity, Valid: true},
-				TimezoneLocation: timezone,
+				TimezoneLocation: input.TimezoneLocation,
 			}
 
 			newEvent, err := queries.CreateEvent(ctx, inputArgs)
 			if err != nil {
+				if strings.Contains(err.Error(), "host_fkey") {
+					return status.Wrap(errors.New("invalid host id"), status.InvalidArgument)
+				}
+				if strings.Contains(err.Error(), "timezone_location_fkey") {
+					return status.Wrap(errors.New("invalid IANA timezone location"), status.InvalidArgument)
+				}
 				log.Println(fmt.Errorf("failed to create event: %w", err))
 				return status.Wrap(errors.New(internalErrMsg), status.Internal)
 			}
@@ -184,12 +189,12 @@ func (a *API) CreateEvent() usecase.Interactor {
 			output.ID = newEvent.ID
 			output.Name = newEvent.Name
 			output.Host = newEvent.Host
-			output.LocationName = newEvent.LocationName.String
-			output.StreetAddress = newEvent.StreetAddress
-			output.CityID = newEvent.City
-			output.CityName = input.CityName
-			output.StateCode = input.StateCode
-			output.Zipcode = newEvent.Zipcode
+			output.Location.Name = newEvent.LocationName.String
+			output.Location.StreetAddress = newEvent.StreetAddress
+			output.Location.CityID = newEvent.City
+			output.Location.City = input.CityName
+			output.Location.StateCode = input.StateCode
+			output.Location.Zipcode = newEvent.Zipcode
 			output.HTMLDescription = newEvent.HtmlDescription.String
 			output.Rsvps = newEvent.Rsvps
 			output.Capacity = newEvent.Capacity.Int32
