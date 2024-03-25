@@ -52,6 +52,7 @@ type Event struct {
 	HtmlDescription  pgtype.Text      `json:"html_description"`
 	Rsvps            bool             `json:"rsvps"`
 	Capacity         pgtype.Int4      `json:"capacity"`
+	Visible          bool             `json:"visible"`
 	TimezoneLocation string           `json:"timezone_location"`
 }
 

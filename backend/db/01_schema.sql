@@ -164,7 +164,8 @@ CREATE TABLE public.events (
     html_description text,
     rsvps boolean NOT NULL,
     capacity integer,
-    timezone_location character varying(50) NOT NULL
+    timezone_location character varying(50) NOT NULL,
+    visible boolean DEFAULT false NOT NULL
 );
 
 

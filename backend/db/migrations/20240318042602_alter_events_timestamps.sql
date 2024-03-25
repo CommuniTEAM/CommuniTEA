@@ -6,6 +6,9 @@ alter table "events"
 alter "end_time" type timestamp;
 
 alter table "events"
+add if not exists "visible" boolean not null default false;
+
+alter table "events"
 drop if exists "date";
 
 alter table "events"

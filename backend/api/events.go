@@ -28,6 +28,7 @@ type eventOutput struct {
 	Rsvps            bool          `json:"rsvps"`
 	Capacity         int32         `json:"capacity"`
 	TimezoneLocation string        `json:"timezone_location"`
+	Visible          bool          `json:"visible"`
 }
 
 type eventLocation struct {
@@ -77,6 +78,7 @@ func (a *API) GetEvent() usecase.Interactor {
 			output.Rsvps = eventDetails.Rsvps
 			output.Capacity = eventDetails.Capacity.Int32
 			output.TimezoneLocation = eventDetails.TimezoneLocation
+			output.Visible = eventDetails.Visible
 
 			output.StartTime, err = getTimeWithTimezone(eventDetails.TimezoneLocation, eventDetails.StartTime.Time)
 			if err != nil {
@@ -113,6 +115,7 @@ func (a *API) CreateEvent() usecase.Interactor {
 		Rsvps            bool      `json:"rsvps"                   nullable:"false"`
 		Capacity         int32     `json:"capacity"                nullable:"false"`
 		TimezoneLocation string    `example:"America/Los_Angeles"  json:"timezone_location" nullable:"false"`
+		Visible          bool      `json:"visible"                 nullable:"false"`
 	}
 
 	response := usecase.NewInteractor(
@@ -172,6 +175,7 @@ func (a *API) CreateEvent() usecase.Interactor {
 				Rsvps:            input.Rsvps,
 				Capacity:         pgtype.Int4{Int32: input.Capacity, Valid: true},
 				TimezoneLocation: input.TimezoneLocation,
+				Visible:          input.Visible,
 			}
 
 			newEvent, err := queries.CreateEvent(ctx, inputArgs)
@@ -199,6 +203,7 @@ func (a *API) CreateEvent() usecase.Interactor {
 			output.Rsvps = newEvent.Rsvps
 			output.Capacity = newEvent.Capacity.Int32
 			output.TimezoneLocation = newEvent.TimezoneLocation
+			output.Visible = newEvent.Visible
 
 			output.StartTime, err = getTimeWithTimezone(newEvent.TimezoneLocation, newEvent.StartTime.Time)
 			if err != nil {

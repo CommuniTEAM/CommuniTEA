@@ -13,9 +13,9 @@ import (
 )
 
 const createEvent = `-- name: CreateEvent :one
-insert into "events" ("id", "name", "host", "location_name", "street_address", "city", "zipcode", "start_time", "end_time", "html_description", "rsvps", "capacity", "timezone_location")
-values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-returning id, name, host, location_name, street_address, city, zipcode, start_time, end_time, html_description, rsvps, capacity, timezone_location
+insert into "events" ("id", "name", "host", "location_name", "street_address", "city", "zipcode", "start_time", "end_time", "html_description", "rsvps", "capacity", "visible", "timezone_location")
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+returning id, name, host, location_name, street_address, city, zipcode, start_time, end_time, html_description, rsvps, capacity, visible, timezone_location
 `
 
 type CreateEventParams struct {
@@ -31,6 +31,7 @@ type CreateEventParams struct {
 	HtmlDescription  pgtype.Text      `json:"html_description"`
 	Rsvps            bool             `json:"rsvps"`
 	Capacity         pgtype.Int4      `json:"capacity"`
+	Visible          bool             `json:"visible"`
 	TimezoneLocation string           `json:"timezone_location"`
 }
 
@@ -48,6 +49,7 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 		arg.HtmlDescription,
 		arg.Rsvps,
 		arg.Capacity,
+		arg.Visible,
 		arg.TimezoneLocation,
 	)
 	var i Event
@@ -64,6 +66,7 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 		&i.HtmlDescription,
 		&i.Rsvps,
 		&i.Capacity,
+		&i.Visible,
 		&i.TimezoneLocation,
 	)
 	return i, err
@@ -83,6 +86,7 @@ select
     "html_description",
     "rsvps",
     "capacity",
+    "visible",
     "timezone_location"
 from events
 where "id" = $1
@@ -104,6 +108,7 @@ func (q *Queries) GetEventByID(ctx context.Context, id uuid.UUID) (Event, error)
 		&i.HtmlDescription,
 		&i.Rsvps,
 		&i.Capacity,
+		&i.Visible,
 		&i.TimezoneLocation,
 	)
 	return i, err
